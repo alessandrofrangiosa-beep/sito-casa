@@ -71,8 +71,8 @@ export const galleryData: GalleryItem[] = [
     id: 9,
     src: "/images/attuali/09-camera-matrimoniale.jpg",
     title: "Camera matrimoniale",
-    caption: "Camera matrimoniale ampia con termosifone: basta rimuovere la carta da parati.",
-    alt: "Ampia camera matrimoniale vuota con termosifone e carta da parati da rimuovere",
+    caption: "Camera matrimoniale ampia e luminosa con termosifone: da rinfrescare con i tuoi colori.",
+    alt: "Ampia camera matrimoniale vuota con termosifone e portafinestra",
   },
   {
     id: 10,

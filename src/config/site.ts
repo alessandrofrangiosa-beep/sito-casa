@@ -13,6 +13,8 @@ export const PROPERTY = {
   priceNote: "trattabili",
   agencySavings: "€\u00a07.500 – €\u00a010.000",
   condoWorksPaid: "€\u00a010.000 – €\u00a015.000",
+  /** Importo dei lavori già pagati mostrato sotto il prezzo nella hero */
+  worksPaidHero: "€\u00a015.000",
   /** Spese condominiali mensili, es. "€ 60/mese" */
   condoFees: null as string | null,
   /** Classe energetica APE, es. "G" */

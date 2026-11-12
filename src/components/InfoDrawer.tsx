@@ -109,7 +109,7 @@ export function InfoDrawer({
               <p className="font-semibold text-ink">Trasparenza totale</p>
               <p className="mt-1">
                 L&apos;immobile è venduto <strong>vuoto / non arredato</strong>. Richiede principalmente{" "}
-                <strong>rimozione della carta da parati, tinteggiatura delle pareti e arredo personalizzato</strong>.
+                <strong>una semplice rinfrescata delle pareti secondo il proprio gusto e l&apos;arredo personalizzato</strong>.
                 Niente rifacimenti strutturali: è una tela bianca da personalizzare.
               </p>
             </div>

@@ -10,7 +10,11 @@ const ALREADY_DONE = [
   "Ingresso e corridoio già tinteggiati di bianco",
 ];
 
-const TODO = ["Rimuovere la vecchia carta da parati", "Tinteggiare", "Arredare a tuo gusto"];
+const TODO = [
+  "Rinfrescare le pareti con i tuoi colori preferiti",
+  "Scegliere e portare i tuoi arredi",
+  "Goderti subito la vista mare e le 3 terrazze",
+];
 
 export function Opportunity() {
   return (
@@ -55,16 +59,16 @@ export function Opportunity() {
         </article>
         <article className="rounded-2xl border border-primary/20 bg-primary-soft p-5">
           <Paintbrush className="h-6 w-6 text-primary" />
-          <p className="mt-2 text-sm font-bold uppercase tracking-wider text-ink">Ti resta solo</p>
+          <p className="mt-2 text-sm font-bold uppercase tracking-wider text-ink">Zero opere murarie — ti resta solo:</p>
           <ol className="mt-3 space-y-2">
             {TODO.map((t, i) => (
-              <li key={t} className="flex items-center gap-2.5 text-[15px] font-semibold text-ink">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-xs text-white">{i + 1}</span>
+              <li key={t} className="flex items-start gap-2.5 text-[15px] font-semibold leading-snug text-ink">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-xs text-white">{i + 1}</span>
                 {t}
               </li>
             ))}
           </ol>
-          <p className="mt-3 text-sm text-slate-ink">Infissi e riscaldamento ci sono già: è una tela bianca da personalizzare.</p>
+          <p className="mt-3 text-sm text-slate-ink">Nessun lavoro strutturale o impianto da rifare: una tela bianca pronta in pochi giorni.</p>
         </article>
       </div>
     </section>
