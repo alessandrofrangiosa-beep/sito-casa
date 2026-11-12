@@ -24,8 +24,9 @@ export const PROPERTY = {
  * Numero WhatsApp in formato internazionale senza "+" né spazi (es. "393331234567").
  * Si può impostare anche con la variabile NEXT_PUBLIC_WHATSAPP_NUMBER.
  */
-export const WHATSAPP_NUMBER: string | null =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") || null;
+const rawWhatsApp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
+/** `null` finché il numero non è inserito o non è valido (8-15 cifre): il pulsante di invio resta disattivato. */
+export const WHATSAPP_NUMBER: string | null = /^\d{8,15}$/.test(rawWhatsApp) ? rawWhatsApp : null;
 
 /**
  * Tour virtuale 360°.

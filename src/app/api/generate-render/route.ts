@@ -25,7 +25,7 @@ function buildPrompt(roomLabel: string, isOutdoor: boolean, stylePrompt: string,
     `Furnish and redecorate ${what} as a photorealistic interior design photograph.`,
     stylePrompt && `Style: ${stylePrompt}.`,
     userPrompt && `Client request: ${userPrompt}.`,
-    "Remove old wallpaper and repaint the walls cleanly where needed.",
+    "Refresh the walls with clean, fresh paint in colours matching the style.",
     "STRICTLY KEEP UNCHANGED: room geometry, walls, ceiling height, floor plan, position and size of every window, French door and door, radiators, and the real sea / city view visible outside the windows.",
     "Same camera angle and perspective, natural daylight, realistic materials, no text, no people.",
   ]
@@ -95,6 +95,14 @@ async function forwardLead(phone: string, req: NextRequest) {
   } catch (err) {
     console.error("[lead] Invio al webhook fallito", err);
   }
+}
+
+/** Stato del servizio: permette alla pagina di mostrare il configuratore solo se è attivo. */
+export async function GET() {
+  return NextResponse.json(
+    { enabled: Boolean(process.env.FAL_KEY || process.env.OPENAI_API_KEY) },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }
 
 export async function POST(req: NextRequest) {

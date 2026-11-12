@@ -122,7 +122,9 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
   const submit = () => {
     setTouched(true);
     if (missing.length || !waHref) return;
-    window.open(waHref, "_blank", "noopener,noreferrer");
+    const win = window.open(waHref, "_blank");
+    if (win) win.opener = null;
+    else window.location.href = waHref; // popup bloccato: apre WhatsApp nella stessa scheda
   };
 
   return (
@@ -227,7 +229,14 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
           </p>
         )}
 
-        {!WHATSAPP_NUMBER && <DaControllare block>Inserire numero WhatsApp</DaControllare>}
+        {!WHATSAPP_NUMBER && (
+          <>
+            <p className="rounded-xl border border-line bg-ice px-4 py-3 text-center text-sm leading-snug text-slate-ink" role="status">
+              Le prenotazioni via WhatsApp saranno attive a breve. Puoi già preparare la tua richiesta.
+            </p>
+            {process.env.NODE_ENV !== "production" && <DaControllare block>Inserire numero WhatsApp</DaControllare>}
+          </>
+        )}
 
         <button
           type="button"

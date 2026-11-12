@@ -9,6 +9,7 @@ import { FloorPlan } from "@/components/FloorPlan";
 import { Location } from "@/components/Location";
 import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
+import { CompositionList } from "@/components/CompositionList";
 import { PROPERTY } from "@/config/site";
 
 /** Collega automaticamente la prima immagine trovata in /public/images/planimetria (verificata al build). */
@@ -35,6 +36,7 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 
 export default function Home() {
   const floorPlan = findFloorPlan();
+  const aiEnabled = Boolean(process.env.FAL_KEY || process.env.OPENAI_API_KEY);
 
   return (
     <UiProvider>
@@ -42,7 +44,7 @@ export default function Home() {
         <Hero />
 
         <div className="pb-16 sm:pb-20">
-          <ExploreSection />
+          <ExploreSection aiEnabled={aiEnabled} />
         </div>
 
         <Band tone="ice">
@@ -56,11 +58,17 @@ export default function Home() {
         <Band tone="ice">
           <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
             <SectionTitle
-              eyebrow="Distribuzione"
-              title="Planimetria"
-              intro="Zona giorno e zona notte ben separate da un corridoio luminoso, 3 terrazze e 2 bagni: tocca la pianta per ingrandirla a schermo intero."
+              eyebrow="Quadrilocale · 4 locali"
+              title="Distribuzione degli spazi"
+              intro="Zona giorno e zona notte ben separate dal corridoio centrale: sala, cucina abitabile, 3 camere, 2 bagni e 3 terrazze."
             />
-            <FloorPlan src={floorPlan} />
+            <div className="grid gap-4 md:grid-cols-2 md:items-start">
+              <CompositionList />
+              <div>
+                <p className="mb-2 text-sm font-semibold text-ink">Planimetria · tocca per ingrandire</p>
+                <FloorPlan src={floorPlan} />
+              </div>
+            </div>
           </section>
         </Band>
 
