@@ -62,7 +62,7 @@ export function Hero() {
               <li className="flex gap-1.5">
                 <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={3} aria-hidden />
                 <span>
-                  <strong className="font-semibold tabular-nums">{PROPERTY.worksPaidHero}</strong> di lavori su facciate, balconi e migliorie già pagati dal proprietario
+                  <strong className="font-semibold tabular-nums">{PROPERTY.condoWorksPaid}</strong> di lavori su facciate, balconi e migliorie già pagati dal proprietario
                 </span>
               </li>
             </ul>
