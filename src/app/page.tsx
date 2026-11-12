@@ -52,10 +52,14 @@ export default function Home() {
         </Band>
 
         <Band>
-          <Opportunity />
+          <Location />
         </Band>
 
         <Band tone="ice">
+          <Opportunity />
+        </Band>
+
+        <Band>
           <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
             <SectionTitle
               eyebrow="Quadrilocale · 4 locali"
@@ -70,10 +74,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-        </Band>
-
-        <Band>
-          <Location />
         </Band>
 
         <Band tone="ice" last>
