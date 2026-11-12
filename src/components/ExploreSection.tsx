@@ -14,7 +14,7 @@ const MODES: { id: Mode; emoji: string; label: string; short: string }[] = [
   { id: "ai", emoji: "🎨", label: "Crea il tuo Render AI", short: "Render AI" },
 ];
 
-export function ExploreSection() {
+export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
   const [mode, setMode] = useState<Mode>("foto");
   const { markPhotoSeen } = useUi();
   const onPhoto = useCallback((item: GalleryItem) => markPhotoSeen(item.id), [markPhotoSeen]);
@@ -61,7 +61,7 @@ export function ExploreSection() {
             </p>
           </>
         )}
-        {mode === "ai" && <AiStudio />}
+        {mode === "ai" && <AiStudio aiEnabled={aiEnabled} onShowRenders={() => setMode("render")} />}
       </div>
     </section>
   );

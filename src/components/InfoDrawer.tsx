@@ -5,6 +5,7 @@ import { Sheet } from "./Sheet";
 import { DaControllare } from "./DaControllare";
 import { PROPERTY } from "@/config/site";
 import { useUi } from "./UiProvider";
+import { composition } from "@/data/composition";
 
 export type InfoTab = "composizione" | "stato" | "condominio" | "documenti";
 
@@ -75,7 +76,8 @@ export function InfoDrawer({
               <dl>
                 <Row label="Superficie">~{PROPERTY.sqm} m²</Row>
                 <Row label="Piano">{PROPERTY.floor}</Row>
-                <Row label="Locali">Soggiorno, cucina abitabile, 3 camere</Row>
+                <Row label="Tipologia">Quadrilocale: 4 locali (sala + 3 camere)</Row>
+                <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
                 <Row label="Terrazze">3</Row>
                 <Row label="Ripostiglio">Nessuno</Row>
@@ -83,16 +85,11 @@ export function InfoDrawer({
               </dl>
             </Card>
             <ul className="space-y-3">
-              <Bullet>Ingresso già tinteggiato di bianco, con doppie porte a vetri.</Bullet>
-              <Bullet>Soggiorno con pavimento in graniglia nera lucida.</Bullet>
-              <Bullet>Cucina abitabile con finestra e portafinestra sulla terrazza.</Bullet>
-              <Bullet>1 camera matrimoniale + 2 stanze accessorie polivalenti (figli, studio, ospiti).</Bullet>
-              <Bullet>
-                2 bagni: 1 interno completo con vasca + 1 esterno finestrato, attrezzato a lavanderia con pilozzo e
-                caldaia.
-              </Bullet>
-              <Bullet>3 terrazze: 1 ampia comunicante tra cucina e stanza + 2 più piccole.</Bullet>
-              <Bullet>Garage privato per auto.</Bullet>
+              {composition.map((c) => (
+                <Bullet key={c.area}>
+                  <span className="font-semibold">{c.area}:</span> {c.text}.
+                </Bullet>
+              ))}
             </ul>
           </>
         )}
@@ -109,8 +106,8 @@ export function InfoDrawer({
               <p className="font-semibold text-ink">Trasparenza totale</p>
               <p className="mt-1">
                 L&apos;immobile è venduto <strong>vuoto / non arredato</strong>. Richiede principalmente{" "}
-                <strong>rimozione della carta da parati, tinteggiatura delle pareti e arredo personalizzato</strong>.
-                Niente rifacimenti strutturali: è una tela bianca da personalizzare.
+                <strong>una semplice rinfrescata delle pareti secondo il proprio gusto e l&apos;arredo personalizzato</strong>.{" "}
+                <strong>Zero opere murarie</strong>: pronta da personalizzare con i tuoi colori e arredi.
               </p>
             </div>
           </>

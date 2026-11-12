@@ -32,3 +32,9 @@ Facoltativo: `LEAD_WEBHOOK_URL` riceve in POST i numeri lasciati per sbloccare a
 - `src/data/galleryData.ts`: titoli e didascalie di foto, render, stanze AI e stili
 - `src/config/site.ts`: prezzo, dati tecnici, WhatsApp, tour 360°, limiti AI
 - `src/app/api/generate-render/route.ts`: generazione dei render (fal.ai Flux Kontext oppure OpenAI Image Edit). Limita a 2 render gratis, poi altri 3 dopo che il visitatore lascia il numero WhatsApp. Il limite è salvato in un cookie httpOnly e in localStorage.
+
+## Comportamento senza chiave API o numero WhatsApp
+
+- **Render AI**: finché `FAL_KEY` / `OPENAI_API_KEY` mancano, i visitatori vedono il riquadro "Configuratore Render AI in fase di attivazione" invece del pulsante di generazione. La pagina lo verifica con `GET /api/generate-render`, quindi si attiva da sola appena aggiungi la chiave sul server.
+- **Prenota Visita**: finché `NEXT_PUBLIC_WHATSAPP_NUMBER` manca o non è valido (8-15 cifre), il pulsante di invio resta disattivato e compare un avviso discreto. Nessun link `wa.me` viene aperto.
+- I due promemoria rossi `[DA CONTROLLARE]` per chiave API e numero WhatsApp si vedono solo in sviluppo (`npm run dev`), non nel sito pubblicato.

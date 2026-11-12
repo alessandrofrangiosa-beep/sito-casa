@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Lock, RefreshCw, Sparkles, Wand2 } from "lucide-react";
+import { Clock3, Lock, RefreshCw, Sparkles, Wand2 } from "lucide-react";
 import { aiBaseRooms, aiStyles } from "@/data/galleryData";
 import { AI_BONUS_RENDERS, AI_FREE_RENDERS } from "@/config/site";
 import { DaControllare } from "./DaControllare";
@@ -57,8 +57,35 @@ function BeforeAfter({ before, after, label }: { before: string; after: string; 
   );
 }
 
-export function AiStudio() {
+const IS_DEV = process.env.NODE_ENV !== "production";
+
+/** Riquadro mostrato ai visitatori finché il servizio Render AI non è configurato */
+function AiComingSoon({ onShowRenders }: { onShowRenders?: () => void }) {
+  return (
+    <div className="flex gap-3 rounded-xl border border-primary/20 bg-primary-soft p-4">
+      <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+      <div className="min-w-0">
+        <p className="font-semibold text-ink">Configuratore Render AI in fase di attivazione</p>
+        <p className="mt-0.5 text-sm leading-snug text-slate-ink">
+          Esplora intanto i Render 3D già pronti nella scheda accanto.
+        </p>
+        {onShowRenders && (
+          <button
+            type="button"
+            onClick={onShowRenders}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-hover"
+          >
+            ✨ Vedi i Render 3D
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function AiStudio({ aiEnabled = false, onShowRenders }: { aiEnabled?: boolean; onShowRenders?: () => void }) {
   const { openBooking } = useUi();
+  const [enabled, setEnabled] = useState(aiEnabled);
   const [roomId, setRoomId] = useState(aiBaseRooms[0].id);
   const [styleId, setStyleId] = useState<string | null>(aiStyles[1].id);
   const [prompt, setPrompt] = useState("");
@@ -66,7 +93,6 @@ export function AiStudio() {
   const [unlocked, setUnlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [missingKey, setMissingKey] = useState(false);
   const [showUnlock, setShowUnlock] = useState(false);
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
@@ -77,6 +103,22 @@ export function AiStudio() {
     setUnlocked(readLs(LS_UNLOCK) === "1");
   }, []);
 
+  // Verifica a runtime se il server ha una chiave API (fal.ai / OpenAI) configurata
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/generate-render", { method: "GET", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (alive && d && typeof d.enabled === "boolean") setEnabled(d.enabled);
+      })
+      .catch(() => {
+        /* nessun server (anteprima statica): resta il valore calcolato al build */
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const limit = AI_FREE_RENDERS + (unlocked ? AI_BONUS_RENDERS : 0);
   const remaining = Math.max(0, limit - used);
   const exhausted = unlocked && remaining === 0;
@@ -85,7 +127,6 @@ export function AiStudio() {
 
   async function generate(withPhone = false) {
     setError(null);
-    setMissingKey(false);
     if (!withPhone && remaining === 0) {
       if (!unlocked) setShowUnlock(true);
       return;
@@ -117,7 +158,7 @@ export function AiStudio() {
           setUsed(AI_FREE_RENDERS + AI_BONUS_RENDERS);
           writeLs(LS_COUNT, String(AI_FREE_RENDERS + AI_BONUS_RENDERS));
         } else if (data.error === "missing_api_key") {
-          setMissingKey(true);
+          setEnabled(false);
         } else {
           setError(data.message ?? "Errore imprevisto.");
         }
@@ -146,9 +187,11 @@ export function AiStudio() {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Studio interattivo</p>
           <h3 className="text-2xl font-semibold leading-tight">Immagina la casa con il tuo stile</h3>
         </div>
-        <span className="shrink-0 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary">
-          {remaining}/{limit} {unlocked ? "render" : "gratis"}
-        </span>
+        {enabled && (
+          <span className="shrink-0 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary tabular-nums">
+            {remaining}/{limit} {unlocked ? "render" : "gratis"}
+          </span>
+        )}
       </div>
 
       {/* 1. Stanza */}
@@ -206,7 +249,14 @@ export function AiStudio() {
       </section>
 
       {/* 3. Genera */}
-      {!showUnlock && !exhausted && (
+      {!enabled && (
+        <>
+          <AiComingSoon onShowRenders={onShowRenders} />
+          {IS_DEV && <DaControllare block>Inserire API Key fal.ai / OpenAI in .env.local</DaControllare>}
+        </>
+      )}
+
+      {enabled && !showUnlock && !exhausted && (
         <button
           type="button"
           onClick={() => generate()}
@@ -225,10 +275,9 @@ export function AiStudio() {
         </button>
       )}
 
-      {missingKey && <DaControllare block>Inserire API Key fal.ai / OpenAI in .env.local</DaControllare>}
       {error && <p className="text-sm font-semibold text-red-600" role="alert">{error}</p>}
 
-      {showUnlock && !unlocked && (
+      {enabled && showUnlock && !unlocked && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
