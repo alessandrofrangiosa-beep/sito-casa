@@ -33,7 +33,7 @@ export function ExploreSection() {
               aria-controls={`pannello-${m.id}`}
               onClick={() => setMode(m.id)}
               className={`flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-2.5 text-center transition sm:flex-row sm:gap-2 sm:text-base ${
-                active ? "bg-gulf text-white shadow-soft" : "text-slate-ink hover:bg-sand"
+                active ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
               }`}
             >
               <span className="text-xl sm:text-lg" aria-hidden>{m.emoji}</span>

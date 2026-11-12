@@ -31,19 +31,19 @@ type Result = { image: string; roomId: string; styleLabel: string };
 function BeforeAfter({ before, after, label }: { before: string; after: string; label: string }) {
   const [pos, setPos] = useState(50);
   return (
-    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-gulf select-none">
+    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-ink select-none">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={after} alt={`Render AI: ${label}`} className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
         <Image src={before} alt="Foto reale di partenza" fill sizes="(min-width:768px) 600px, 100vw" className="object-cover" />
       </div>
       <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-white shadow" style={{ left: `${pos}%` }}>
-        <span className="absolute top-1/2 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-xs font-bold text-gulf shadow-soft">
+        <span className="absolute top-1/2 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-xs font-bold text-ink shadow-soft">
           ⇆
         </span>
       </div>
       <span className="absolute top-2 left-2 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white">Oggi</span>
-      <span className="absolute top-2 right-2 rounded-full bg-gulf/85 px-2.5 py-1 text-[11px] font-semibold text-white">✨ Render AI</span>
+      <span className="absolute top-2 right-2 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-semibold text-white">✨ Render AI</span>
       <input
         type="range"
         min={0}
@@ -140,20 +140,20 @@ export function AiStudio() {
   const resultRoom = result ? aiBaseRooms.find((r) => r.id === result.roomId)! : null;
 
   return (
-    <div className="space-y-6 rounded-3xl border border-line bg-card p-4 shadow-soft sm:p-6">
+    <div className="space-y-6 rounded-2xl border border-line bg-card p-4 shadow-soft sm:p-6">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-terra">Studio interattivo</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Studio interattivo</p>
           <h3 className="text-2xl font-semibold leading-tight">Immagina la casa con il tuo stile</h3>
         </div>
-        <span className="shrink-0 rounded-full bg-emerald-soft px-3 py-1.5 text-xs font-bold text-emerald-brand">
+        <span className="shrink-0 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary">
           {remaining}/{limit} {unlocked ? "render" : "gratis"}
         </span>
       </div>
 
       {/* 1. Stanza */}
       <section>
-        <p className="mb-2 text-sm font-bold text-gulf">1 · Scegli la stanza</p>
+        <p className="mb-2 text-sm font-bold text-ink">1 · Scegli la stanza</p>
         <div className="grid grid-cols-4 gap-2">
           {aiBaseRooms.map((r) => (
             <button
@@ -162,7 +162,7 @@ export function AiStudio() {
               onClick={() => setRoomId(r.id)}
               aria-pressed={roomId === r.id}
               className={`group overflow-hidden rounded-xl border-2 text-left transition ${
-                roomId === r.id ? "border-terra" : "border-line"
+                roomId === r.id ? "border-primary" : "border-line"
               }`}
             >
               <span className="relative block aspect-square">
@@ -176,7 +176,7 @@ export function AiStudio() {
 
       {/* 2. Stile */}
       <section>
-        <p className="mb-2 text-sm font-bold text-gulf">2 · Stile rapido</p>
+        <p className="mb-2 text-sm font-bold text-ink">2 · Stile rapido</p>
         <div className="grid grid-cols-2 gap-2">
           {aiStyles.map((s) => (
             <button
@@ -185,7 +185,7 @@ export function AiStudio() {
               onClick={() => setStyleId(styleId === s.id ? null : s.id)}
               aria-pressed={styleId === s.id}
               className={`rounded-xl border px-3 py-3 text-sm font-semibold transition ${
-                styleId === s.id ? "border-gulf bg-gulf text-white" : "border-line bg-sand text-ink"
+                styleId === s.id ? "border-primary bg-primary text-white" : "border-line bg-ice text-ink"
               }`}
             >
               {s.label}
@@ -199,7 +199,7 @@ export function AiStudio() {
             onChange={(e) => setPrompt(e.target.value.slice(0, 280))}
             rows={2}
             placeholder="Es. divano angolare blu, parquet chiaro, libreria a parete"
-            className="w-full resize-none rounded-xl border border-line bg-sand px-3.5 py-3 text-[15px] outline-none focus:border-gulf"
+            className="w-full resize-none rounded-xl border border-line bg-ice px-3.5 py-3 text-[15px] outline-none focus:border-primary"
           />
         </label>
         <p className="mt-1 text-xs text-slate-ink">Pareti, finestre e vista mare restano quelle reali: cambia solo l&apos;arredo.</p>
@@ -211,7 +211,7 @@ export function AiStudio() {
           type="button"
           onClick={() => generate()}
           disabled={loading || (!styleId && !prompt.trim())}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-terra px-5 py-4 text-base font-bold text-white shadow-soft transition disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-4 text-base font-semibold text-white shadow-soft transition hover:bg-primary-hover disabled:opacity-60"
         >
           {loading ? (
             <>
@@ -234,10 +234,10 @@ export function AiStudio() {
             e.preventDefault();
             generate(true);
           }}
-          className="space-y-3 rounded-2xl border border-terra/40 bg-terra-soft p-4"
+          className="space-y-3 rounded-2xl border border-primary/20 bg-primary-soft p-4"
         >
-          <p className="flex items-center gap-2 font-semibold text-gulf">
-            <Lock className="h-4 w-4 text-terra" /> Hai usato i {AI_FREE_RENDERS} render gratuiti
+          <p className="flex items-center gap-2 font-semibold text-ink">
+            <Lock className="h-4 w-4 text-primary" /> Hai usato i {AI_FREE_RENDERS} render gratuiti
           </p>
           <p className="text-sm text-ink">
             Lascia il tuo numero WhatsApp per sbloccare <strong>altri {AI_BONUS_RENDERS} render</strong>: ti
@@ -251,7 +251,7 @@ export function AiStudio() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+39 333 123 4567"
-            className="w-full rounded-xl border border-line bg-card px-4 py-3 text-base outline-none focus:border-gulf"
+            className="w-full rounded-xl border border-line bg-card px-4 py-3 text-base outline-none focus:border-primary"
           />
           <label className="flex items-start gap-2.5 text-xs leading-snug text-slate-ink">
             <input
@@ -259,7 +259,7 @@ export function AiStudio() {
               required
               checked={consent}
               onChange={(e) => setConsent(e.target.checked)}
-              className="mt-0.5 h-4 w-4 shrink-0 accent-[#15803D]"
+              className="mt-0.5 h-4 w-4 shrink-0 accent-[#0E6BA8]"
             />
             Acconsento a essere contattato su WhatsApp dal proprietario per informazioni su questo immobile. Il numero
             non sarà ceduto a terzi.
@@ -267,7 +267,7 @@ export function AiStudio() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-brand px-5 py-3.5 font-bold text-white disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
           >
             {loading ? <RefreshCw className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
             Sblocca {AI_BONUS_RENDERS} render e genera
@@ -276,18 +276,18 @@ export function AiStudio() {
       )}
 
       {exhausted && (
-        <div className="rounded-2xl border border-line bg-sand p-4 text-center">
-          <p className="font-semibold text-gulf">Hai esplorato tutti i render disponibili.</p>
+        <div className="rounded-2xl border border-line bg-ice p-4 text-center">
+          <p className="font-semibold text-ink">Hai esplorato tutti i render disponibili.</p>
           <p className="mt-1 text-sm text-slate-ink">Il modo migliore per immaginarla ora è vederla dal vivo.</p>
-          <button type="button" onClick={openBooking} className="mt-3 rounded-xl bg-emerald-brand px-5 py-3 font-bold text-white">
-            💬 Prenota una visita
+          <button type="button" onClick={openBooking} className="mt-3 rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:bg-primary-hover">
+            Prenota una visita
           </button>
         </div>
       )}
 
       {result && resultRoom && (
         <section className="space-y-3">
-          <p className="text-sm font-bold text-gulf">
+          <p className="text-sm font-bold text-ink">
             Il tuo render · {resultRoom.label} · {result.styleLabel}
           </p>
           <BeforeAfter before={resultRoom.src} after={result.image} label={`${resultRoom.label} ${result.styleLabel}`} />
@@ -295,7 +295,7 @@ export function AiStudio() {
             Trascina per confrontare. Immagine generata dall&apos;intelligenza artificiale: ipotesi di arredo, non
             rappresenta lo stato attuale dell&apos;immobile.
           </p>
-          <button type="button" onClick={openBooking} className="w-full rounded-2xl border-2 border-emerald-brand px-5 py-3.5 font-bold text-emerald-brand">
+          <button type="button" onClick={openBooking} className="w-full rounded-xl border border-primary px-5 py-3.5 font-semibold text-primary transition hover:bg-primary-soft">
             Ti piace? Vieni a vederla dal vivo →
           </button>
         </section>

@@ -41,11 +41,11 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
       className="animate-caption pointer-events-none absolute inset-x-2 bottom-2 flex items-center gap-2.5 rounded-xl bg-white/92 px-3 py-2 shadow-soft backdrop-blur-md sm:inset-x-3 sm:bottom-3"
       aria-live="polite"
     >
-      <span className="grid h-7 min-w-7 shrink-0 place-items-center rounded-lg bg-gulf px-1 text-[11px] font-bold text-white">
+      <span className="grid h-7 min-w-7 shrink-0 place-items-center rounded-lg bg-primary px-1 text-[11px] font-bold text-white">
         {String(index + 1).padStart(2, "0")}
       </span>
       <p className="line-clamp-2 text-[12.5px] leading-snug text-ink sm:text-sm">
-        <strong className="font-bold text-gulf">{item.title}</strong>
+        <strong className="font-bold text-ink">{item.title}</strong>
         <span className="text-slate-ink"> · {item.caption}</span>
       </p>
       <span className="sr-only">
@@ -57,7 +57,7 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
 
 function Arrows({ index, total, goTo, dark = false }: { index: number; total: number; goTo: (i: number) => void; dark?: boolean }) {
   const base = `absolute top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full shadow-soft transition disabled:opacity-0 ${
-    dark ? "bg-white/15 text-white" : "bg-white/85 text-gulf backdrop-blur"
+    dark ? "bg-white/15 text-white" : "bg-white/85 text-ink backdrop-blur"
   }`;
   return (
     <>
@@ -89,7 +89,7 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
 
   return (
     <div>
-      <div className="relative overflow-hidden rounded-3xl border border-line bg-gulf shadow-soft">
+      <div className="relative overflow-hidden rounded-2xl border border-line bg-ink shadow-soft">
         <div
           ref={trackRef}
           onScroll={onScroll}
@@ -121,12 +121,12 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
           <div className="flex flex-col items-start gap-1.5">
             {overlayBadge && (
-              <span className="rounded-full bg-gulf/80 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+              <span className="rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
                 ✨ {overlayBadge}
               </span>
             )}
             {current.badge && (
-              <span key={current.id} className="animate-caption rounded-full bg-emerald-brand px-2.5 py-1 text-[11px] font-bold text-white shadow-soft">
+              <span key={current.id} className="animate-caption rounded-full border border-primary/20 bg-primary-soft px-2.5 py-1 text-[11px] font-semibold text-primary shadow-soft">
                 ✓ {current.badge}
               </span>
             )}
@@ -150,7 +150,7 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
             aria-label={`Vai a: ${item.title}`}
             aria-current={i === index}
             className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border-2 transition ${
-              i === index ? "border-terra" : "border-transparent opacity-60"
+              i === index ? "border-primary" : "border-transparent opacity-60"
             }`}
           >
             <Image src={item.src} alt="" fill sizes="56px" className="object-cover" />
@@ -221,7 +221,7 @@ function Lightbox({
         <Arrows index={index} total={items.length} goTo={goTo} dark />
       </div>
       <div key={item.id} className="animate-caption px-5 pb-safe pt-3 text-white">
-        <p className="font-serif text-lg font-semibold text-white">{item.title}</p>
+        <p className="text-lg font-semibold text-white">{item.title}</p>
         <p className="text-sm text-white/75">{item.caption}</p>
       </div>
     </div>

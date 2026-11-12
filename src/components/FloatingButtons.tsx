@@ -1,24 +1,29 @@
 "use client";
 
+import { Info } from "lucide-react";
 import { useUi } from "./UiProvider";
+import { WhatsAppIcon } from "./BookingModal";
 
 export function FloatingButtons() {
   const { openInfo, openBooking } = useUi();
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex items-end justify-between gap-3 px-3 pb-safe sm:px-5">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex items-end justify-between gap-3 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-5">
       <button
         type="button"
         onClick={() => openInfo()}
-        className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/20 bg-gulf px-4 py-3.5 text-sm font-bold text-white shadow-float sm:px-5 sm:text-base"
+        className="pointer-events-auto flex h-11 items-center gap-1.5 rounded-full border border-line bg-white/95 pl-3 pr-4 text-sm font-semibold text-ink shadow-float backdrop-blur transition hover:border-primary/40 hover:text-primary"
       >
-        <span aria-hidden>ℹ️</span> Info Utili
+        <Info className="h-4 w-4 text-primary" /> Info Utili
       </button>
       <button
         type="button"
         onClick={openBooking}
-        className="pointer-events-auto flex items-center gap-2 rounded-full bg-emerald-brand px-4 py-3.5 text-sm font-bold text-white shadow-float sm:px-5 sm:text-base"
+        className="pointer-events-auto flex h-11 items-center gap-2 rounded-full bg-primary pl-1.5 pr-4 text-sm font-semibold text-white shadow-float transition hover:bg-primary-hover"
       >
-        <span aria-hidden>💬</span> Prenota Visita
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-white">
+          <WhatsAppIcon className="h-[18px] w-[18px] text-whatsapp" />
+        </span>
+        Prenota Visita
       </button>
     </div>
   );

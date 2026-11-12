@@ -24,37 +24,57 @@ function findFloorPlan(): string | null {
   }
 }
 
+/** Fascia a tutta larghezza: alterna bianco e grigio ghiaccio tra le sezioni */
+function Band({ tone = "white", last = false, children }: { tone?: "white" | "ice"; last?: boolean; children: React.ReactNode }) {
+  return (
+    <div className={`${tone === "ice" ? "border-y border-line bg-ice" : "bg-page"} py-14 sm:py-20 ${last ? "pb-28" : ""}`}>
+      {children}
+    </div>
+  );
+}
+
 export default function Home() {
   const floorPlan = findFloorPlan();
 
   return (
     <UiProvider>
-      <main className="space-y-16 pb-32 sm:space-y-24">
-        <div className="space-y-6">
-          <Hero />
+      <main>
+        <Hero />
+
+        <div className="pb-16 sm:pb-20">
           <ExploreSection />
         </div>
 
-        <VirtualTour />
+        <Band tone="ice">
+          <VirtualTour />
+        </Band>
 
-        <Opportunity />
+        <Band>
+          <Opportunity />
+        </Band>
 
-        <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
-          <SectionTitle
-            eyebrow="Distribuzione"
-            title="Planimetria"
-            intro="Zona giorno e zona notte ben separate da un corridoio luminoso, 3 terrazze e 2 bagni: tocca la pianta per ingrandirla a schermo intero."
-          />
-          <FloorPlan src={floorPlan} />
-        </section>
+        <Band tone="ice">
+          <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
+            <SectionTitle
+              eyebrow="Distribuzione"
+              title="Planimetria"
+              intro="Zona giorno e zona notte ben separate da un corridoio luminoso, 3 terrazze e 2 bagni: tocca la pianta per ingrandirla a schermo intero."
+            />
+            <FloorPlan src={floorPlan} />
+          </section>
+        </Band>
 
-        <Location />
+        <Band>
+          <Location />
+        </Band>
 
-        <FinalCta />
+        <Band tone="ice" last>
+          <FinalCta />
+        </Band>
       </main>
 
-      <footer className="border-t border-line bg-card px-4 pb-28 pt-8 text-center text-xs leading-relaxed text-slate-ink">
-        <p className="font-serif text-base font-semibold text-gulf">
+      <footer className="bg-page px-4 pb-28 pt-8 text-center text-xs leading-relaxed text-slate-ink">
+        <p className="text-base font-semibold text-ink">
           {PROPERTY.address} · {PROPERTY.city}
         </p>
         <p className="mt-1">Vendita diretta da privato · Nessuna agenzia coinvolta · Visite solo in presenza su appuntamento</p>

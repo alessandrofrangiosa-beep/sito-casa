@@ -42,12 +42,12 @@ export function Sheet({
         type="button"
         aria-label="Chiudi"
         onClick={onClose}
-        className="animate-fade absolute inset-0 bg-gulf/55 backdrop-blur-[2px]"
+        className="animate-fade absolute inset-0 bg-ink/50 backdrop-blur-[2px]"
       />
       <div
         ref={panelRef}
         tabIndex={-1}
-        className={`animate-sheet absolute inset-x-0 bottom-0 flex max-h-[92dvh] flex-col rounded-t-3xl bg-sand shadow-float outline-none md:inset-y-0 md:bottom-auto md:h-dvh md:max-h-none md:w-[460px] md:rounded-none ${
+        className={`animate-sheet absolute inset-x-0 bottom-0 flex max-h-[92dvh] flex-col rounded-t-3xl bg-ice shadow-float outline-none md:inset-y-0 md:bottom-auto md:h-dvh md:max-h-none md:w-[460px] md:rounded-none ${
           side === "left" ? "md:left-0 md:right-auto" : "md:right-0 md:left-auto"
         }`}
       >
@@ -55,7 +55,7 @@ export function Sheet({
         <header className="flex items-start justify-between gap-4 border-b border-line px-5 pb-4 pt-3 md:pt-6">
           <div>
             {eyebrow && (
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-terra">{eyebrow}</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
             )}
             <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
           </div>
@@ -63,7 +63,7 @@ export function Sheet({
             type="button"
             onClick={onClose}
             aria-label="Chiudi pannello"
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-card text-gulf"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-card text-ink"
           >
             <X className="h-5 w-5" />
           </button>

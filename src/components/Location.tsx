@@ -28,17 +28,17 @@ export function Location() {
         <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-1">
           {POINTS.map(({ icon: Icon, title, text }) => (
             <li key={title} className="flex gap-3 rounded-2xl border border-line bg-card p-3.5">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-terra-soft text-terra">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
                 <Icon className="h-5 w-5" />
               </span>
               <span>
-                <span className="block text-[15px] font-bold text-gulf">{title}</span>
+                <span className="block text-[15px] font-bold text-ink">{title}</span>
                 <span className="block text-sm leading-snug text-slate-ink">{text}</span>
               </span>
             </li>
           ))}
         </ul>
-        <div className="overflow-hidden rounded-3xl border border-line bg-card shadow-soft md:sticky md:top-4 md:self-start">
+        <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft md:sticky md:top-4 md:self-start">
           <iframe
             title="Mappa: Via Vittorio Veneto 390, Torre Annunziata"
             src={`https://www.google.com/maps?q=${MAP_QUERY}&z=16&output=embed`}
@@ -50,7 +50,7 @@ export function Location() {
             href={`https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="block border-t border-line px-4 py-3 text-center text-sm font-bold text-gulf"
+            className="block border-t border-line px-4 py-3 text-center text-sm font-bold text-ink"
           >
             Apri in Google Maps →
           </a>

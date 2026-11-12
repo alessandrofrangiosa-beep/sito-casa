@@ -22,17 +22,17 @@ export function Opportunity() {
       />
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <article className="rounded-3xl border border-emerald-brand/25 bg-emerald-soft p-5">
-          <PiggyBank className="h-7 w-7 text-emerald-brand" />
-          <p className="mt-3 font-serif text-3xl font-bold text-emerald-brand">{PROPERTY.agencySavings}</p>
+        <article className="rounded-2xl border border-primary/20 bg-primary-soft p-5">
+          <PiggyBank className="h-7 w-7 text-primary" />
+          <p className="mt-3 text-3xl font-bold tracking-tight text-primary tabular-nums">{PROPERTY.agencySavings}</p>
           <p className="mt-1 font-semibold text-ink">di provvigioni d&apos;agenzia risparmiate</p>
           <p className="mt-2 text-sm leading-relaxed text-slate-ink">
             Vendita diretta dal proprietario: 0% commissioni, trattativa trasparente e un unico interlocutore.
           </p>
         </article>
-        <article className="rounded-3xl border border-emerald-brand/25 bg-emerald-soft p-5">
-          <Hammer className="h-7 w-7 text-emerald-brand" />
-          <p className="mt-3 font-serif text-3xl font-bold text-emerald-brand">{PROPERTY.condoWorksPaid}</p>
+        <article className="rounded-2xl border border-primary/20 bg-primary-soft p-5">
+          <Hammer className="h-7 w-7 text-primary" />
+          <p className="mt-3 text-3xl font-bold tracking-tight text-primary tabular-nums">{PROPERTY.condoWorksPaid}</p>
           <p className="mt-1 font-semibold text-ink">di lavori condominiali già pagati</p>
           <p className="mt-2 text-sm leading-relaxed text-slate-ink">
             Lavori straordinari su facciate e balconi deliberati e saldati dal proprietario: il ponteggio visibile in foto
@@ -42,24 +42,24 @@ export function Opportunity() {
       </div>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-[1.4fr_1fr]">
-        <article className="rounded-3xl border border-line bg-card p-5 shadow-soft">
-          <p className="text-sm font-bold uppercase tracking-wider text-gulf">Già presente</p>
+        <article className="rounded-2xl border border-line bg-card p-5 shadow-soft">
+          <p className="text-sm font-bold uppercase tracking-wider text-ink">Già presente</p>
           <ul className="mt-3 space-y-2.5">
             {ALREADY_DONE.map((t) => (
               <li key={t} className="flex gap-2.5 text-[15px] leading-snug text-ink">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-brand" strokeWidth={3} />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
                 {t}
               </li>
             ))}
           </ul>
         </article>
-        <article className="rounded-3xl border border-terra/30 bg-terra-soft p-5">
-          <Paintbrush className="h-6 w-6 text-terra" />
-          <p className="mt-2 text-sm font-bold uppercase tracking-wider text-gulf">Ti resta solo</p>
+        <article className="rounded-2xl border border-primary/20 bg-primary-soft p-5">
+          <Paintbrush className="h-6 w-6 text-primary" />
+          <p className="mt-2 text-sm font-bold uppercase tracking-wider text-ink">Ti resta solo</p>
           <ol className="mt-3 space-y-2">
             {TODO.map((t, i) => (
               <li key={t} className="flex items-center gap-2.5 text-[15px] font-semibold text-ink">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-terra text-xs text-white">{i + 1}</span>
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-xs text-white">{i + 1}</span>
                 {t}
               </li>
             ))}

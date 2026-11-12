@@ -13,8 +13,8 @@ export function FinalCta() {
   const { openInfo, openBooking } = useUi();
   return (
     <section className="mx-auto max-w-5xl px-4">
-      <div className="overflow-hidden rounded-3xl bg-gulf p-6 text-white shadow-soft sm:p-10">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-terra">Visite solo in presenza</p>
+      <div className="overflow-hidden rounded-2xl bg-ink p-6 text-white shadow-soft sm:p-10">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">Visite solo in presenza</p>
         <h2 className="mt-2 text-[1.75rem] font-semibold leading-tight text-white sm:text-4xl">
           La vista mare va vissuta dal vivo.
         </h2>
@@ -24,19 +24,19 @@ export function FinalCta() {
         </p>
         <ol className="mt-6 grid gap-3 sm:grid-cols-3">
           {STEPS.map((s, i) => (
-            <li key={s.t} className="rounded-2xl bg-white/8 p-4 ring-1 ring-white/10">
-              <span className="font-serif text-2xl font-bold text-terra">0{i + 1}</span>
+            <li key={s.t} className="rounded-xl bg-white/5 p-4 ring-1 ring-white/10">
+              <span className="text-sm font-bold text-white/50 tabular-nums">0{i + 1}</span>
               <p className="mt-1 font-bold text-white">{s.t}</p>
               <p className="mt-1 text-sm text-white/70">{s.d}</p>
             </li>
           ))}
         </ol>
         <div className="mt-6 flex flex-col gap-2 sm:flex-row">
-          <button type="button" onClick={openBooking} className="rounded-2xl bg-emerald-brand px-6 py-4 font-bold text-white">
-            💬 Prenota la visita · {PROPERTY.price}
+          <button type="button" onClick={openBooking} className="rounded-xl bg-primary px-6 py-3.5 font-semibold text-white tabular-nums transition hover:bg-primary-hover">
+            Prenota la visita · {PROPERTY.price}
           </button>
-          <button type="button" onClick={() => openInfo()} className="rounded-2xl border border-white/30 px-6 py-4 font-bold text-white">
-            ℹ️ Apri le Info Utili
+          <button type="button" onClick={() => openInfo()} className="rounded-xl border border-white/25 px-6 py-3.5 font-semibold text-white transition hover:bg-white/10">
+            Apri le Info Utili
           </button>
         </div>
       </div>

@@ -30,7 +30,7 @@ function Chip({
       aria-pressed={active}
       onClick={onClick}
       className={`rounded-xl border px-3.5 py-2.5 text-sm font-semibold transition ${
-        active ? "border-gulf bg-gulf text-white" : "border-line bg-card text-slate-ink"
+        active ? "border-primary bg-primary text-white" : "border-line bg-card text-slate-ink"
       }`}
     >
       {children}
@@ -41,8 +41,8 @@ function Chip({
 function Step({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
     <fieldset className="space-y-3">
-      <legend className="flex items-center gap-2 text-sm font-bold text-gulf">
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-terra text-xs text-white">{n}</span>
+      <legend className="flex items-center gap-2 text-sm font-bold text-ink">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-xs text-white">{n}</span>
         {title}
       </legend>
       {children}
@@ -65,7 +65,7 @@ function CheckLine({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 h-5 w-5 shrink-0 accent-[#15803D]"
+        className="mt-0.5 h-5 w-5 shrink-0 accent-[#0E6BA8]"
       />
       <span>{children}</span>
     </label>
@@ -128,8 +128,8 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
   return (
     <Sheet open={open} onClose={onClose} title="Prenota una visita dal vivo" eyebrow="Pre-qualificazione • 1 minuto" side="right">
       <div className="space-y-6 px-5 py-5 pb-safe">
-        <div className="flex gap-3 rounded-2xl border border-emerald-brand/30 bg-emerald-soft p-4 text-sm leading-relaxed text-ink">
-          <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-brand" />
+        <div className="flex gap-3 rounded-2xl border border-primary/20 bg-primary-soft p-4 text-sm leading-relaxed text-ink">
+          <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
           <p>
             Le visite si svolgono <strong>solo in presenza</strong>, su appuntamento, direttamente con il proprietario
             (nessuna videochiamata). Per rispetto del tempo di tutti, ti chiediamo poche informazioni prima di fissare.
@@ -142,7 +142,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
             onChange={(e) => setName(e.target.value)}
             autoComplete="name"
             placeholder="Nome e cognome"
-            className="w-full rounded-xl border border-line bg-card px-4 py-3 text-base outline-none focus:border-gulf"
+            className="w-full rounded-xl border border-line bg-card px-4 py-3 text-base outline-none focus:border-primary"
           />
         </Step>
 
@@ -156,7 +156,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
           <CheckLine checked={readInfo} onChange={setReadInfo}>
             Ho letto le Info Utili (composizione, stato, condominio, documenti){" "}
             {!infoOpened && (
-              <button type="button" onClick={() => openInfo()} className="font-semibold text-terra underline">
+              <button type="button" onClick={() => openInfo()} className="font-semibold text-primary underline">
                 Aprile ora
               </button>
             )}
@@ -198,7 +198,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
                 aria-pressed={days.includes(d)}
                 onClick={() => toggle(days, setDays, d)}
                 className={`rounded-xl border py-2.5 text-xs font-bold transition ${
-                  days.includes(d) ? "border-gulf bg-gulf text-white" : "border-line bg-card text-slate-ink"
+                  days.includes(d) ? "border-primary bg-primary text-white" : "border-line bg-card text-slate-ink"
                 }`}
               >
                 {d}
@@ -216,7 +216,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
 
         <div className="rounded-2xl border border-line bg-card p-4">
           <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-ink">
-            <CalendarDays className="h-4 w-4 text-terra" /> Anteprima messaggio WhatsApp
+            <CalendarDays className="h-4 w-4 text-primary" /> Anteprima messaggio WhatsApp
           </p>
           <pre className="whitespace-pre-wrap font-sans text-[13px] leading-relaxed text-ink">{message}</pre>
         </div>
@@ -233,9 +233,12 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
           type="button"
           onClick={submit}
           disabled={!waHref}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-brand px-5 py-4 text-base font-bold text-white shadow-soft disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-primary px-5 py-3.5 text-base font-semibold text-white shadow-soft transition hover:bg-primary-hover disabled:opacity-50"
         >
-          <WhatsAppIcon /> Invia richiesta su WhatsApp
+          <span className="grid h-8 w-8 place-items-center rounded-full bg-white">
+            <WhatsAppIcon className="h-[18px] w-[18px] text-whatsapp" />
+          </span>
+          Invia richiesta su WhatsApp
         </button>
         <p className="flex items-center justify-center gap-1.5 text-center text-xs text-slate-ink">
           <MapPin className="h-3.5 w-3.5" /> {PROPERTY.address}, {PROPERTY.city}

@@ -19,7 +19,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <div className="flex items-start justify-between gap-4 border-b border-line py-3 last:border-0">
       <dt className="text-sm text-slate-ink">{label}</dt>
-      <dd className="text-right text-sm font-semibold text-ink">{children}</dd>
+      <dd className="text-right text-sm font-semibold text-ink tabular-nums">{children}</dd>
     </div>
   );
 }
@@ -27,7 +27,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex gap-3 text-[15px] leading-relaxed text-ink">
-      <span className="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-soft text-emerald-brand">
+      <span className="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
         <Check className="h-3.5 w-3.5" strokeWidth={3} />
       </span>
       <span>{children}</span>
@@ -53,14 +53,14 @@ export function InfoDrawer({
 
   return (
     <Sheet open={tab !== null} onClose={onClose} title="Info Utili" eyebrow="Scheda tecnica completa" side="left">
-      <nav className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-auto border-b border-line bg-sand px-5 py-3">
+      <nav className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-auto border-b border-line bg-ice px-5 py-3">
         {TABS.map((t, i) => (
           <button
             key={t.id}
             type="button"
             onClick={() => onTabChange(t.id)}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              active === t.id ? "bg-gulf text-white" : "border border-line bg-card text-slate-ink"
+              active === t.id ? "bg-primary text-white" : "border border-line bg-card text-slate-ink"
             }`}
           >
             {i + 1}. {t.label}
@@ -105,8 +105,8 @@ export function InfoDrawer({
               <Bullet>Pavimentazione in buono stato (graniglia nera nel salone, alla veneziana nelle camere).</Bullet>
               <Bullet>Bagno interno completo di vasca e sanitari.</Bullet>
             </ul>
-            <div className="rounded-2xl border border-terra/40 bg-terra-soft p-4 text-[15px] leading-relaxed text-ink">
-              <p className="font-semibold text-gulf">Trasparenza totale</p>
+            <div className="rounded-2xl border border-primary/20 bg-primary-soft p-4 text-[15px] leading-relaxed text-ink">
+              <p className="font-semibold text-ink">Trasparenza totale</p>
               <p className="mt-1">
                 L&apos;immobile è venduto <strong>vuoto / non arredato</strong>. Richiede principalmente{" "}
                 <strong>rimozione della carta da parati, tinteggiatura delle pareti e arredo personalizzato</strong>.
@@ -132,7 +132,7 @@ export function InfoDrawer({
                   {PROPERTY.condoFees ?? <DaControllare>Inserire importo spese condominiali</DaControllare>}
                 </Row>
                 <Row label="Lavori straordinari">
-                  <span className="text-emerald-brand">Già pagati</span>
+                  <span className="text-primary">Già pagati</span>
                 </Row>
               </dl>
             </Card>
@@ -164,9 +164,9 @@ export function InfoDrawer({
         <button
           type="button"
           onClick={openBooking}
-          className="mt-2 w-full rounded-2xl bg-emerald-brand px-5 py-4 text-base font-bold text-white shadow-soft"
+          className="mt-2 w-full rounded-xl bg-primary px-5 py-3.5 text-base font-semibold text-white shadow-soft transition hover:bg-primary-hover"
         >
-          💬 Ho letto tutto: prenota la visita
+          Ho letto tutto: prenota la visita
         </button>
       </div>
     </Sheet>
