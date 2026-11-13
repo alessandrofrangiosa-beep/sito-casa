@@ -23,7 +23,6 @@ export const composition: CompositionItem[] = [
 export const quickFacts: { value: string; label: string }[] = [
   { value: "4", label: "stanze" },
   { value: "1", label: "cucina" },
-  { value: "144 m²", label: "superficie" },
   { value: "2", label: "bagni" },
   { value: "1 + 2", label: "terrazza + balconi" },
   { value: "1", label: "garage" },

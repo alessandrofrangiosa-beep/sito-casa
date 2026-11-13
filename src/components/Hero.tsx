@@ -71,7 +71,7 @@ export function Hero() {
             </ul>
           </div>
 
-          <dl className="mt-3 grid grid-cols-[0.9fr_0.95fr_1.2fr_0.85fr_1.4fr_0.95fr] max-[340px]:grid-cols-[0.9fr_0.95fr_1.25fr_0.85fr_1.45fr_0.95fr] divide-x divide-line rounded-xl border border-line bg-ice">
+          <dl className="mt-3 grid grid-cols-[0.95fr_1fr_0.95fr_1.4fr_0.95fr] max-[340px]:grid-cols-[0.95fr_1fr_0.9fr_1.5fr_0.95fr] divide-x divide-line rounded-xl border border-line bg-ice">
             {quickFacts.map((f, i) => (
               <div key={f.label} className="flex min-w-0 flex-col-reverse items-center justify-center px-1 py-2 text-center">
                 <dt className={`mt-0.5 text-[10.5px] font-medium leading-tight text-slate-ink max-[340px]:text-[9px] sm:text-xs ${f.label.includes("+") ? "" : "truncate"}`}>{f.label}</dt>
