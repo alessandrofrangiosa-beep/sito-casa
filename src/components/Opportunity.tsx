@@ -8,6 +8,7 @@ const ALREADY_DONE = [
   "Bagno completo con vasca e sanitari",
   "Riscaldamento con termosifoni e caldaia già installati",
   "Ingresso e corridoio già tinteggiati di bianco",
+  "Copertura Fibra fino a 200 Mega: connessione veloce e stabile ideale per lavorare in smart working vista Golfo, videochiamate e streaming 4K.",
 ];
 
 const TODO = [
@@ -62,8 +63,8 @@ function PriceBreakdown() {
       </dl>
 
       <p className="mt-4 rounded-xl bg-ink px-4 py-3 text-[15px] font-semibold leading-snug text-white">
-        Stai bloccando oggi a prezzo pre-restauro un immobile in uno stabile con facciate appena rifatte e zero spese
-        straordinarie previste per i prossimi 15–20 anni.
+        Stai bloccando oggi a prezzo pre-restauro un immobile in uno stabile con facciate appena rifatte e nessuna
+        spesa straordinaria prevista per facciate e balconi.
       </p>
       <p className="mt-2 text-xs leading-snug text-slate-ink">
         Valori indicativi a scopo di confronto: il prezzo di vendita resta {PROPERTY.price} {PROPERTY.priceNote}.
