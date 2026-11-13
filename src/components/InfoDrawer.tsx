@@ -106,7 +106,7 @@ export function InfoDrawer({
             <Card>
               <dl>
                 <Row label="Superficie">~{PROPERTY.sqm} m²</Row>
-                <Row label="Tipologia">Quadrilocale: 4 locali (sala + 3 camere)</Row>
+                <Row label="Tipologia">Quadrilocale: 4 stanze</Row>
                 <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
                 <Row label="Pertinenze">1 terrazza + 2 balconi + garage privato ampio, adatto anche a SUV</Row>
