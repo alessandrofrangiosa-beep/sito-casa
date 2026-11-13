@@ -10,7 +10,7 @@ export const composition: CompositionItem[] = [
   { area: "Cucina", text: "Cucina abitabile separata con accesso diretto alla terrazza" },
   {
     area: "Zona notte",
-    text: "3 camere da letto: 1 camera matrimoniale principale + 2 ampie camere polivalenti, ideali per figli, ospiti o studio",
+    text: "1 camera da letto matrimoniale + 2 stanze versatili (in passato studio e stanza multiuso), da usare come studio, cameretta, stanza ospiti o smart working",
   },
   {
     area: "Bagni",

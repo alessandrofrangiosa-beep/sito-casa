@@ -4,7 +4,7 @@ import { SectionTitle } from "./SectionTitle";
 
 const ALREADY_DONE = [
   "Infissi bianchi con vetrocamera già sostituiti",
-  "Pavimenti in buono stato: graniglia nera nel salone, alla veneziana nelle camere",
+  "Pavimenti in buono stato: graniglia nera nel salone, alla veneziana nelle altre stanze",
   "Bagno completo con vasca e sanitari",
   "Riscaldamento con termosifoni e caldaia già installati",
   "Ingresso e corridoio già tinteggiati di bianco",

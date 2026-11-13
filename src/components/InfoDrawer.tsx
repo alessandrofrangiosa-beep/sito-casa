@@ -138,7 +138,7 @@ export function InfoDrawer({
               <Bullet>Infissi nuovi bianchi con vetrocamera.</Bullet>
               <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
               <Bullet>Copertura Fibra fino a 200 Mega, ideale per lo smart working.</Bullet>
-              <Bullet>Pavimentazione in buono stato (graniglia nera nel salone, alla veneziana nelle camere).</Bullet>
+              <Bullet>Pavimentazione in buono stato (graniglia nera nel salone, alla veneziana nelle altre stanze).</Bullet>
               <Bullet>Bagno interno completo di vasca e sanitari.</Bullet>
             </ul>
             <div className="rounded-2xl border border-primary/20 bg-primary-soft p-4 text-[15px] leading-relaxed text-ink">
