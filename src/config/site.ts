@@ -21,6 +21,19 @@ export const PROPERTY = {
 };
 
 /**
+ * Scomposizione trasparente del prezzo (sezione "Perché è un'opportunità concreta").
+ * Il netto e il prezzo al m² sono calcolati in automatico da questi valori.
+ */
+export const PRICE_BREAKDOWN = {
+  askingPrice: 250_000,
+  deductions: [
+    { label: "Valore garage privato incluso (quotazione media in zona)", amount: 25_000 },
+    { label: "Lavori straordinari su facciate e balconi già saldati", amount: 15_000 },
+    { label: "Commissioni d'agenzia risparmiate (0% intermediari)", amount: 9_000 },
+  ],
+};
+
+/**
  * Numero WhatsApp in formato internazionale senza "+" né spazi (es. "393331234567").
  * Si può impostare anche con la variabile NEXT_PUBLIC_WHATSAPP_NUMBER.
  */

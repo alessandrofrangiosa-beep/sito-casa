@@ -1,5 +1,6 @@
 "use client";
 
+import { FileCheck2 } from "lucide-react";
 import { useUi } from "./UiProvider";
 import { PROPERTY } from "@/config/site";
 
@@ -22,6 +23,14 @@ export function FinalCta() {
           Tratti direttamente con il proprietario: nessuna provvigione, nessun intermediario, risposte chiare. Libero subito,
           con rogito e consegna immediata.
         </p>
+        <div className="mt-5 flex gap-3 rounded-xl border border-white/15 bg-white/5 p-4">
+          <FileCheck2 className="mt-0.5 h-5 w-5 shrink-0 text-white" aria-hidden />
+          <p className="min-w-0 text-sm leading-snug text-white/85">
+            <strong className="font-semibold text-white">Documentazione già pronta e verificata per il mutuo:</strong>{" "}
+            conformità urbanistica e catastale controllata, quietanze lavori condominiali saldate e consegna immediata al
+            rogito.
+          </p>
+        </div>
         <ol className="mt-6 grid gap-3 sm:grid-cols-3">
           {STEPS.map((s, i) => (
             <li key={s.t} className="rounded-xl bg-white/5 p-4 ring-1 ring-white/10">

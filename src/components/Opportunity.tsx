@@ -1,5 +1,5 @@
-import { Hammer, PiggyBank, Paintbrush, Check } from "lucide-react";
-import { PROPERTY } from "@/config/site";
+import { Calculator, Check, Hammer, HardHat, Paintbrush, PiggyBank } from "lucide-react";
+import { PRICE_BREAKDOWN, PROPERTY } from "@/config/site";
 import { SectionTitle } from "./SectionTitle";
 
 const ALREADY_DONE = [
@@ -15,6 +15,62 @@ const TODO = [
   "Scegliere e portare i tuoi arredi",
   "Goderti subito la vista mare e le 3 terrazze",
 ];
+
+const euro = (n: number) => `€\u00a0${new Intl.NumberFormat("it-IT", { useGrouping: "always" }).format(n)}`;
+
+/** Scomposizione del prezzo: netto e €/m² calcolati dai valori in PRICE_BREAKDOWN */
+function PriceBreakdown() {
+  const { askingPrice, deductions } = PRICE_BREAKDOWN;
+  const net = askingPrice - deductions.reduce((sum, d) => sum + d.amount, 0);
+  const perSqm = Math.round(net / PROPERTY.sqm);
+
+  return (
+    <article className="mt-3 rounded-2xl border border-line bg-card p-5 shadow-soft">
+      <div className="flex items-center gap-2.5">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
+          <Calculator className="h-5 w-5" aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-primary">Calcolo trasparente</p>
+          <h3 className="text-lg font-bold leading-tight sm:text-xl">Quanto paghi davvero l&apos;appartamento</h3>
+        </div>
+      </div>
+
+      <dl className="mt-4 divide-y divide-line text-[15px]">
+        <div className="flex items-start justify-between gap-4 pb-3">
+          <dt className="min-w-0">
+            <span className="font-semibold text-ink">Prezzo richiesto</span>
+            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 120 m² + 3 terrazze + garage</span>
+          </dt>
+          <dd className="whitespace-nowrap font-bold text-ink tabular-nums">{euro(askingPrice)}</dd>
+        </div>
+        {deductions.map((d) => (
+          <div key={d.label} className="flex items-start justify-between gap-4 py-3">
+            <dt className="min-w-0 leading-snug text-slate-ink">{d.label}</dt>
+            <dd className="whitespace-nowrap font-semibold text-primary tabular-nums">−&nbsp;{euro(d.amount)}</dd>
+          </div>
+        ))}
+        <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-t-2 border-ink/80 pt-3">
+          <dt className="min-w-0 font-semibold leading-snug text-ink">= Costo netto reale dei 120 m² vista mare</dt>
+          <dd className="text-right">
+            <span className="block whitespace-nowrap text-2xl font-extrabold tracking-tight text-ink tabular-nums">~&nbsp;{euro(net)}</span>
+            <span className="mt-1 inline-block rounded-full border border-primary/20 bg-primary-soft px-2.5 py-0.5 text-xs font-semibold text-primary tabular-nums">
+              appena {new Intl.NumberFormat("it-IT", { useGrouping: "always" }).format(perSqm)}&nbsp;€/m²
+            </span>
+          </dd>
+        </div>
+      </dl>
+
+      <p className="mt-4 rounded-xl bg-ink px-4 py-3 text-[15px] font-semibold leading-snug text-white">
+        Stai bloccando oggi a prezzo pre-restauro un immobile in uno stabile con facciate appena rifatte e zero spese
+        straordinarie previste per i prossimi 15–20 anni.
+      </p>
+      <p className="mt-2 text-xs leading-snug text-slate-ink">
+        Valori indicativi a scopo di confronto: il prezzo di vendita resta {PROPERTY.price} {PROPERTY.priceNote}.
+      </p>
+    </article>
+  );
+}
 
 export function Opportunity() {
   return (
@@ -45,6 +101,8 @@ export function Opportunity() {
         </article>
       </div>
 
+      <PriceBreakdown />
+
       <div className="mt-3 grid gap-3 sm:grid-cols-[1.4fr_1fr]">
         <article className="rounded-2xl border border-line bg-card p-5 shadow-soft">
           <p className="text-sm font-bold uppercase tracking-wider text-ink">Già presente</p>
@@ -69,6 +127,16 @@ export function Opportunity() {
             ))}
           </ol>
           <p className="mt-3 text-sm text-slate-ink">Nessun lavoro strutturale o impianto da rifare: una tela bianca pronta in pochi giorni.</p>
+          <div className="mt-4 rounded-xl border border-primary/25 bg-card p-3.5">
+            <p className="flex items-center gap-2 text-sm font-bold text-primary">
+              <HardHat className="h-4 w-4 shrink-0" aria-hidden /> Bonus tempi e costi: ditta già attiva nello stabile
+            </p>
+            <p className="mt-1.5 text-[13.5px] leading-snug text-ink">
+              L&apos;impresa incaricata dal condominio per le facciate è già sul posto: su richiesta e senza alcun vincolo
+              ricevi il contatto diretto della squadra, per tinteggiare e personalizzare gli interni subito dopo il rogito.
+              Zero tempi di attesa e costi di uscita cantiere ridotti al minimo.
+            </p>
+          </div>
         </article>
       </div>
     </section>

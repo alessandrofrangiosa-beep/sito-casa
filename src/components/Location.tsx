@@ -1,4 +1,4 @@
-import { Anchor, Coffee, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
+import { Car, Anchor, Coffee, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import { SectionTitle } from "./SectionTitle";
 
@@ -24,6 +24,16 @@ export function Location() {
         title={<>Via Vittorio Veneto 390: centro, mare e collegamenti</>}
         intro="Uno dei contesti residenziali più apprezzati di Torre Annunziata: tutto ciò che serve è sotto casa, e il mare lo vedi dalla finestra."
       />
+      <div className="mb-3 flex gap-3 rounded-2xl border border-primary/20 bg-primary-soft p-4">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-white">
+          <Car className="h-5 w-5" aria-hidden />
+        </span>
+        <p className="min-w-0 text-[15px] leading-snug text-ink">
+          <strong className="font-semibold">Zero stress parcheggio in Via Vittorio Veneto</strong> grazie al garage privato
+          con risalita in ascensore fino al 6° piano, e <strong className="font-semibold">3 terrazze vivibili da marzo a
+          novembre</strong> come una quinta stanza vista Golfo.
+        </p>
+      </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
         <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-1">
           {POINTS.map(({ icon: Icon, title, text }) => (
