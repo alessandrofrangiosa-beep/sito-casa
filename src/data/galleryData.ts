@@ -154,9 +154,8 @@ export type AiStyle = { id: string; label: string; prompt: string };
 
 /** Stili rapidi: riempiono la descrizione (max 180 caratteri), che il visitatore può poi modificare. */
 export const aiStyles: AiStyle[] = [
-  { id: "moderno-luminoso", label: "Moderno Luminoso", prompt: "Stile moderno luminoso: pareti bianche, mobili in legno chiaro, linee pulite e luce naturale" },
+  { id: "cameretta", label: "Cameretta per bambini", prompt: "Cameretta per bambini: lettino, scrivania e libreria bassa, tappeto morbido, giochi colorati, pareti azzurro chiaro e luce calda" },
   { id: "mediterraneo", label: "Mediterraneo Vista Mare", prompt: "Stile mediterraneo: pareti bianco caldo, accenti terracotta e sabbia, lino, rattan e piante d'ulivo" },
   { id: "minimal", label: "Minimal Contemporaneo", prompt: "Stile minimal contemporaneo: toni neutri, pochi pezzi di design, finiture opache e atmosfera calma" },
   { id: "caldo", label: "Caldo Accogliente", prompt: "Stile caldo e accogliente: toni beige e caramello, legno di noce, tessuti morbidi, tappeti e luci calde" },
-  { id: "cameretta", label: "Cameretta bambino", prompt: "Cameretta per bambino: lettino, scrivania e libreria bassa, tappeto morbido, giochi colorati, pareti azzurro chiaro e luce calda" },
 ];
