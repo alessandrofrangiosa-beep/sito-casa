@@ -55,7 +55,7 @@ export function Sheet({
         <header className="flex items-start justify-between gap-4 border-b border-line px-5 pb-4 pt-3 md:pt-6">
           <div>
             {eyebrow && (
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">{eyebrow}</p>
             )}
             <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
           </div>

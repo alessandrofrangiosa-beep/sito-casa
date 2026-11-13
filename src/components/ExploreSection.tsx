@@ -37,7 +37,7 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
               }`}
             >
               <span className="text-xl sm:text-lg" aria-hidden>{m.emoji}</span>
-              <span className="text-[12px] font-bold leading-tight sm:text-sm">
+              <span className="text-[13px] font-bold leading-tight sm:text-sm">
                 <span className="sm:hidden">{m.short}</span>
                 <span className="hidden sm:inline">{m.label}</span>
               </span>

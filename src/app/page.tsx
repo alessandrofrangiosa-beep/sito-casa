@@ -98,7 +98,7 @@ export default function Home() {
           {PROPERTY.address} · {PROPERTY.city}
         </p>
         <p className="mt-1">Vendita diretta da privato · Nessuna agenzia coinvolta · Visite solo in presenza su appuntamento</p>
-        <p className="mt-3 text-[11px]">
+        <p className="mt-3 text-xs">
           I render 3D e le immagini generate con l&apos;AI sono ipotesi illustrative di arredo e non costituiscono
           elemento contrattuale. Superfici e dati indicativi, da verificare in sede di visita e rogito.
         </p>

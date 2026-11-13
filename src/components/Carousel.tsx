@@ -41,10 +41,10 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
       className="animate-caption pointer-events-none absolute inset-x-2 bottom-2 flex items-center gap-2.5 rounded-xl bg-white/92 px-3 py-2 shadow-soft backdrop-blur-md sm:inset-x-3 sm:bottom-3"
       aria-live="polite"
     >
-      <span className="grid h-7 min-w-7 shrink-0 place-items-center rounded-lg bg-primary px-1 text-[11px] font-bold text-white">
+      <span className="grid h-7 min-w-7 shrink-0 place-items-center rounded-lg bg-primary px-1 text-[12px] font-bold text-white">
         {String(index + 1).padStart(2, "0")}
       </span>
-      <p className="line-clamp-2 text-[12.5px] leading-snug text-ink sm:text-sm">
+      <p className="line-clamp-2 text-[13.5px] leading-snug text-ink sm:text-sm">
         <strong className="font-bold text-ink">{item.title}</strong>
         <span className="text-slate-ink"> · {item.caption}</span>
       </p>
@@ -121,17 +121,17 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
           <div className="flex flex-col items-start gap-1.5">
             {overlayBadge && (
-              <span className="rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+              <span className="rounded-full bg-ink/70 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
                 ✨ {overlayBadge}
               </span>
             )}
             {current.badge && (
-              <span key={current.id} className="animate-caption rounded-full border border-primary/20 bg-primary-soft px-2.5 py-1 text-[11px] font-semibold text-primary shadow-soft">
+              <span key={current.id} className="animate-caption rounded-full border border-primary/20 bg-primary-soft px-2.5 py-1 text-[12px] font-semibold text-primary shadow-soft">
                 ✓ {current.badge}
               </span>
             )}
           </div>
-          <span className="flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+          <span className="flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
             {index + 1} / {items.length}
             <Maximize2 className="h-3 w-3" />
           </span>

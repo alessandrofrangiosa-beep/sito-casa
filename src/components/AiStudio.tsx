@@ -46,8 +46,8 @@ function BeforeAfter({ before, after, label }: { before: string; after: string; 
           ⇆
         </span>
       </div>
-      <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white">Oggi</span>
-      <span className="absolute right-2 top-2 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-semibold text-white">
+      <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2.5 py-1 text-[12px] font-semibold text-white">Oggi</span>
+      <span className="absolute right-2 top-2 rounded-full bg-ink/70 px-2.5 py-1 text-[12px] font-semibold text-white">
         ✨ Il tuo progetto
       </span>
       <input
@@ -146,7 +146,7 @@ export function AiStudio({ aiEnabled = false, onShowRenders }: { aiEnabled?: boo
     <div className="space-y-6 rounded-2xl border border-line bg-card p-4 shadow-soft sm:p-6">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Arredala tu · su misura per te</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Arredala tu · su misura per te</p>
           <h3 className="text-2xl font-semibold leading-tight">Progetta la casa come la vuoi tu</h3>
           <p className="mt-1 text-sm leading-snug text-slate-ink">
             Scegli la stanza e lo stile, poi descrivi i tuoi desideri: colori, materiali, mobili. Ottieni un&apos;anteprima
@@ -172,7 +172,7 @@ export function AiStudio({ aiEnabled = false, onShowRenders }: { aiEnabled?: boo
               <span className="relative block aspect-square">
                 <Image src={r.src} alt={r.label} fill sizes="140px" className="object-cover" />
               </span>
-              <span className="block truncate px-1.5 py-1.5 text-[11px] font-semibold text-ink sm:text-xs">{r.label}</span>
+              <span className="block truncate px-1.5 py-1.5 text-[12px] font-semibold text-ink sm:text-xs">{r.label}</span>
             </button>
           ))}
         </div>

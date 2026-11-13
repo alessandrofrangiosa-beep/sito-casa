@@ -47,7 +47,7 @@ function SubTitle({ children }: { children: React.ReactNode }) {
 function Highlights() {
   return (
     <div className="overflow-hidden rounded-2xl border border-primary/25 bg-primary-soft">
-      <p className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">In evidenza</p>
+      <p className="px-4 pt-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">In evidenza</p>
       <ul className="divide-y divide-primary/15">
         <li className="flex gap-3 px-4 py-3">
           <Wifi className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />

@@ -15,7 +15,7 @@ export function FinalCta() {
   return (
     <section className="mx-auto max-w-5xl px-4">
       <div className="overflow-hidden rounded-2xl bg-ink p-6 text-white shadow-soft sm:p-10">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">Visite solo in presenza</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/60">Visite solo in presenza</p>
         <h2 className="mt-2 text-[1.75rem] font-semibold leading-tight text-white sm:text-4xl">
           La vista mare va vissuta dal vivo.
         </h2>
