@@ -5,6 +5,6 @@ export const FIBER = {
 };
 
 export const BUILDER_BONUS = {
-  title: "Bonus tempi e costi: ditta già nello stabile",
-  text: "Su richiesta ti diamo il contatto della squadra che sta già lavorando su tutto il condominio: tinteggi e personalizzi gli interni subito dopo il rogito, senza attese e risparmiando, perché la ditta è già sul posto.",
+  title: "Impresa già attiva nello stabile",
+  text: "Su richiesta forniamo il contatto dell'impresa che sta eseguendo i lavori condominiali: interventi interni subito dopo il rogito, senza attese e a costi ridotti.",
 };
