@@ -135,7 +135,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  white-space: nowrap;
+  width: max-content;
+  max-width: 180px;
   font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
@@ -169,6 +170,33 @@
 .neighborhood-map:not(.poi-zoom-mid) .poi-minor {
   display: none;
 }
-.neighborhood-map:not(.poi-zoom-near) .poi-minor .poi-label {
+/* Nome chiuso: si vede solo l'icona (la casa resta sempre aperta) */
+.poi:not(.poi-home):not(.poi-open) .poi-label {
   display: none;
+}
+.poi.poi-open-left .poi-label,
+.poi.poi-open-right .poi-label {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.poi.poi-open-left .poi-label { left: auto; right: 36px; }
+.poi.poi-open-right .poi-label { right: auto; left: 36px; }
+.poi.poi-open-below .poi-label,
+.poi.poi-open-above .poi-label {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+.poi.poi-open-below .poi-label { top: 36px; bottom: auto; }
+.poi.poi-open-above .poi-label { top: auto; bottom: 36px; }
+.poi-open .poi-dot {
+  transform: scale(1.15);
+  border-color: var(--color-ink);
+}
+.poi-dot {
+  transition: transform 0.15s ease;
+}
+.poi-icon.leaflet-interactive {
+  cursor: pointer;
 }
