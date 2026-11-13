@@ -9,7 +9,12 @@ export const PROPERTY = {
   city: "Torre Annunziata (NA)",
   floor: "6° piano di 8 con ascensore",
   sqm: 120,
+  /** Prezzo totale della vendita in blocco (appartamento + garage) */
   price: "€\u00a0250.000",
+  /** Prezzo del solo appartamento, mostrato come cifra principale nella hero */
+  apartmentPrice: "€\u00a0225.000",
+  /** Prezzo del garage privato */
+  garagePrice: "€\u00a025.000",
   priceNote: "trattabili",
   agencySavings: "€\u00a07.500 – €\u00a010.000",
   /** Lavori straordinari su facciate e balconi già pagati dal proprietario */
@@ -25,9 +30,9 @@ export const PROPERTY = {
  * Il netto e il prezzo al m² sono calcolati in automatico da questi valori.
  */
 export const PRICE_BREAKDOWN = {
-  askingPrice: 250_000,
+  /** Prezzo del solo appartamento (il garage da € 25.000 è a parte) */
+  askingPrice: 225_000,
   deductions: [
-    { label: "Valore garage privato incluso (quotazione media in zona)", amount: 25_000 },
     { label: "Lavori straordinari su facciate e balconi già saldati", amount: 15_000 },
     { label: "Commissioni d'agenzia risparmiate (0% intermediari)", amount: 9_000 },
   ],

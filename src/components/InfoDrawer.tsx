@@ -7,13 +7,14 @@ import { PROPERTY } from "@/config/site";
 import { useUi } from "./UiProvider";
 import { composition } from "@/data/composition";
 
-export type InfoTab = "composizione" | "stato" | "condominio" | "documenti";
+export type InfoTab = "prezzo" | "composizione" | "impianti" | "condominio" | "documenti";
 
 const TABS: { id: InfoTab; label: string }[] = [
+  { id: "prezzo", label: "Prezzo" },
   { id: "composizione", label: "Composizione" },
-  { id: "stato", label: "Stato e dotazioni" },
-  { id: "condominio", label: "Condominio" },
-  { id: "documenti", label: "Documenti" },
+  { id: "impianti", label: "Caratteristiche e impianti" },
+  { id: "condominio", label: "Condominio e lavori" },
+  { id: "documenti", label: "Stato documentale" },
 ];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -36,6 +37,10 @@ function Bullet({ children }: { children: React.ReactNode }) {
   );
 }
 
+function SubTitle({ children }: { children: React.ReactNode }) {
+  return <p className="pt-1 text-xs font-bold uppercase tracking-wider text-primary">{children}</p>;
+}
+
 function Card({ children }: { children: React.ReactNode }) {
   return <div className="rounded-2xl border border-line bg-card p-4 shadow-soft">{children}</div>;
 }
@@ -50,7 +55,7 @@ export function InfoDrawer({
   onClose: () => void;
 }) {
   const { openBooking } = useUi();
-  const active = tab ?? "composizione";
+  const active = tab ?? "prezzo";
 
   return (
     <Sheet open={tab !== null} onClose={onClose} title="Info Utili" eyebrow="Scheda tecnica completa" side="left">
@@ -70,18 +75,42 @@ export function InfoDrawer({
       </nav>
 
       <div className="space-y-4 px-5 py-5">
+        {active === "prezzo" && (
+          <>
+            <Card>
+              <dl>
+                <Row label="Appartamento (quadrilocale 120 m² + 3 terrazze)">{PROPERTY.apartmentPrice}</Row>
+                <Row label="Garage privato">{PROPERTY.garagePrice}</Row>
+                <Row label="Vendita congiunta">
+                  {PROPERTY.price} {PROPERTY.priceNote}
+                </Row>
+                <Row label="Commissioni d&apos;agenzia">
+                  <span className="text-primary">0%</span>
+                </Row>
+              </dl>
+            </Card>
+            <ul className="space-y-3">
+              <Bullet>
+                Vendita congiunta di appartamento e garage: <strong>{PROPERTY.price} {PROPERTY.priceNote}</strong>.
+              </Bullet>
+              <Bullet>Trattativa diretta con il proprietario, senza intermediari: 0% commissioni d&apos;agenzia.</Bullet>
+              <Bullet>
+                {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi già saldati dal proprietario.
+              </Bullet>
+            </ul>
+          </>
+        )}
+
         {active === "composizione" && (
           <>
             <Card>
               <dl>
                 <Row label="Superficie">~{PROPERTY.sqm} m²</Row>
-                <Row label="Piano">{PROPERTY.floor}</Row>
                 <Row label="Tipologia">Quadrilocale: 4 locali (sala + 3 camere)</Row>
                 <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
-                <Row label="Terrazze">3</Row>
+                <Row label="Pertinenze">3 terrazze + garage privato ampio, adatto anche a SUV</Row>
                 <Row label="Ripostiglio">Nessuno</Row>
-                <Row label="Box auto">Garage privato incluso</Row>
               </dl>
             </Card>
             <ul className="space-y-3">
@@ -91,14 +120,24 @@ export function InfoDrawer({
                 </Bullet>
               ))}
             </ul>
+            <SubTitle>Esposizione</SubTitle>
+            <Card>
+              <dl>
+                <Row label="Piano">{PROPERTY.floor}</Row>
+                <Row label="Vista">Mare panoramica, non ostruibile</Row>
+                <Row label="Luce">Naturale tutto il giorno</Row>
+              </dl>
+            </Card>
           </>
         )}
 
-        {active === "stato" && (
+        {active === "impianti" && (
           <>
             <ul className="space-y-3">
-              <Bullet>Infissi bianchi con vetrocamera già installati.</Bullet>
-              <Bullet>Impianto di riscaldamento con termosifoni e caldaia presenti.</Bullet>
+              <Bullet>Soffitti alti: ampiezza, respiro e possibilità di controsoffitti con faretti LED.</Bullet>
+              <Bullet>Infissi nuovi bianchi con vetrocamera.</Bullet>
+              <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
+              <Bullet>Copertura Fibra fino a 200 Mega, ideale per lo smart working.</Bullet>
               <Bullet>Pavimentazione in buono stato (graniglia nera nel salone, alla veneziana nelle camere).</Bullet>
               <Bullet>Bagno interno completo di vasca e sanitari.</Bullet>
             </ul>
@@ -118,10 +157,14 @@ export function InfoDrawer({
             <ul className="space-y-3">
               <Bullet>Stabile con ascensore.</Bullet>
               <Bullet>
-                Lavori straordinari su facciate e balconi ({PROPERTY.condoWorksPaid}){" "}
+                {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi{" "}
                 <strong>già deliberati e saldati dal proprietario</strong>.
               </Bullet>
               <Bullet>Il ponteggio visibile in foto è in fase di ultimazione.</Bullet>
+              <Bullet>
+                Facoltativo: puoi contattare direttamente l&apos;impresa già sul posto per eventuali tinteggiature
+                interne dopo il rogito.
+              </Bullet>
             </ul>
             <Card>
               <dl>
@@ -139,9 +182,9 @@ export function InfoDrawer({
         {active === "documenti" && (
           <>
             <ul className="space-y-3">
-              <Bullet>Immobile mutuabile.</Bullet>
-              <Bullet>Catastali in regola.</Bullet>
-              <Bullet>Libero subito: rogito e consegna immediata.</Bullet>
+              <Bullet>Libero subito.</Bullet>
+              <Bullet>Documentazione controllata e pronta per mutuo e rogito immediato.</Bullet>
+              <Bullet>Immobile mutuabile, catastali in regola.</Bullet>
               <Bullet>Trattativa diretta con il proprietario, senza intermediari.</Bullet>
             </ul>
             <Card>
@@ -151,7 +194,7 @@ export function InfoDrawer({
                 </Row>
                 <Row label="Disponibilità">Libero subito</Row>
                 <Row label="Prezzo">
-                  {PROPERTY.price} {PROPERTY.priceNote}
+                  {PROPERTY.apartmentPrice} + {PROPERTY.garagePrice} garage
                 </Row>
               </dl>
             </Card>

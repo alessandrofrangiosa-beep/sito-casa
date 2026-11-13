@@ -101,7 +101,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
     const pay = payment === "Mutuo" ? `Mutuo (${mortgage || "—"})` : payment || "—";
     return [
       `Buongiorno, sono ${name.trim() || "—"}.`,
-      `Vorrei prenotare una VISITA DAL VIVO dell'appartamento in ${PROPERTY.address}, Torre Annunziata (${PROPERTY.price} ${PROPERTY.priceNote}).`,
+      `Vorrei prenotare una VISITA DAL VIVO dell'appartamento in ${PROPERTY.address}, Torre Annunziata (${PROPERTY.apartmentPrice} + ${PROPERTY.garagePrice} garage, in blocco ${PROPERTY.price} ${PROPERTY.priceNote}).`,
       "",
       "✅ Ho visionato le foto e le Info Utili del sito",
       `💶 Modalità di acquisto: ${pay}`,
@@ -156,7 +156,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
             </span>
           </CheckLine>
           <CheckLine checked={readInfo} onChange={setReadInfo}>
-            Ho letto le Info Utili (composizione, stato, condominio, documenti){" "}
+            Ho letto le Info Utili (prezzo, composizione, impianti, condominio, documenti){" "}
             {!infoOpened && (
               <button type="button" onClick={() => openInfo()} className="font-semibold text-primary underline">
                 Aprile ora

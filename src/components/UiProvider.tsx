@@ -28,7 +28,7 @@ export function UiProvider({ children }: { children: React.ReactNode }) {
   const [seen, setSeen] = useState<Set<number>>(() => new Set([1]));
   const [infoOpened, setInfoOpened] = useState(false);
 
-  const openInfo = useCallback((tab: InfoTab = "composizione") => {
+  const openInfo = useCallback((tab: InfoTab = "prezzo") => {
     setBookingOpen(false);
     setInfoTab(tab);
     setInfoOpened(true);

@@ -8,6 +8,8 @@ const ALREADY_DONE = [
   "Bagno completo con vasca e sanitari",
   "Riscaldamento con termosifoni e caldaia già installati",
   "Ingresso e corridoio già tinteggiati di bianco",
+  "Soffitti alti che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED",
+  "Vista mare aperta e non ostruibile dal 6° piano: soleggiamento naturale tutto il giorno con risparmio energetico reale e brezza marina sulle 3 terrazze",
   "Copertura Fibra fino a 200 Mega: connessione veloce e stabile ideale per lavorare in smart working vista Golfo, videochiamate e streaming 4K.",
 ];
 
@@ -40,8 +42,8 @@ function PriceBreakdown() {
       <dl className="mt-4 divide-y divide-line text-[15px]">
         <div className="flex items-start justify-between gap-4 pb-3">
           <dt className="min-w-0">
-            <span className="font-semibold text-ink">Prezzo richiesto</span>
-            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 120 m² + 3 terrazze + garage</span>
+            <span className="font-semibold text-ink">Prezzo appartamento</span>
+            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 120 m² + 3 terrazze</span>
           </dt>
           <dd className="whitespace-nowrap font-bold text-ink tabular-nums">{euro(askingPrice)}</dd>
         </div>
@@ -67,7 +69,8 @@ function PriceBreakdown() {
         spesa straordinaria prevista per facciate e balconi.
       </p>
       <p className="mt-2 text-xs leading-snug text-slate-ink">
-        Valori indicativi a scopo di confronto: il prezzo di vendita resta {PROPERTY.price} {PROPERTY.priceNote}.
+        Il garage privato da {PROPERTY.garagePrice} completa l&apos;operazione a {PROPERTY.price} {PROPERTY.priceNote}{" "}
+        (vendita in blocco). Valori indicativi a scopo di confronto.
       </p>
     </article>
   );

@@ -16,7 +16,7 @@ export const composition: CompositionItem[] = [
     area: "Bagni",
     text: "2 bagni: 1 bagno principale completo interno con vasca + 1 bagno esterno/lavanderia finestrato su terrazza con WC, pilozzo e caldaia",
   },
-  { area: "Esterni", text: "3 terrazze (1 terrazza principale ampia + 2 terrazze più piccole) e garage privato incluso" },
+  { area: "Esterni", text: "3 terrazze (1 terrazza principale ampia + 2 terrazze più piccole) e garage privato ampio, adatto anche a un SUV" },
 ];
 
 /** Dati rapidi mostrati nella barra sotto il prezzo */

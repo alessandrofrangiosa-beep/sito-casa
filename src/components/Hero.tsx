@@ -32,11 +32,14 @@ export function Hero() {
           </p>
 
           <div className="mt-3 border-t border-line pt-3 sm:mt-4 sm:pt-4">
-            <p className="flex items-baseline gap-2">
-              <span className="text-[2rem] max-[340px]:text-[1.7rem] font-extrabold leading-none tracking-tight text-ink tabular-nums sm:text-5xl">
-                {PROPERTY.price}
+            <p className="text-[2rem] max-[340px]:text-[1.7rem] font-extrabold leading-none tracking-tight text-ink tabular-nums sm:text-5xl">
+              {PROPERTY.apartmentPrice}
+            </p>
+            <p className="mt-1.5 text-[13px] leading-snug text-slate-ink max-[340px]:text-[12px] sm:text-sm">
+              <strong className="font-semibold text-ink tabular-nums">+ {PROPERTY.garagePrice}</strong> garage privato{" "}
+              <span className="whitespace-nowrap">
+                (vendita in blocco: <span className="tabular-nums">{PROPERTY.price}</span> {PROPERTY.priceNote})
               </span>
-              <span className="text-sm font-medium text-slate-ink">{PROPERTY.priceNote}</span>
             </p>
             <ul className="mt-2 space-y-0.5 rounded-xl border border-primary/20 bg-primary-soft px-3 py-2 text-[13px] leading-snug text-primary max-[340px]:px-2.5 max-[340px]:text-[11.5px] sm:text-sm">
               <li className="flex gap-1.5">

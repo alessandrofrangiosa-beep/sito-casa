@@ -42,7 +42,7 @@ export function FinalCta() {
         </ol>
         <div className="mt-6 flex flex-col gap-2 sm:flex-row">
           <button type="button" onClick={openBooking} className="rounded-xl bg-primary px-6 py-3.5 font-semibold text-white tabular-nums transition hover:bg-primary-hover">
-            Prenota la visita · {PROPERTY.price}
+            Prenota la visita · {PROPERTY.apartmentPrice} + garage
           </button>
           <button type="button" onClick={() => openInfo()} className="rounded-xl border border-white/25 px-6 py-3.5 font-semibold text-white transition hover:bg-white/10">
             Apri le Info Utili

@@ -29,8 +29,8 @@ export function Location() {
           <Car className="h-5 w-5" aria-hidden />
         </span>
         <p className="min-w-0 text-[15px] leading-snug text-ink">
-          <strong className="font-semibold">Zero stress parcheggio in Via Vittorio Veneto</strong> grazie al garage privato
-          con risalita in ascensore fino al 6° piano, e <strong className="font-semibold">3 terrazze vivibili da marzo a
+          <strong className="font-semibold">Zero stress parcheggio in Via Vittorio Veneto</strong> grazie all&apos;ampio garage
+          privato in cui entra tranquillamente anche un SUV, e <strong className="font-semibold">3 terrazze vivibili da marzo a
           novembre</strong> come una quinta stanza vista Golfo.
         </p>
       </div>
