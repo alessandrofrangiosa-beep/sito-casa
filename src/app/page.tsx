@@ -10,6 +10,7 @@ import { Location } from "@/components/Location";
 import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
 import { CompositionList } from "@/components/CompositionList";
+import { MortgageSimulator } from "@/components/MortgageSimulator";
 import { PROPERTY } from "@/config/site";
 
 /** Collega automaticamente la prima immagine trovata in /public/images/planimetria (verificata al build). */
@@ -76,7 +77,11 @@ export default function Home() {
           </section>
         </Band>
 
-        <Band tone="ice" last>
+        <Band tone="ice">
+          <MortgageSimulator />
+        </Band>
+
+        <Band last>
           <FinalCta />
         </Band>
       </main>

@@ -2,12 +2,13 @@ import Image from "next/image";
 import { Check, MapPin } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import { quickFacts } from "@/data/composition";
+import { defaultMonthlyPayment, formatEuro } from "@/lib/mortgage";
 
 
 export function Hero() {
   return (
     <header className="relative pb-24 sm:pb-16">
-      <div className="relative h-[19dvh] max-h-80 min-h-24 [@media(max-height:620px)]:h-[13dvh] [@media(max-height:620px)]:min-h-16 w-full overflow-hidden sm:h-[42dvh]">
+      <div className="relative h-[19dvh] max-h-80 min-h-24 [@media(max-height:700px)]:h-[13dvh] [@media(max-height:700px)]:min-h-16 w-full overflow-hidden sm:h-[42dvh]">
         <Image
           src="/images/attuali/01-vista-mare-golfo.jpg"
           alt="Vista sul Golfo di Napoli dal 6° piano di Via Vittorio Veneto 390"
@@ -41,6 +42,14 @@ export function Hero() {
                 (vendita in blocco: <span className="tabular-nums">{PROPERTY.price}</span> {PROPERTY.priceNote})
               </span>
             </p>
+            <a
+              href="#simula-mutuo"
+              className="mt-2 inline-block rounded-2xl border border-primary/20 bg-card px-3 py-1.5 text-xs font-medium leading-snug text-slate-ink transition hover:border-primary/50 max-[340px]:text-[11px]"
+            >
+              Oppure con mutuo: rata stimata da{" "}
+              <strong className="whitespace-nowrap font-semibold text-ink tabular-nums">~ {formatEuro(defaultMonthlyPayment())}/mese</strong>{" "}
+              <span className="whitespace-nowrap font-semibold text-primary">→ Simula</span>
+            </a>
             <ul className="mt-2 space-y-0.5 rounded-xl border border-primary/20 bg-primary-soft px-3 py-2 text-[13px] leading-snug text-primary max-[340px]:px-2.5 max-[340px]:text-[11.5px] sm:text-sm">
               <li className="flex gap-1.5">
                 <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={3} aria-hidden />
