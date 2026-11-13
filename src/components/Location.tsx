@@ -45,19 +45,15 @@ export function Location() {
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
-        {/* Tessere tutte uguali: in alto icona e distanza sulla stessa riga, sotto il nome a tutta larghezza */}
+        {/* Tessere tutte uguali: icona in alto, nome sotto, distanza in fondo allineata in tutte le tessere */}
         <ul className="grid auto-rows-fr grid-cols-2 gap-2 self-start">
           {POINTS.map(({ icon: Icon, title, detail }) => (
-            <li key={title} className="flex min-w-0 flex-col gap-2 rounded-xl border border-line bg-card p-2.5">
-              <span className="flex items-center justify-between gap-2">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
-                  <Icon className="h-4 w-4" aria-hidden />
-                </span>
-                <span className="rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-primary tabular-nums">
-                  {detail}
-                </span>
+            <li key={title} className="flex min-w-0 flex-col rounded-xl border border-line bg-card px-3 py-2.5">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
+                <Icon className="h-4 w-4" aria-hidden />
               </span>
-              <span className="text-[13px] leading-tight font-bold text-ink max-[360px]:text-[12px] sm:text-sm">{title}</span>
+              <span className="mt-1.5 text-[13px] leading-tight font-bold text-ink max-[360px]:text-[12px] sm:text-sm">{title}</span>
+              <span className="mt-auto pt-1 text-xs leading-tight font-semibold text-primary tabular-nums">{detail}</span>
             </li>
           ))}
         </ul>
