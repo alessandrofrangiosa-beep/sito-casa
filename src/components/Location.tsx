@@ -7,9 +7,10 @@ import { MAP_POINTS } from "@/data/mapPoints";
 const meters = (ids: string[]) => ids.map((id) => MAP_POINTS.find((p) => p.id === id)?.meters ?? Infinity);
 const km = (m: number) => `${(m / 1000).toFixed(1).replace(".", ",")}\u00a0km`;
 const nearest = (...ids: string[]) => km(Math.min(...meters(ids)));
-const range = (...ids: string[]) => {
+/** Media delle distanze, per le voci che raggruppano più punti diversi (es. le tre scuole) */
+const average = (...ids: string[]) => {
   const all = meters(ids);
-  return `${km(Math.min(...all)).replace("\u00a0km", "")}–${km(Math.max(...all))}`;
+  return km(all.reduce((a, b) => a + b, 0) / all.length);
 };
 
 // \u00ad = trattino che compare solo se la parola non entra nella riga (schermi molto stretti)
@@ -20,7 +21,7 @@ const POINTS = [
   { icon: Pill, title: "Farmacie", detail: nearest("farmacia") },
   { icon: Coffee, title: "Bar e negozi", detail: nearest("bar") },
   { icon: Hospital, title: "Ospedale", detail: nearest("ospedale") },
-  { icon: School, title: "Scuola elementare, media e superiore", detail: range("elementare", "media", "superiore"), wide: true },
+  { icon: School, title: "Scuola elementare, media e superiore", detail: average("elementare", "media", "superiore"), wide: true },
   { icon: Train, title: "Circum\u00advesuviana", detail: nearest("circum") },
   { icon: Landmark, title: "Scavi di Oplonti", detail: nearest("scavi") },
   { icon: Anchor, title: "Lungomare e porto", detail: nearest("molo", "lungomare") },
