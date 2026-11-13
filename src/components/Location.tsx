@@ -3,6 +3,9 @@ import { PROPERTY } from "@/config/site";
 import { SectionTitle } from "./SectionTitle";
 
 const MAP_QUERY = encodeURIComponent(`${PROPERTY.address}, 80058 Torre Annunziata NA`);
+/** Mappa incorporata (URL embed pubblico di Google Maps, senza chiave API) */
+const MAP_EMBED_URL =
+  "https://maps.google.com/maps?q=Via%20Vittorio%20Veneto%20390,%20Torre%20Annunziata&t=&z=16&ie=UTF8&iwloc=&output=embed";
 
 const POINTS = [
   { icon: Waves, title: "Vista mare panoramica" },
@@ -48,21 +51,24 @@ export function Location() {
             </li>
           ))}
         </ul>
-        <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft md:sticky md:top-4 md:self-start">
-          <iframe
-            title="Mappa: Via Vittorio Veneto 390, Torre Annunziata"
-            src={`https://www.google.com/maps?q=${MAP_QUERY}&z=16&output=embed`}
-            className="aspect-square w-full md:aspect-[4/5]"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+        <div className="md:sticky md:top-4 md:self-start">
+          <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft">
+            <iframe
+              title="Mappa: Via Vittorio Veneto 390, 80058 Torre Annunziata NA"
+              src={MAP_EMBED_URL}
+              className="block h-[260px] w-full border-0 md:h-[340px]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="block border-t border-line px-4 py-3 text-center text-sm font-bold text-ink"
+            className="mt-2 inline-block text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
           >
-            Apri in Google Maps →
+            Apri mappa a schermo intero →
           </a>
         </div>
       </div>
