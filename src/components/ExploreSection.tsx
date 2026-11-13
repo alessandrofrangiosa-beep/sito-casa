@@ -11,7 +11,7 @@ type Mode = "foto" | "render" | "ai";
 const MODES: { id: Mode; emoji: string; label: string; short: string }[] = [
   { id: "foto", emoji: "📷", label: "Foto Attuali", short: "Foto Attuali" },
   { id: "render", emoji: "✨", label: "Render 3D Ipotetico", short: "Render 3D" },
-  { id: "ai", emoji: "🎨", label: "Crea il tuo Render AI", short: "Render AI" },
+  { id: "ai", emoji: "🎨", label: "Arredala come vuoi tu", short: "Arredala tu" },
 ];
 
 export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {

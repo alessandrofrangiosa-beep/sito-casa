@@ -33,7 +33,7 @@ function BeforeAfter({ before, after, label }: { before: string; after: string; 
   return (
     <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-ink select-none">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={after} alt={`Render AI: ${label}`} className="absolute inset-0 h-full w-full object-cover" />
+      <img src={after} alt={`Il tuo progetto: ${label}`} className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
         <Image src={before} alt="Foto reale di partenza" fill sizes="(min-width:768px) 600px, 100vw" className="object-cover" />
       </div>
@@ -43,7 +43,7 @@ function BeforeAfter({ before, after, label }: { before: string; after: string; 
         </span>
       </div>
       <span className="absolute top-2 left-2 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white">Oggi</span>
-      <span className="absolute top-2 right-2 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-semibold text-white">✨ Render AI</span>
+      <span className="absolute top-2 right-2 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-semibold text-white">✨ Il tuo progetto</span>
       <input
         type="range"
         min={0}
@@ -65,7 +65,7 @@ function AiComingSoon({ onShowRenders }: { onShowRenders?: () => void }) {
     <div className="flex gap-3 rounded-xl border border-primary/20 bg-primary-soft p-4">
       <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
       <div className="min-w-0">
-        <p className="font-semibold text-ink">Configuratore Render AI in fase di attivazione</p>
+        <p className="font-semibold text-ink">Configuratore «Arredala tu» in fase di attivazione</p>
         <p className="mt-0.5 text-sm leading-snug text-slate-ink">
           Esplora intanto i Render 3D già pronti nella scheda accanto.
         </p>
@@ -184,8 +184,12 @@ export function AiStudio({ aiEnabled = false, onShowRenders }: { aiEnabled?: boo
     <div className="space-y-6 rounded-2xl border border-line bg-card p-4 shadow-soft sm:p-6">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Studio interattivo</p>
-          <h3 className="text-2xl font-semibold leading-tight">Immagina la casa con il tuo stile</h3>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Arredala tu · su misura per te</p>
+          <h3 className="text-2xl font-semibold leading-tight">Progetta la casa come la vuoi tu</h3>
+          <p className="mt-1 text-sm leading-snug text-slate-ink">
+            Scegli la stanza e lo stile, poi descrivi i tuoi desideri: colori, materiali, mobili. Ottieni un&apos;anteprima
+            pensata solo per te.
+          </p>
         </div>
         {enabled && (
           <span className="shrink-0 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary tabular-nums">
