@@ -1,19 +1,29 @@
 import { Car, Anchor, Coffee, Hospital, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
 import { SectionTitle } from "./SectionTitle";
 import { NeighborhoodMap } from "./NeighborhoodMap";
+import { MAP_POINTS } from "@/data/mapPoints";
+
+/** Distanza (in linea d'aria) del punto più vicino tra quelli indicati, presa dai dati della mappa */
+const meters = (ids: string[]) => ids.map((id) => MAP_POINTS.find((p) => p.id === id)?.meters ?? Infinity);
+const km = (m: number) => `${(m / 1000).toFixed(1).replace(".", ",")}\u00a0km`;
+const nearest = (...ids: string[]) => km(Math.min(...meters(ids)));
+const range = (...ids: string[]) => {
+  const all = meters(ids);
+  return `${km(Math.min(...all)).replace("\u00a0km", "")}–${km(Math.max(...all))}`;
+};
 
 // \u00ad = trattino che compare solo se la parola non entra nella riga (schermi molto stretti)
 const POINTS = [
-  { icon: Waves, title: "Vista mare panoramica" },
-  { icon: ShoppingBag, title: "Super\u00admercati sotto casa" },
-  { icon: Pill, title: "Farmacie" },
-  { icon: Coffee, title: "Bar e negozi" },
-  { icon: School, title: "Scuola elementare, media e superiore" },
-  { icon: Hospital, title: "Ospedale" },
-  { icon: Train, title: "Circum\u00advesuviana" },
-  { icon: Landmark, title: "Scavi di Oplonti" },
-  { icon: Anchor, title: "Lungomare e porto" },
-  { icon: Route, title: "Svincolo A3" },
+  { icon: Waves, title: "Vista mare panoramica", detail: "6° piano" },
+  { icon: ShoppingBag, title: "Super\u00admercati", detail: nearest("deco", "sisa") },
+  { icon: Pill, title: "Farmacie", detail: nearest("farmacia") },
+  { icon: Coffee, title: "Bar e negozi", detail: nearest("bar") },
+  { icon: School, title: "Scuola elementare, media e superiore", detail: range("elementare", "media", "superiore") },
+  { icon: Hospital, title: "Ospedale", detail: nearest("ospedale") },
+  { icon: Train, title: "Circum\u00advesuviana", detail: nearest("circum") },
+  { icon: Landmark, title: "Scavi di Oplonti", detail: nearest("scavi") },
+  { icon: Anchor, title: "Lungomare e porto", detail: nearest("molo", "lungomare") },
+  { icon: Route, title: "Svincolo A3", detail: nearest("a3-nord", "a3-sud") },
 ];
 
 export function Location() {
@@ -35,7 +45,7 @@ export function Location() {
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
         <ul className="grid grid-cols-2 gap-2 self-start">
-          {POINTS.map(({ icon: Icon, title }) => (
+          {POINTS.map(({ icon: Icon, title, detail }) => (
             <li
               key={title}
               className="flex min-w-0 items-center gap-2 rounded-xl border border-line bg-card px-2.5 py-2.5"
@@ -43,7 +53,10 @@ export function Location() {
               <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
                 <Icon className="h-4 w-4" aria-hidden />
               </span>
-              <span className="min-w-0 text-[13px] font-bold leading-tight text-ink sm:text-sm">{title}</span>
+              <span className="min-w-0 leading-tight">
+                <span className="block text-[13px] font-bold text-ink sm:text-sm">{title}</span>
+                <span className="mt-0.5 block text-xs font-semibold text-primary tabular-nums">{detail}</span>
+              </span>
             </li>
           ))}
         </ul>
