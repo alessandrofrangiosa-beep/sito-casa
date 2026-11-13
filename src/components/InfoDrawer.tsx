@@ -1,11 +1,12 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, HardHat, Wifi } from "lucide-react";
 import { Sheet } from "./Sheet";
 import { DaControllare } from "./DaControllare";
 import { PROPERTY } from "@/config/site";
 import { useUi } from "./UiProvider";
 import { composition } from "@/data/composition";
+import { FIBER } from "@/data/highlights";
 
 export type InfoTab = "prezzo" | "composizione" | "impianti" | "condominio" | "documenti";
 
@@ -39,6 +40,32 @@ function Bullet({ children }: { children: React.ReactNode }) {
 
 function SubTitle({ children }: { children: React.ReactNode }) {
   return <p className="pt-1 text-xs font-bold uppercase tracking-wider text-primary">{children}</p>;
+}
+
+/** Punti di forza sempre visibili in cima al pannello */
+function Highlights() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-primary/25 bg-primary-soft">
+      <p className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">In evidenza</p>
+      <ul className="divide-y divide-primary/15">
+        <li className="flex gap-3 px-4 py-3">
+          <Wifi className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+          <span className="min-w-0 text-sm leading-snug text-ink">
+            <strong className="font-semibold">{FIBER.title}</strong>, ideale per lo smart working, le videochiamate e lo
+            streaming 4K.
+          </span>
+        </li>
+        <li className="flex gap-3 px-4 py-3">
+          <HardHat className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+          <span className="min-w-0 text-sm leading-snug text-ink">
+            <strong className="font-semibold">Ditta già attiva nello stabile:</strong> su richiesta e senza vincoli ricevi
+            il contatto della squadra delle facciate per tinteggiare gli interni subito dopo il rogito, senza attese e
+            con costi di uscita ridotti.
+          </span>
+        </li>
+      </ul>
+    </div>
+  );
 }
 
 function Card({ children }: { children: React.ReactNode }) {
@@ -75,6 +102,8 @@ export function InfoDrawer({
       </nav>
 
       <div className="space-y-4 px-5 py-5">
+        <Highlights />
+
         {active === "prezzo" && (
           <>
             <Card>
@@ -134,10 +163,12 @@ export function InfoDrawer({
         {active === "impianti" && (
           <>
             <ul className="space-y-3">
+              <Bullet>
+                <strong>Copertura Fibra fino a 200 Mega</strong>, ideale per lo smart working.
+              </Bullet>
               <Bullet>Soffitti alti: ampiezza, respiro e possibilità di controsoffitti con faretti LED.</Bullet>
               <Bullet>Infissi nuovi bianchi con vetrocamera.</Bullet>
               <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
-              <Bullet>Copertura Fibra fino a 200 Mega, ideale per lo smart working.</Bullet>
               <Bullet>Pavimentazione in buono stato (graniglia nera nel salone, alla veneziana nelle altre stanze).</Bullet>
               <Bullet>Bagno interno completo di vasca e sanitari.</Bullet>
             </ul>

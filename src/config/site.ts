@@ -25,18 +25,6 @@ export const PROPERTY = {
   energyClass: null as string | null,
 };
 
-/**
- * Scomposizione trasparente del prezzo (sezione "Perché è un'opportunità concreta").
- * Il netto e il prezzo al m² sono calcolati in automatico da questi valori.
- */
-export const PRICE_BREAKDOWN = {
-  /** Prezzo del solo appartamento (il garage da € 25.000 è a parte) */
-  askingPrice: 225_000,
-  deductions: [
-    { label: "Lavori straordinari su facciate e balconi già saldati", amount: 15_000 },
-    { label: "Commissioni d'agenzia risparmiate (0% intermediari)", amount: 9_000 },
-  ],
-};
 
 /**
  * Numero WhatsApp in formato internazionale senza "+" né spazi (es. "393331234567").
