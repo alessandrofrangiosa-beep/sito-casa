@@ -145,6 +145,11 @@ export function MortgageSimulator() {
             banca.
           </p>
 
+          <p className="px-1 text-sm leading-snug text-ink">
+            <strong className="font-semibold">Acquisto da privato:</strong> imposta di registro agevolata al 2% sul valore
+            catastale (Prima Casa) e zero IVA.
+          </p>
+
           <a
             href="https://www.mutuionline.it"
             target="_blank"

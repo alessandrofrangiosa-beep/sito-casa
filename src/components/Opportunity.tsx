@@ -2,18 +2,17 @@ import { Check, HardHat } from "lucide-react";
 import { BUILDER_BONUS, FIBER } from "@/data/highlights";
 import { SectionTitle } from "./SectionTitle";
 
-/** Dotazioni già presenti: la fibra è il primo punto, con lo stesso stile degli altri */
-const ALREADY_DONE = [
-  "Infissi bianchi con vetrocamera già sostituiti",
-  "Pavimenti in buono stato: graniglia nera nel salone, alla veneziana nelle altre stanze",
-  "Bagno completo con vasca e sanitari",
-  "Riscaldamento con termosifoni e caldaia già installati",
-  "Ingresso e corridoio già tinteggiati di bianco",
-  "Soffitti alti che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED",
-  "Vista mare aperta e non ostruibile dal 6° piano con soleggiamento naturale tutto il giorno",
+/** Dotazioni già presenti: inizio in grassetto per una lettura veloce su smartphone; la fibra è il primo punto */
+const ITEMS: { bold: string; rest: string }[] = [
+  { bold: `${FIBER.title}:`, rest: ` ${FIBER.text}` },
+  { bold: "Infissi bianchi con vetrocamera", rest: " già sostituiti" },
+  { bold: "Pavimenti in buono stato:", rest: " graniglia nera nel salone, alla veneziana nelle altre stanze" },
+  { bold: "Bagno completo", rest: " con vasca e sanitari" },
+  { bold: "Riscaldamento autonomo", rest: " con termosifoni e caldaia già installati" },
+  { bold: "Ingresso e corridoio", rest: " già tinteggiati di bianco" },
+  { bold: "Soffitti alti", rest: " che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED" },
+  { bold: "Vista mare aperta a Sud-Ovest (6°\u00a0piano):", rest: " luce naturale piena fino al tramonto e vista non ostruibile sul Golfo." },
 ];
-
-const ITEMS = [`${FIBER.title}: ${FIBER.text}`, ...ALREADY_DONE];
 
 export function Opportunity() {
   return (
@@ -37,11 +36,14 @@ export function Opportunity() {
       <article className="mt-3 rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-6">
         <ul className="space-y-4">
           {ITEMS.map((t) => (
-            <li key={t} className="flex gap-3 px-1 text-base leading-snug text-ink sm:text-lg">
+            <li key={t.bold} className="flex gap-3 px-1 text-base leading-snug text-ink sm:text-lg">
               <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
                 <Check className="h-4 w-4" strokeWidth={3} aria-hidden />
               </span>
-              {t}
+              <span className="min-w-0">
+                <strong className="font-semibold">{t.bold}</strong>
+                {t.rest}
+              </span>
             </li>
           ))}
         </ul>
