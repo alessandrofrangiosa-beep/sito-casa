@@ -31,8 +31,7 @@ export function Location() {
         </span>
         <p className="min-w-0 text-[15px] leading-snug text-ink">
           <strong className="font-semibold">Zero stress parcheggio in Via Vittorio Veneto</strong> grazie all&apos;ampio garage
-          privato in cui entra tranquillamente anche un SUV, e <strong className="font-semibold">terrazza e 2 balconi vivibili da marzo a
-          novembre</strong>, con la terrazza che diventa una quinta stanza vista Golfo.
+          privato in cui entra tranquillamente anche un SUV.
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
