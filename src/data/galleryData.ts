@@ -41,7 +41,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 5,
     src: "/images/attuali/05-terrazza-principale.jpg",
-    title: "Terrazza principale",
+    title: "Terrazza",
     caption: "Terrazza lunga tra cucina e stanza. Ponteggio lavori facciata già pagato.",
     alt: "Terrazza lunga con ringhiera e ponteggio dei lavori di facciata in ultimazione",
     badge: "Lavori già pagati",
@@ -49,9 +49,9 @@ export const galleryData: GalleryItem[] = [
   {
     id: 6,
     src: "/images/attuali/06-seconda-terrazza.jpg",
-    title: "Seconda terrazza",
-    caption: "Seconda terrazza riservata e luminosa con infisso scorrevole bianco.",
-    alt: "Seconda terrazza soleggiata con infisso scorrevole bianco e vista sui monti",
+    title: "Balcone",
+    caption: "Balcone riservato e luminoso con infisso scorrevole bianco.",
+    alt: "Balcone soleggiato con infisso scorrevole bianco e vista sui monti",
   },
   {
     id: 7,
@@ -124,8 +124,8 @@ export const renderData: GalleryItem[] = [
   { id: 1, src: "/images/render/render-01-ingresso.jpg", title: "Ingresso", caption: "Ingresso caldo e accogliente con consolle, specchio e luce soffusa.", alt: "Render dell'ingresso arredato" },
   { id: 2, src: "/images/render/render-02-soggiorno.jpg", title: "Soggiorno", caption: "Living luminoso con divano, zona TV e toni naturali.", alt: "Render del soggiorno arredato" },
   { id: 3, src: "/images/render/render-03-angolo-relax-vista-mare.jpg", title: "Angolo relax vista mare", caption: "Lettura e relax davanti alla portafinestra affacciata sul Golfo.", alt: "Render di un angolo relax davanti alla vista mare" },
-  { id: 4, src: "/images/render/render-04-terrazza-principale.jpg", title: "Terrazza principale", caption: "Terrazza lunga vissuta come un salotto all'aperto, a lavori ultimati.", alt: "Render della terrazza principale arredata" },
-  { id: 5, src: "/images/render/render-05-seconda-terrazza.jpg", title: "Seconda terrazza", caption: "Angolo verde con fioriere e sedute per la colazione al sole.", alt: "Render della seconda terrazza con piante" },
+  { id: 4, src: "/images/render/render-04-terrazza-principale.jpg", title: "Terrazza", caption: "Terrazza lunga vissuta come un salotto all'aperto, a lavori ultimati.", alt: "Render della terrazza arredata" },
+  { id: 5, src: "/images/render/render-05-seconda-terrazza.jpg", title: "Balcone", caption: "Angolo verde con fioriere e sedute per la colazione al sole.", alt: "Render del balcone con piante" },
   { id: 6, src: "/images/render/render-06-corridoio.jpg", title: "Corridoio", caption: "Corridoio zona notte valorizzato da quadri, piante e luce calda.", alt: "Render del corridoio arredato" },
   { id: 7, src: "/images/render/render-07-nicchia-armadio.jpg", title: "Nicchia ad arco", caption: "L'arco del disimpegno diventa un guardaroba su misura in legno.", alt: "Render della nicchia ad arco con armadio in legno" },
   { id: 8, src: "/images/render/render-08-camera-matrimoniale.jpg", title: "Camera matrimoniale", caption: "Camera in stile naturale, con tende in lino e tessili morbidi.", alt: "Render della camera matrimoniale arredata" },
@@ -143,7 +143,7 @@ export const aiBaseRooms: AiBaseRoom[] = [
   { id: "soggiorno", label: "Soggiorno", src: "/images/stanze-base-ai/soggiorno.jpg" },
   { id: "cucina", label: "Cucina", src: "/images/stanze-base-ai/cucina.jpg" },
   { id: "camera", label: "Camera", src: "/images/stanze-base-ai/camera.jpg" },
-  { id: "terrazza", label: "Terrazza vista mare", src: "/images/stanze-base-ai/terrazza-vista-mare.jpg" },
+  { id: "terrazza", label: "Balcone vista mare", src: "/images/stanze-base-ai/terrazza-vista-mare.jpg" },
 ];
 
 export type AiStyle = { id: string; label: string; prompt: string };

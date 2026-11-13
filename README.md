@@ -1,6 +1,6 @@
 # Landing page — Via Vittorio Veneto 390, Torre Annunziata
 
-Landing page per vendere da privato un appartamento di ~144 m² con vista mare, 3 terrazze e garage. È progettata prima di tutto per smartphone. Stack: Next.js (App Router), Tailwind CSS v4 e TypeScript.
+Landing page per vendere da privato un appartamento di ~144 m² con vista mare, terrazza, 2 balconi e garage. È progettata prima di tutto per smartphone. Stack: Next.js (App Router), Tailwind CSS v4 e TypeScript.
 
 ## Avvio
 
@@ -28,7 +28,7 @@ Facoltativo: `LEAD_WEBHOOK_URL` riceve in POST i numeri lasciati per sbloccare a
 
 - `public/images/attuali/01…15-*.jpg`: le 15 foto reali, nell'ordine della visita guidata
 - `public/images/render/render-01…13-*.jpg`: i render 3D, ordinati per stanza
-- `public/images/stanze-base-ai/`: le foto base dello studio AI (soggiorno, cucina, camera, terrazza)
+- `public/images/stanze-base-ai/`: le foto base dello studio AI (soggiorno, cucina, camera, balcone vista mare)
 - `src/data/galleryData.ts`: titoli e didascalie di foto, render, stanze AI e stili
 - `src/config/site.ts`: prezzo, dati tecnici, WhatsApp, tour 360°, limiti AI
 - `src/app/api/generate-render/route.ts`: generazione dei render (fal.ai Flux Kontext oppure OpenAI Image Edit). Limita a 2 render gratis, poi altri 3 dopo che il visitatore lascia il numero WhatsApp. Il limite è salvato in un cookie httpOnly e in localStorage.

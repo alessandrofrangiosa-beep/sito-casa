@@ -79,7 +79,7 @@ export function InfoDrawer({
           <>
             <Card>
               <dl>
-                <Row label="Appartamento (quadrilocale 144 m² + 3 terrazze)">{PROPERTY.apartmentPrice}</Row>
+                <Row label="Appartamento (quadrilocale 144 m² + terrazza e 2 balconi)">{PROPERTY.apartmentPrice}</Row>
                 <Row label="Garage privato">{PROPERTY.garagePrice}</Row>
                 <Row label="Vendita congiunta">
                   {PROPERTY.price} {PROPERTY.priceNote}
@@ -109,7 +109,7 @@ export function InfoDrawer({
                 <Row label="Tipologia">Quadrilocale: 4 locali (sala + 3 camere)</Row>
                 <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
-                <Row label="Pertinenze">3 terrazze + garage privato ampio, adatto anche a SUV</Row>
+                <Row label="Pertinenze">1 terrazza + 2 balconi + garage privato ampio, adatto anche a SUV</Row>
                 <Row label="Ripostiglio">Nessuno</Row>
               </dl>
             </Card>

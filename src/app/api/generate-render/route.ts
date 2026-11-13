@@ -20,7 +20,7 @@ type Body = {
 };
 
 function buildPrompt(roomLabel: string, isOutdoor: boolean, stylePrompt: string, userPrompt: string) {
-  const what = isOutdoor ? "this terrace" : `this empty ${roomLabel.toLowerCase()}`;
+  const what = isOutdoor ? "this balcony" : `this empty ${roomLabel.toLowerCase()}`;
   return [
     `Furnish and redecorate ${what} as a photorealistic interior design photograph.`,
     stylePrompt && `Style: ${stylePrompt}.`,

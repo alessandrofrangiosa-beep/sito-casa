@@ -140,7 +140,7 @@ export function MortgageSimulator() {
           </div>
 
           <p className="rounded-xl border border-primary/20 bg-primary-soft px-4 py-3 text-[15px] leading-snug text-ink">
-            Con una rata paragonabile a un affitto in zona, acquisti un quadrilocale vista mare di 144 m² con 3 terrazze e
+            Con una rata paragonabile a un affitto in zona, acquisti un quadrilocale vista mare di 144 m² con terrazza, 2 balconi e
             garage privato — con 0% di commissioni d&apos;agenzia da anticipare e documentazione già verificata per la
             banca.
           </p>

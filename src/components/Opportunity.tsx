@@ -9,14 +9,14 @@ const ALREADY_DONE = [
   "Riscaldamento con termosifoni e caldaia già installati",
   "Ingresso e corridoio già tinteggiati di bianco",
   "Soffitti alti che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED",
-  "Vista mare aperta e non ostruibile dal 6° piano: soleggiamento naturale tutto il giorno con risparmio energetico reale e brezza marina sulle 3 terrazze",
+  "Vista mare aperta e non ostruibile dal 6° piano: soleggiamento naturale tutto il giorno con risparmio energetico reale e brezza marina su terrazza e balconi",
   "Copertura Fibra fino a 200 Mega: connessione veloce e stabile ideale per lavorare in smart working vista Golfo, videochiamate e streaming 4K.",
 ];
 
 const TODO = [
   "Rinfrescare le pareti con i tuoi colori preferiti",
   "Scegliere e portare i tuoi arredi",
-  "Goderti subito la vista mare e le 3 terrazze",
+  "Goderti subito la vista mare dalla terrazza e dai 2 balconi",
 ];
 
 const euro = (n: number) => `€\u00a0${new Intl.NumberFormat("it-IT", { useGrouping: "always" }).format(n)}`;
@@ -43,7 +43,7 @@ function PriceBreakdown() {
         <div className="flex items-start justify-between gap-4 pb-3">
           <dt className="min-w-0">
             <span className="font-semibold text-ink">Prezzo appartamento</span>
-            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 144 m² + 3 terrazze</span>
+            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 144 m² + terrazza e 2 balconi</span>
           </dt>
           <dd className="whitespace-nowrap font-bold text-ink tabular-nums">{euro(askingPrice)}</dd>
         </div>
