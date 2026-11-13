@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Maximize2, X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
-import { MAP_POINTS, type MapPoint } from "@/data/mapPoints";
+import { HOME, MAP_POINTS, type MapPoint } from "@/data/mapPoints";
 
 /** Zoom da cui compaiono i punti secondari (negozi, farmacie, scuole, bar) */
 const MINOR_ICON_ZOOM = 14.5;
@@ -107,42 +107,82 @@ export function NeighborhoodMap() {
       // Un solo nome aperto alla volta (oltre a quello della casa, sempre visibile)
       const markers: { point: MapPoint; marker: import("leaflet").Marker }[] = [];
       let openId: string | null = null;
-      const overlaps = (a: DOMRect, b: DOMRect) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-      /** Mette il nome dal lato con più spazio, senza uscire dalla mappa né coprire l'etichetta della casa */
+            /**
+       * Apre il nome dal lato opposto alla casa, così non copre mai né l'icona né l'etichetta della casa.
+       * Se da quel lato uscirebbe dalla mappa prova i lati laterali (sempre lontano dalla casa) e per ultimo quello verso la casa.
+       */
+      type Side = "left" | "right" | "below" | "above";
       const placeLabel = (poi: Element, point: MapPoint) => {
         if (!map) return;
         const label = poi.querySelector<HTMLElement>(".poi-label");
-        const homeLabel = ref.current?.querySelector(".poi-home .poi-label");
         if (!label) return;
-        const x = map.latLngToContainerPoint([point.lat, point.lng]).x;
+        const pos = map.latLngToContainerPoint([point.lat, point.lng]);
+        const home = map.latLngToContainerPoint([HOME.lat, HOME.lng]);
         const width = map.getSize().x;
-        const preferred: Array<"left" | "right" | "below" | "above"> = x > width / 2 ? ["left", "right", "below", "above"] : ["right", "left", "below", "above"];
+        const dx = pos.x - home.x;
+        const dy = pos.y - home.y;
+        const h: Side = dx >= 0 ? "right" : "left";
+        const v: Side = dy >= 0 ? "below" : "above";
+        const opposite = { left: "right", right: "left", below: "above", above: "below" } as const;
+        // Lato lontano dalla casa sull'asse principale, poi quello sull'altro asse, poi i due verso la casa
+        const order: Side[] = Math.abs(dx) >= Math.abs(dy) ? [h, v, opposite[v], opposite[h]] : [v, h, opposite[h], opposite[v]];
         const mapBox = ref.current!.getBoundingClientRect();
-        const tryOn = (side: (typeof preferred)[number]) => {
+        // Ingombro della casa (icona + nome) con un piccolo margine
+        const homeBoxes = [...(ref.current?.querySelectorAll(".poi-home .poi-dot, .poi-home .poi-label") ?? [])].map((e) => e.getBoundingClientRect());
+        const pad = 4;
+        const hitsHome = (b: DOMRect) =>
+          homeBoxes.some((hb) => b.left < hb.right + pad && hb.left - pad < b.right && b.top < hb.bottom + pad && hb.top - pad < b.bottom);
+        const tryOn = (side: Side) => {
           poi.classList.remove("poi-open-left", "poi-open-right", "poi-open-below", "poi-open-above");
           poi.classList.add(`poi-open-${side}`);
-          const room = side === "left" ? x - 44 : side === "right" ? width - x - 44 : Math.min(x, width - x) * 2 - 16;
+          const room = side === "left" ? pos.x - 44 : side === "right" ? width - pos.x - 44 : Math.min(pos.x, width - pos.x) * 2 - 16;
           label.style.maxWidth = `${Math.max(90, Math.min(170, room))}px`;
-          const box = label.getBoundingClientRect();
+          label.style.marginLeft = label.style.marginTop = "0px";
+          // Vicino ai bordi il nome scorre lungo il proprio lato per restare tutto dentro la mappa
+          let box = label.getBoundingClientRect();
+          const fit = (lo: number, hi: number, min: number, max: number) => (lo < min ? min - lo : hi > max ? Math.max(max - hi, min - lo) : 0);
+          if (side === "above" || side === "below") {
+            const shift = fit(box.left, box.right, mapBox.left + 4, mapBox.right - 4);
+            if (shift) label.style.marginLeft = `${shift}px`;
+          } else {
+            const shift = fit(box.top, box.bottom, mapBox.top + 4, mapBox.bottom - 4);
+            if (shift) label.style.marginTop = `${shift}px`;
+          }
+          box = label.getBoundingClientRect();
           return {
             inside: box.left >= mapBox.left && box.right <= mapBox.right && box.top >= mapBox.top && box.bottom <= mapBox.bottom,
-            clear: !homeLabel || !overlaps(box, homeLabel.getBoundingClientRect()),
+            clear: !hitsHome(box),
           };
         };
-        // 1° scelta: dentro la mappa e senza coprire la casa; 2°: almeno senza coprire la casa
-        const results = preferred.map((side) => ({ side, ...tryOn(side) }));
+        // 1° scelta: senza toccare la casa e dentro la mappa; 2°: almeno senza toccare la casa
+        const results = order.map((side) => ({ side, ...tryOn(side) }));
         const pick = results.find((r) => r.inside && r.clear) ?? results.find((r) => r.clear) ?? results[0];
         tryOn(pick.side);
       };
 
-      const setOpen = (id: string | null) => {
+      /** Se il nome appena aperto tocca il bordo, sposta un poco la mappa per mostrarlo intero */
+      const revealLabel = (poi: Element) => {
+        const label = poi.querySelector(".poi-label");
+        if (!map || !label || !ref.current) return;
+        const m = ref.current.getBoundingClientRect();
+        const a = label.getBoundingClientRect();
+        const edge = 8;
+        const dx = a.right > m.right - edge ? a.right - (m.right - edge) : a.left < m.left + edge ? a.left - (m.left + edge) : 0;
+        const dy = a.bottom > m.bottom - edge ? a.bottom - (m.bottom - edge) : a.top < m.top + edge ? a.top - (m.top + edge) : 0;
+        if (dx || dy) map.panBy([dx, dy], { animate: true, duration: 0.25 });
+      };
+
+      const setOpen = (id: string | null, fromTap = false) => {
         openId = id;
         for (const { point, marker } of markers) {
           const poi = marker.getElement()?.querySelector(".poi");
           const isOpen = point.id === id;
           poi?.classList.toggle("poi-open", isOpen);
-          if (poi && isOpen && map) placeLabel(poi, point);
-          marker.setZIndexOffset(point.tier === "home" ? 3000 : isOpen ? 2000 : point.tier === "major" ? 500 : 0);
+          if (poi && isOpen && map) {
+            placeLabel(poi, point);
+            if (fromTap) revealLabel(poi);
+          }
+          marker.setZIndexOffset(isOpen ? 4000 : point.tier === "home" ? 3000 : point.tier === "major" ? 500 : 0);
         }
       };
 
@@ -157,7 +197,7 @@ export function NeighborhoodMap() {
         if (p.tier !== "home") {
           marker.on("click", (e) => {
             L.DomEvent.stopPropagation(e);
-            setOpen(openId === p.id ? null : p.id);
+            setOpen(openId === p.id ? null : p.id, true);
           });
         }
         markers.push({ point: p, marker });
