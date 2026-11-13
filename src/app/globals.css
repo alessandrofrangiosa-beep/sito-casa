@@ -79,3 +79,96 @@
   .animate-caption, .animate-sheet, .animate-fade, .animate-slide-next, .animate-slide-prev { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ── Mappa del quartiere (Leaflet + OpenStreetMap) ── */
+.neighborhood-map {
+  position: relative;
+  z-index: 0; /* tiene i livelli interni di Leaflet sotto pulsanti fissi e pannelli */
+  isolation: isolate;
+}
+.neighborhood-map .leaflet-container,
+.neighborhood-map.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-ice);
+}
+.map-tiles-muted {
+  filter: grayscale(0.75) saturate(0.6) brightness(1.05) contrast(0.92);
+}
+.poi-icon {
+  background: none;
+  border: 0;
+}
+.poi {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+.poi-dot {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 2px solid var(--color-primary);
+  font-size: 15px;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgb(15 23 42 / 0.25);
+}
+.poi-minor .poi-dot {
+  width: 24px;
+  height: 24px;
+  margin: 3px;
+  font-size: 12px;
+  border-width: 1.5px;
+}
+.poi-home .poi-dot {
+  width: 40px;
+  height: 40px;
+  margin: -5px;
+  font-size: 20px;
+  background: var(--color-primary);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px rgb(14 107 168 / 0.25), 0 3px 10px rgb(15 23 42 / 0.35);
+}
+.poi-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-ink);
+  background: rgb(255 255 255 / 0.96);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 2px 6px;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.15);
+  pointer-events: none;
+}
+.poi-right .poi-label { left: 34px; }
+.poi-left .poi-label { right: 34px; }
+.poi-top .poi-label {
+  top: auto;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.poi-bottom .poi-label {
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.poi-home .poi-label {
+  top: 40px;
+  background: var(--color-primary);
+  color: #fff;
+  border-color: transparent;
+}
+.neighborhood-map:not(.poi-zoom-mid) .poi-minor {
+  display: none;
+}
+.neighborhood-map:not(.poi-zoom-near) .poi-minor .poi-label {
+  display: none;
+}

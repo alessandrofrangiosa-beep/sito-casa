@@ -1,11 +1,9 @@
 import { Car, Anchor, Coffee, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import { SectionTitle } from "./SectionTitle";
+import { NeighborhoodMap } from "./NeighborhoodMap";
 
 const MAP_QUERY = encodeURIComponent(`${PROPERTY.address}, 80058 Torre Annunziata NA`);
-/** Mappa incorporata (URL embed pubblico di Google Maps, senza chiave API) */
-const MAP_EMBED_URL =
-  "https://maps.google.com/maps?q=Via%20Vittorio%20Veneto%20390,%20Torre%20Annunziata&t=&z=16&ie=UTF8&iwloc=&output=embed";
 
 const POINTS = [
   { icon: Waves, title: "Vista mare panoramica" },
@@ -53,14 +51,7 @@ export function Location() {
         </ul>
         <div className="md:sticky md:top-4 md:self-start">
           <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft">
-            <iframe
-              title="Mappa: Via Vittorio Veneto 390, 80058 Torre Annunziata NA"
-              src={MAP_EMBED_URL}
-              className="block h-[260px] w-full border-0 md:h-[340px]"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
+            <NeighborhoodMap />
           </div>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`}
