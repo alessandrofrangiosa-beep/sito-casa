@@ -3,7 +3,8 @@ node_modules/
 out/
 next-env.d.ts
 *.tsbuildinfo
-.env*.local
-.env
+# Variabili d'ambiente e chiavi: mai nel repository (resta tracciato solo il modello vuoto)
+.env*
+!.env.example
 .DS_Store
 .netlify/

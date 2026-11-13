@@ -16,13 +16,12 @@ npm run build && npm start   # produzione
 | Cosa | Dove |
 |---|---|
 | Numero WhatsApp | `NEXT_PUBLIC_WHATSAPP_NUMBER` in `.env.local` (es. `393331234567`) |
-| Chiave API Render AI | `FAL_KEY` **oppure** `OPENAI_API_KEY` in `.env.local` |
+| Chiave API "Arredala tu" | `OPENAI_API_KEY` in `.env.local` o nelle variabili d'ambiente di Vercel |
 | Spese condominiali mensili | `PROPERTY.condoFees` in `src/config/site.ts` |
 | Classe energetica APE | `PROPERTY.energyClass` in `src/config/site.ts` |
 | Planimetria | carica un `.jpg/.png/.webp` in `public/images/planimetria/` (viene collegata automaticamente al build) |
 | Tour 360° | `ENABLE_3D_TOUR = true` e `TOUR_EMBED_URL` in `src/config/site.ts` |
 
-Facoltativo: `LEAD_WEBHOOK_URL` riceve in POST i numeri lasciati per sbloccare altri render (Make, Zapier, Google Sheets…). In ogni caso i numeri vengono scritti nei log del server.
 
 ## Struttura
 
@@ -31,10 +30,15 @@ Facoltativo: `LEAD_WEBHOOK_URL` riceve in POST i numeri lasciati per sbloccare a
 - `public/images/stanze-base-ai/`: le foto base dello studio AI (soggiorno, cucina, camera, balcone vista mare)
 - `src/data/galleryData.ts`: titoli e didascalie di foto, render, stanze AI e stili
 - `src/config/site.ts`: prezzo, dati tecnici, WhatsApp, tour 360°, limiti AI
-- `src/app/api/generate-render/route.ts`: generazione dei render (fal.ai Flux Kontext oppure OpenAI Image Edit). Limita a 2 render gratis, poi altri 3 dopo che il visitatore lascia il numero WhatsApp. Il limite è salvato in un cookie httpOnly e in localStorage.
+- `src/app/api/render/route.ts`: render AI di "Arredala tu" con OpenAI `gpt-image-1` (`/v1/images/edits`, qualità `medium`), a partire dalle foto reali in `public/images/attuali/`. Misure di sicurezza:
+  - chiave letta solo da `process.env.OPENAI_API_KEY`, mai loggata né restituita;
+  - body accettato: solo `roomId` (whitelist di stanze) e `userPrompt` (5-180 caratteri, niente caratteri di controllo, link o immagini);
+  - solo `POST` con `Content-Type: application/json` da `https://sito-casa.vercel.app` (in sviluppo anche `http://localhost:3000`);
+  - cache in memoria per richieste identiche, max 3 generazioni per IP, max 25 generazioni ogni 24 ore in totale;
+  - chiave mancante o credito esaurito → messaggio cortese per il visitatore.
 
 ## Comportamento senza chiave API o numero WhatsApp
 
-- **Render AI**: finché `FAL_KEY` / `OPENAI_API_KEY` mancano, i visitatori vedono il riquadro "Configuratore Render AI in fase di attivazione" invece del pulsante di generazione. La pagina lo verifica con `GET /api/generate-render`, quindi si attiva da sola appena aggiungi la chiave sul server.
+- **Arredala tu**: finché `OPENAI_API_KEY` manca (o il credito OpenAI è esaurito), i visitatori vedono "Simulazioni AI temporaneamente non disponibili: esplora i render già pronti nella scheda dedicata." invece del pulsante di generazione. Su Vercel, dopo aver aggiunto la chiave, serve un nuovo deploy.
 - **Prenota Visita**: finché `NEXT_PUBLIC_WHATSAPP_NUMBER` manca o non è valido (8-15 cifre), il pulsante di invio resta disattivato e compare un avviso discreto. Nessun link `wa.me` viene aperto.
 - I due promemoria rossi `[DA CONTROLLARE]` per chiave API e numero WhatsApp si vedono solo in sviluppo (`npm run dev`), non nel sito pubblicato.

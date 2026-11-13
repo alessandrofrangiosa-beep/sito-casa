@@ -37,7 +37,8 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 
 export default function Home() {
   const floorPlan = findFloorPlan();
-  const aiEnabled = Boolean(process.env.FAL_KEY || process.env.OPENAI_API_KEY);
+  // Solo un booleano: la chiave resta sul server e non arriva mai al browser
+  const aiEnabled = Boolean(process.env.OPENAI_API_KEY);
 
   return (
     <UiProvider>

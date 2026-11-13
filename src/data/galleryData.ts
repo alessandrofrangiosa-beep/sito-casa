@@ -138,35 +138,25 @@ export const renderData: GalleryItem[] = [
 
 export type AiBaseRoom = { id: string; label: string; src: string };
 
-/** Foto base per lo studio "Crea il tuo Render AI" in /public/images/stanze-base-ai */
+/**
+ * Stanze disponibili in "Arredala tu": foto reali in /public/images/attuali.
+ * Gli id devono coincidere con la whitelist ROOM_FILES in src/app/api/render/route.ts.
+ */
 export const aiBaseRooms: AiBaseRoom[] = [
-  { id: "soggiorno", label: "Soggiorno", src: "/images/stanze-base-ai/soggiorno.jpg" },
-  { id: "cucina", label: "Cucina", src: "/images/stanze-base-ai/cucina.jpg" },
-  { id: "camera", label: "Camera", src: "/images/stanze-base-ai/camera.jpg" },
-  { id: "terrazza", label: "Balcone vista mare", src: "/images/stanze-base-ai/terrazza-vista-mare.jpg" },
+  { id: "soggiorno", label: "Soggiorno", src: "/images/attuali/03-soggiorno.jpg" },
+  { id: "cucina", label: "Cucina", src: "/images/attuali/04-cucina.jpg" },
+  { id: "camera", label: "Camera", src: "/images/attuali/09-camera-matrimoniale.jpg" },
+  { id: "stanza-balcone", label: "Stanza con balcone", src: "/images/attuali/10-stanza-accessoria-1.jpg" },
+  { id: "stanza-soleggiata", label: "Stanza soleggiata", src: "/images/attuali/11-stanza-accessoria-2.jpg" },
+  { id: "balcone", label: "Balcone vista mare", src: "/images/attuali/06-seconda-terrazza.jpg" },
 ];
 
 export type AiStyle = { id: string; label: string; prompt: string };
 
+/** Stili rapidi: riempiono la descrizione (max 180 caratteri), che il visitatore può poi modificare. */
 export const aiStyles: AiStyle[] = [
-  {
-    id: "moderno-luminoso",
-    label: "Moderno Luminoso",
-    prompt: "bright modern interior, white and light grey walls, light oak furniture, clean lines, soft natural daylight",
-  },
-  {
-    id: "mediterraneo",
-    label: "Mediterraneo Vista Mare",
-    prompt: "Mediterranean coastal style, warm white plaster walls, terracotta and sand accents, linen fabrics, rattan, olive plants, blue ceramic details",
-  },
-  {
-    id: "minimal",
-    label: "Minimal Contemporaneo",
-    prompt: "minimal contemporary interior, neutral palette, few essential designer pieces, hidden storage, matte finishes, gallery-like calm",
-  },
-  {
-    id: "caldo",
-    label: "Caldo Accogliente",
-    prompt: "warm cozy interior, beige and caramel tones, walnut wood, soft textiles, warm lamps, plush rugs, inviting atmosphere",
-  },
+  { id: "moderno-luminoso", label: "Moderno Luminoso", prompt: "Stile moderno luminoso: pareti bianche, mobili in legno chiaro, linee pulite e luce naturale" },
+  { id: "mediterraneo", label: "Mediterraneo Vista Mare", prompt: "Stile mediterraneo: pareti bianco caldo, accenti terracotta e sabbia, lino, rattan e piante d'ulivo" },
+  { id: "minimal", label: "Minimal Contemporaneo", prompt: "Stile minimal contemporaneo: toni neutri, pochi pezzi di design, finiture opache e atmosfera calma" },
+  { id: "caldo", label: "Caldo Accogliente", prompt: "Stile caldo e accogliente: toni beige e caramello, legno di noce, tessuti morbidi, tappeti e luci calde" },
 ];
