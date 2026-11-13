@@ -7,6 +7,8 @@ import { HOME, MAP_POINTS, type MapPoint } from "@/data/mapPoints";
 
 /** Zoom da cui compaiono i punti secondari (negozi, farmacie, scuole, bar) */
 const MINOR_ICON_ZOOM = 14.5;
+/** Punti entro questa distanza dalla casa rientrano nella vista iniziale */
+const NEAR_RADIUS_M = 1100;
 /** Su touch: la mappa si sblocca appena la pagina smette di scorrere, se è visibile almeno per questa quota */
 const UNLOCK_VISIBLE_RATIO = 0.9;
 /** Millisecondi senza eventi di scorrimento per considerare la pagina ferma (copre anche lo scorrimento a inerzia) */
@@ -204,8 +206,18 @@ export function NeighborhoodMap() {
       }
       map.on("click", () => setOpen(null));
 
-      const bounds = L.latLngBounds(MAP_POINTS.map((p) => [p.lat, p.lng] as [number, number]));
-      const fitAll = () => map?.fitBounds(bounds, { paddingTopLeft: [62, 22], paddingBottomRight: [26, 34], maxZoom: 16 });
+      // Vista iniziale ravvicinata sul quartiere (negozi, farmacie, scuole già visibili);
+      // svincoli A3 e stazione FS si vedono allontanando lo zoom
+      const near = MAP_POINTS.filter((p) => p.tier === "home" || (p.meters ?? 0) <= NEAR_RADIUS_M);
+      const nearBounds = L.latLngBounds(near.map((p) => [p.lat, p.lng] as [number, number]));
+      const fitAll = () => {
+        if (!map) return;
+        const z = map.getBoundsZoom(nearBounds, false, L.point(60, 50));
+        const zoom = Math.min(16, Math.max(MINOR_ICON_ZOOM, Math.floor(z * 4) / 4));
+        // Centro un po' spostato verso la casa, così resta ben visibile anche quando non entra tutto
+        const c = nearBounds.getCenter();
+        map.setView([(c.lat + HOME.lat) / 2, (c.lng + HOME.lng) / 2], zoom, { animate: false });
+      };
       fitAll();
 
       const el = ref.current;
