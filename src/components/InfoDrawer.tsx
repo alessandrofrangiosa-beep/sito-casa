@@ -102,8 +102,6 @@ export function InfoDrawer({
       </nav>
 
       <div className="space-y-4 px-5 py-5">
-        <Highlights />
-
         {active === "prezzo" && (
           <>
             <Card>
@@ -162,10 +160,8 @@ export function InfoDrawer({
 
         {active === "impianti" && (
           <>
+            <Highlights />
             <ul className="space-y-3">
-              <Bullet>
-                <strong>Copertura Fibra fino a 200 Mega</strong>, ideale per lo smart working.
-              </Bullet>
               <Bullet>Soffitti alti: ampiezza, respiro e possibilità di controsoffitti con faretti LED.</Bullet>
               <Bullet>Infissi nuovi bianchi con vetrocamera.</Bullet>
               <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
