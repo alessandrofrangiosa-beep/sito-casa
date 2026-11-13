@@ -1,4 +1,4 @@
-import { Car, Anchor, Coffee, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
+import { Car, Anchor, Coffee, Hospital, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
 import { SectionTitle } from "./SectionTitle";
 import { NeighborhoodMap } from "./NeighborhoodMap";
 
@@ -8,7 +8,8 @@ const POINTS = [
   { icon: ShoppingBag, title: "Super\u00admercati sotto casa" },
   { icon: Pill, title: "Farmacie" },
   { icon: Coffee, title: "Bar e negozi" },
-  { icon: School, title: "Scuola elementare, media e superiore", wide: true },
+  { icon: School, title: "Scuola elementare, media e superiore" },
+  { icon: Hospital, title: "Ospedale a meno di 1\u00a0km" },
   { icon: Train, title: "~300 m dalla Circum\u00advesuviana" },
   { icon: Landmark, title: "Scavi di Oplonti" },
   { icon: Anchor, title: "Lungomare e porto" },
@@ -33,14 +34,11 @@ export function Location() {
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
-        <ul className="grid grid-cols-2 gap-2 self-start sm:grid-cols-3 md:grid-cols-2">
-          {POINTS.map(({ icon: Icon, title, wide }) => (
+        <ul className="grid grid-cols-2 gap-2 self-start">
+          {POINTS.map(({ icon: Icon, title }) => (
             <li
               key={title}
-              // La voce più lunga occupa tutta la riga sulle griglie a 2 colonne, così resta su una riga sola
-              className={`flex min-w-0 items-center gap-2 rounded-xl border border-line bg-card px-2.5 py-2.5 ${
-                wide ? "col-span-2 sm:col-span-1 md:col-span-2" : ""
-              }`}
+              className="flex min-w-0 items-center gap-2 rounded-xl border border-line bg-card px-2.5 py-2.5"
             >
               <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
                 <Icon className="h-4 w-4" aria-hidden />
