@@ -11,7 +11,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
 import { CompositionList } from "@/components/CompositionList";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
-import { PROPERTY } from "@/config/site";
+import { ENABLE_3D_TOUR, PROPERTY, TOUR_EMBED_URL } from "@/config/site";
 
 /** Collega automaticamente la prima immagine trovata in /public/images/planimetria (verificata al build). */
 function findFloorPlan(): string | null {
@@ -37,6 +37,10 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 
 export default function Home() {
   const floorPlan = findFloorPlan();
+  // Il tour 360° compare solo quando è attivo e ha un URL; altrimenti la sezione segnaposto è nascosta
+  const showTour = ENABLE_3D_TOUR && Boolean(TOUR_EMBED_URL);
+  // Alternanza bianco / grigio ghiaccio delle fasce, che resta corretta con o senza il tour
+  const tone = (i: number): "white" | "ice" => ((i + (showTour ? 0 : 1)) % 2 === 1 ? "white" : "ice");
   // Solo un booleano: la chiave resta sul server e non arriva mai al browser
   const aiEnabled = Boolean(process.env.OPENAI_API_KEY);
 
@@ -49,19 +53,21 @@ export default function Home() {
           <ExploreSection aiEnabled={aiEnabled} />
         </div>
 
-        <Band tone="ice">
-          <VirtualTour />
-        </Band>
+        {showTour && (
+          <Band tone={tone(0)}>
+            <VirtualTour />
+          </Band>
+        )}
 
-        <Band>
+        <Band tone={tone(1)}>
           <Location />
         </Band>
 
-        <Band tone="ice">
+        <Band tone={tone(2)}>
           <Opportunity />
         </Band>
 
-        <Band>
+        <Band tone={tone(3)}>
           <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
             <SectionTitle
               eyebrow="Quadrilocale · 4 stanze"
@@ -78,11 +84,11 @@ export default function Home() {
           </section>
         </Band>
 
-        <Band tone="ice">
+        <Band tone={tone(4)}>
           <MortgageSimulator />
         </Band>
 
-        <Band last>
+        <Band tone={tone(5)} last>
           <FinalCta />
         </Band>
       </main>

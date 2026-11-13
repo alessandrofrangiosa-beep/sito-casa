@@ -1,7 +1,7 @@
 /** Punti di forza mostrati sia nella sezione "Già presente" sia in evidenza in "Info Utili". */
 export const FIBER = {
   title: "Copertura Fibra fino a 200 Mega",
-  text: "Connessione veloce e stabile ideale per lavorare in smart working vista Golfo, videochiamate e streaming 4K.",
+  text: "ideale per smart working vista Golfo e streaming 4K",
 };
 
 export const BUILDER_BONUS = {

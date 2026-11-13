@@ -5,15 +5,15 @@ import { SectionTitle } from "./SectionTitle";
 const MAP_QUERY = encodeURIComponent(`${PROPERTY.address}, 80058 Torre Annunziata NA`);
 
 const POINTS = [
-  { icon: Waves, title: "Vista mare panoramica", text: "Dal 6° piano lo sguardo spazia sul Golfo e sulla costiera." },
-  { icon: ShoppingBag, title: "Supermercati sotto casa", text: "Spesa quotidiana a pochi passi, senza prendere l'auto." },
-  { icon: Pill, title: "Farmacie", text: "Servizi sanitari di base raggiungibili a piedi." },
-  { icon: Coffee, title: "Bar e negozi", text: "Una via viva e servita, nel cuore della città." },
-  { icon: School, title: "Scuole", text: "Istituti scolastici nelle vicinanze per tutte le età." },
-  { icon: Train, title: "~300 m dalla Circumvesuviana", text: "Stazione Torre Annunziata-Oplonti: Napoli, Pompei e Sorrento senza auto." },
-  { icon: Landmark, title: "Scavi di Oplonti", text: "La Villa di Poppea, patrimonio UNESCO, a breve distanza." },
-  { icon: Anchor, title: "Lungomare e porto", text: "Passeggiate sul mare e porto vicini." },
-  { icon: Route, title: "Svincolo A3", text: "Accesso rapido all'autostrada Napoli–Salerno." },
+  { icon: Waves, title: "Vista mare panoramica" },
+  { icon: ShoppingBag, title: "Supermercati sotto casa" },
+  { icon: Pill, title: "Farmacie" },
+  { icon: Coffee, title: "Bar e negozi" },
+  { icon: School, title: "Scuole" },
+  { icon: Train, title: "~300 m dalla Circumvesuviana" },
+  { icon: Landmark, title: "Scavi di Oplonti" },
+  { icon: Anchor, title: "Lungomare e porto" },
+  { icon: Route, title: "Svincolo A3" },
 ];
 
 export function Location() {
@@ -35,16 +35,16 @@ export function Location() {
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
-        <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-1">
-          {POINTS.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="flex gap-3 rounded-2xl border border-line bg-card p-3.5">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
-                <Icon className="h-5 w-5" />
+        <ul className="grid grid-cols-2 gap-2 self-start sm:grid-cols-3 md:grid-cols-2">
+          {POINTS.map(({ icon: Icon, title }) => (
+            <li
+              key={title}
+              className="flex min-w-0 items-center gap-2 rounded-xl border border-line bg-card px-2.5 py-2.5"
+            >
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
+                <Icon className="h-4 w-4" aria-hidden />
               </span>
-              <span>
-                <span className="block text-[15px] font-bold text-ink">{title}</span>
-                <span className="block text-sm leading-snug text-slate-ink">{text}</span>
-              </span>
+              <span className="min-w-0 text-[13px] font-bold leading-tight text-ink sm:text-sm">{title}</span>
             </li>
           ))}
         </ul>

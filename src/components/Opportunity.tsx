@@ -10,7 +10,7 @@ const ALREADY_DONE = [
   "Riscaldamento con termosifoni e caldaia già installati",
   "Ingresso e corridoio già tinteggiati di bianco",
   "Soffitti alti che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED",
-  "Vista mare aperta e non ostruibile dal 6° piano: soleggiamento naturale tutto il giorno con risparmio energetico reale e brezza marina su terrazza e balconi",
+  "Vista mare aperta e non ostruibile dal 6° piano con soleggiamento naturale tutto il giorno",
 ];
 
 export function Opportunity() {
@@ -29,7 +29,7 @@ export function Opportunity() {
               <Wifi className="h-5 w-5" aria-hidden />
             </span>
             <span className="min-w-0 text-base leading-snug text-ink sm:text-lg">
-              <strong className="font-semibold">{FIBER.title}:</strong> {FIBER.text.charAt(0).toLowerCase() + FIBER.text.slice(1)}
+              <strong className="font-semibold">{FIBER.title}:</strong> {FIBER.text}
             </span>
           </li>
           {ALREADY_DONE.map((t) => (
