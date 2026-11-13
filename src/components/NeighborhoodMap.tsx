@@ -11,9 +11,6 @@ const UNLOCK_VISIBLE_RATIO = 0.9;
 /** Millisecondi senza eventi di scorrimento per considerare la pagina ferma (copre anche lo scorrimento a inerzia) */
 const SCROLL_IDLE_MS = 120;
 
-/** Distanza in pixel dal centro entro cui il nome di un punto si apre da solo */
-const CENTER_RADIUS_PX = 46;
-
 const formatDistance = (m?: number) =>
   m === undefined ? "" : m < 1000 ? ` · ${m} m` : ` · ${(m / 1000).toFixed(1).replace(".", ",")} km`;
 
@@ -161,24 +158,10 @@ export function NeighborhoodMap() {
       const el = ref.current;
       const syncZoom = () => el.classList.toggle("poi-zoom-mid", (map?.getZoom() ?? 0) >= MINOR_ICON_ZOOM);
 
-      // Apre in automatico il nome del punto più vicino al centro della mappa
-      const openNearestToCenter = () => {
-        if (!map) return;
-        const center = map.getSize().divideBy(2);
-        const showMinor = map.getZoom() >= MINOR_ICON_ZOOM;
-        let best: { id: string; d: number } | null = null;
-        for (const { point } of markers) {
-          if (point.tier === "home" || (point.tier === "minor" && !showMinor)) continue;
-          const d = map.latLngToContainerPoint([point.lat, point.lng]).distanceTo(center);
-          if (d <= CENTER_RADIUS_PX && (!best || d < best.d)) best = { id: point.id, d };
-        }
-        setOpen(best?.id ?? null);
-      };
-
       map.on("zoomend", syncZoom);
-      map.on("moveend", openNearestToCenter);
+      // Il nome si apre solo toccando l'icona; dopo uno spostamento viene solo riposizionato
+      map.on("moveend", () => setOpen(openId));
       syncZoom();
-      openNearestToCenter();
 
       if (coarse) cleanupTouch = setupAutoUnlock(el, map);
     })();

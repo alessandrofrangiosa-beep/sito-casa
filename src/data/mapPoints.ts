@@ -1,7 +1,7 @@
 /**
  * Punti mostrati sulla mappa della sezione "Posizione strategica".
  * Coordinate reali prese da OpenStreetMap (Nominatim), novembre 2026.
- * Sulla mappa si vede solo l'icona; il nome (con la distanza) si apre toccando l'icona o portandola al centro.
+ * Sulla mappa si vede solo l'icona; il nome (con la distanza) si apre solo toccando l'icona.
  * Solo la casa ha il nome sempre aperto. "minor" = compare avvicinando lo zoom (negozi, farmacie, scuole, bar).
  * "side" = lato dell'etichetta rispetto al segnaposto, scelto per evitare sovrapposizioni.
  */
