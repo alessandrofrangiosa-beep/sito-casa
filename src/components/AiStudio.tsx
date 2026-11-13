@@ -189,6 +189,8 @@ export function AiStudio({ aiEnabled = false, onShowRenders }: { aiEnabled?: boo
               onClick={() => setPrompt(s.prompt)}
               aria-pressed={prompt === s.prompt}
               className={`rounded-xl border px-3 py-3 text-sm font-semibold transition ${
+                aiStyles.length % 2 === 1 && s.id === aiStyles[aiStyles.length - 1].id ? "col-span-2" : ""
+              } ${
                 prompt === s.prompt ? "border-primary bg-primary text-white" : "border-line bg-ice text-ink"
               }`}
             >
@@ -208,7 +210,7 @@ export function AiStudio({ aiEnabled = false, onShowRenders }: { aiEnabled?: boo
             value={prompt}
             onChange={(e) => setPrompt(e.target.value.replace(/[\r\n\t]+/g, " "))}
             maxLength={PROMPT_MAX}
-            rows={3}
+            rows={4}
             placeholder="Es. divano angolare blu, parquet chiaro, libreria a parete"
             className="w-full resize-none rounded-xl border border-line bg-ice px-3.5 py-3 text-[15px] outline-none focus:border-primary"
           />

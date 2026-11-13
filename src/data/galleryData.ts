@@ -148,7 +148,6 @@ export const aiBaseRooms: AiBaseRoom[] = [
   { id: "camera", label: "Camera", src: "/images/attuali/09-camera-matrimoniale.jpg" },
   { id: "stanza-balcone", label: "Stanza con balcone", src: "/images/attuali/10-stanza-accessoria-1.jpg" },
   { id: "stanza-soleggiata", label: "Stanza soleggiata", src: "/images/attuali/11-stanza-accessoria-2.jpg" },
-  { id: "balcone", label: "Balcone vista mare", src: "/images/attuali/06-seconda-terrazza.jpg" },
 ];
 
 export type AiStyle = { id: string; label: string; prompt: string };
@@ -159,4 +158,5 @@ export const aiStyles: AiStyle[] = [
   { id: "mediterraneo", label: "Mediterraneo Vista Mare", prompt: "Stile mediterraneo: pareti bianco caldo, accenti terracotta e sabbia, lino, rattan e piante d'ulivo" },
   { id: "minimal", label: "Minimal Contemporaneo", prompt: "Stile minimal contemporaneo: toni neutri, pochi pezzi di design, finiture opache e atmosfera calma" },
   { id: "caldo", label: "Caldo Accogliente", prompt: "Stile caldo e accogliente: toni beige e caramello, legno di noce, tessuti morbidi, tappeti e luci calde" },
+  { id: "cameretta", label: "Cameretta bambino", prompt: "Cameretta per bambino: lettino, scrivania e libreria bassa, tappeto morbido, giochi colorati, pareti azzurro chiaro e luce calda" },
 ];

@@ -32,7 +32,6 @@ const ROOM_FILES: Readonly<Record<string, string>> = Object.freeze({
   camera: "09-camera-matrimoniale.jpg",
   "stanza-balcone": "10-stanza-accessoria-1.jpg",
   "stanza-soleggiata": "11-stanza-accessoria-2.jpg",
-  balcone: "06-seconda-terrazza.jpg",
 });
 const PHOTOS_DIR = path.join(process.cwd(), "public", "images", "attuali");
 
