@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Maximize2, X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import { MAP_POINTS, type MapPoint } from "@/data/mapPoints";
 
@@ -25,8 +26,9 @@ function markerHtml(p: MapPoint) {
  * Su touch: mentre la pagina scorre la mappa è bloccata, così il dito che ci passa sopra scorre
  * la pagina. Appena la pagina si ferma con la mappa visibile almeno al 90%, si sblocca subito e si
  * sposta con un dito. Riprendendo a scorrere (o se resta visibile solo in parte) torna bloccata.
+ * A schermo intero è sempre sbloccata.
  */
-function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map) {
+function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map, isFull: () => boolean) {
   let idleTimer: number | undefined;
 
   const visibleRatio = () => {
@@ -35,7 +37,8 @@ function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map) {
     const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
     return Math.max(0, visible) / r.height;
   };
-  const setLocked = (locked: boolean) => {
+  const setLocked = (wantLocked: boolean) => {
+    const locked = wantLocked && !isFull();
     if (locked && map.dragging.enabled()) map.dragging.disable();
     if (!locked && !map.dragging.enabled()) map.dragging.enable();
   };
@@ -50,24 +53,33 @@ function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map) {
   window.addEventListener("resize", evaluate, { passive: true });
   evaluate();
 
-  return () => {
-    window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("resize", evaluate);
-    window.clearTimeout(idleTimer);
+  return {
+    evaluate,
+    cleanup: () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", evaluate);
+      window.clearTimeout(idleTimer);
+    },
   };
 }
 
 /**
  * Mappa OpenStreetMap del quartiere con i punti di interesse reali.
  * Su smartphone si sposta con un dito appena la pagina smette di scorrere con la mappa ben visibile; zoom con due dita o +/−.
+ * "Schermo intero" ingrandisce la mappa dentro il sito (nessun link esterno): si chiude con Chiudi, Esc o il tasto Indietro.
  */
 export function NeighborhoodMap() {
   const ref = useRef<HTMLDivElement>(null);
+  const [full, setFull] = useState(false);
+  const fullRef = useRef(false);
+  /** Chiamata dopo ogni cambio di dimensione: ricalcola la mappa, la reinquadra e aggiorna il blocco touch */
+  const refitRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     let disposed = false;
     let map: import("leaflet").Map | undefined;
     let cleanupTouch: (() => void) | undefined;
+    let resizeObserver: ResizeObserver | undefined;
 
     (async () => {
       const L = (await import("leaflet")).default;
@@ -153,7 +165,8 @@ export function NeighborhoodMap() {
       map.on("click", () => setOpen(null));
 
       const bounds = L.latLngBounds(MAP_POINTS.map((p) => [p.lat, p.lng] as [number, number]));
-      map.fitBounds(bounds, { paddingTopLeft: [62, 22], paddingBottomRight: [26, 34], maxZoom: 16 });
+      const fitAll = () => map?.fitBounds(bounds, { paddingTopLeft: [62, 22], paddingBottomRight: [26, 34], maxZoom: 16 });
+      fitAll();
 
       const el = ref.current;
       const syncZoom = () => el.classList.toggle("poi-zoom-mid", (map?.getZoom() ?? 0) >= MINOR_ICON_ZOOM);
@@ -163,22 +176,92 @@ export function NeighborhoodMap() {
       map.on("moveend", () => setOpen(openId));
       syncZoom();
 
-      if (coarse) cleanupTouch = setupAutoUnlock(el, map);
+      const touch = coarse ? setupAutoUnlock(el, map, () => fullRef.current) : undefined;
+      cleanupTouch = touch?.cleanup;
+      // La mappa segue le dimensioni del riquadro (anche entrando e uscendo dallo schermo intero)
+      resizeObserver = new ResizeObserver(() => map?.invalidateSize());
+      resizeObserver.observe(el);
+      refitRef.current = () => {
+        map?.invalidateSize();
+        fitAll();
+        touch?.evaluate();
+      };
     })();
 
     return () => {
       disposed = true;
       cleanupTouch?.();
+      resizeObserver?.disconnect();
       map?.remove();
     };
   }, []);
 
+  const open = useCallback(() => {
+    window.history.pushState({ ta390MapFull: true }, "");
+    setFull(true);
+  }, []);
+  const close = useCallback(() => {
+    // Se l'apertura ha aggiunto un passo alla cronologia lo consuma, così "Indietro" non resta sporco
+    if (window.history.state?.ta390MapFull) window.history.back();
+    else setFull(false);
+  }, []);
+
+  useEffect(() => {
+    fullRef.current = full;
+    const raf = requestAnimationFrame(() => refitRef.current());
+    if (!full) return () => cancelAnimationFrame(raf);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    // Il tasto Indietro del telefono chiude lo schermo intero invece di lasciare il sito
+    const onPop = () => setFull(false);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("popstate", onPop);
+    return () => {
+      cancelAnimationFrame(raf);
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("popstate", onPop);
+    };
+  }, [full, close]);
+
   return (
-    <div
-      ref={ref}
-      role="region"
-      aria-label="Mappa del quartiere con stazione, scavi, porto, lungomare, svincoli A3, ospedale, negozi, farmacie e scuole"
-      className="neighborhood-map h-[260px] w-full bg-ice md:h-[340px]"
-    />
+    <div>
+      {/* Segnaposto: a schermo intero la pagina sotto non cambia altezza */}
+      {full && <div className="h-[260px] md:h-[340px]" aria-hidden />}
+      <div
+        className={full ? "map-fullscreen fixed inset-0 z-[60] bg-card" : "overflow-hidden rounded-2xl border border-line bg-card shadow-soft"}
+        role={full ? "dialog" : undefined}
+        aria-modal={full ? true : undefined}
+        aria-label={full ? "Mappa del quartiere a schermo intero" : undefined}
+      >
+        <div
+          ref={ref}
+          role="region"
+          aria-label="Mappa del quartiere con stazione, scavi, porto, lungomare, svincoli A3, ospedale, negozi, farmacie e scuole"
+          className={`neighborhood-map w-full bg-ice ${full ? "h-full" : "h-[260px] md:h-[340px]"}`}
+        />
+        {full && (
+          <button
+            type="button"
+            onClick={close}
+            className="absolute right-3 top-[max(0.75rem,env(safe-area-inset-top))] z-10 inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white shadow-soft"
+          >
+            <X className="h-4 w-4" aria-hidden />
+            Chiudi
+          </button>
+        )}
+      </div>
+      {!full && (
+        <button
+          type="button"
+          onClick={open}
+          className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
+        >
+          <Maximize2 className="h-4 w-4" aria-hidden />
+          Apri mappa a schermo intero
+        </button>
+      )}
+    </div>
   );
 }

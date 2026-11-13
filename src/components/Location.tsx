@@ -1,9 +1,6 @@
 import { Car, Anchor, Coffee, Landmark, Pill, Route, School, ShoppingBag, Train, Waves } from "lucide-react";
-import { PROPERTY } from "@/config/site";
 import { SectionTitle } from "./SectionTitle";
 import { NeighborhoodMap } from "./NeighborhoodMap";
-
-const MAP_QUERY = encodeURIComponent(`${PROPERTY.address}, 80058 Torre Annunziata NA`);
 
 const POINTS = [
   { icon: Waves, title: "Vista mare panoramica" },
@@ -48,18 +45,9 @@ export function Location() {
             </li>
           ))}
         </ul>
-        <div className="md:sticky md:top-4 md:self-start">
-          <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-soft">
-            <NeighborhoodMap />
-          </div>
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 inline-block text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
-          >
-            Apri mappa a schermo intero →
-          </a>
+        {/* "sticky" crea un livello a parte: con la mappa a schermo intero va portato sopra i pulsanti fissi */}
+        <div className="md:sticky md:top-4 md:self-start has-[.map-fullscreen]:z-[60]">
+          <NeighborhoodMap />
         </div>
       </div>
     </section>
