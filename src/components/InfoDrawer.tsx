@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, HardHat, Wifi } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, ChevronLeft, ChevronRight, HardHat, Wifi } from "lucide-react";
 import { Sheet } from "./Sheet";
 import { DaControllare } from "./DaControllare";
 import { PROPERTY } from "@/config/site";
@@ -83,15 +84,53 @@ export function InfoDrawer({
 }) {
   const { openBooking } = useUi();
   const active = tab ?? "prezzo";
+  const index = TABS.findIndex((t) => t.id === active);
+  const navRef = useRef<HTMLElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const touch = useRef<{ x: number; y: number; t: number } | null>(null);
+  const [direction, setDirection] = useState<"next" | "prev" | null>(null);
+
+  const goTo = (i: number) => {
+    if (i < 0 || i >= TABS.length || i === index) return;
+    setDirection(i > index ? "next" : "prev");
+    onTabChange(TABS[i].id);
+  };
+
+  // Scheda attiva al centro della barra (scorrimento solo orizzontale) e contenuto dall'inizio
+  useEffect(() => {
+    if (tab === null) return;
+    const nav = navRef.current;
+    const chip = nav?.children[index] as HTMLElement | undefined;
+    if (nav && chip) nav.scrollTo({ left: chip.offsetLeft - nav.clientWidth / 2 + chip.clientWidth / 2, behavior: "smooth" });
+    const scroller = bodyRef.current?.closest(".overflow-y-auto");
+    if (scroller && scroller.scrollTop > 0) scroller.scrollTo({ top: 0 });
+  }, [index, tab]);
+
+  // Scorrimento con il dito: verso sinistra → scheda successiva, verso destra → precedente
+  const onTouchStart = (e: React.TouchEvent) => {
+    const p = e.touches[0];
+    touch.current = { x: p.clientX, y: p.clientY, t: Date.now() };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touch.current;
+    touch.current = null;
+    if (!start) return;
+    const p = e.changedTouches[0];
+    const dx = p.clientX - start.x;
+    const dy = p.clientY - start.y;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5 || Date.now() - start.t > 800) return;
+    goTo(dx < 0 ? index + 1 : index - 1);
+  };
 
   return (
     <Sheet open={tab !== null} onClose={onClose} title="Info Utili" eyebrow="Scheda tecnica completa" side="left">
-      <nav className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-auto border-b border-line bg-ice px-5 py-3">
+      <nav ref={navRef} className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-auto border-b border-line bg-ice px-5 py-3">
         {TABS.map((t, i) => (
           <button
             key={t.id}
             type="button"
-            onClick={() => onTabChange(t.id)}
+            onClick={() => goTo(i)}
+            aria-current={active === t.id ? "true" : undefined}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
               active === t.id ? "bg-primary text-white" : "border border-line bg-card text-slate-ink"
             }`}
@@ -101,7 +140,43 @@ export function InfoDrawer({
         ))}
       </nav>
 
-      <div className="space-y-4 px-5 py-5">
+      <div
+        ref={bodyRef}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        style={{ touchAction: "pan-y" }}
+        className="space-y-4 px-5 py-5"
+      >
+        <div className="flex items-center justify-between gap-3 text-xs text-slate-ink">
+          <button
+            type="button"
+            onClick={() => goTo(index - 1)}
+            disabled={index === 0}
+            aria-label="Scheda precedente"
+            className="grid h-8 w-8 place-items-center rounded-full border border-line bg-card text-ink transition disabled:opacity-30"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <div className="flex flex-col items-center gap-1">
+            <span className="flex gap-1.5" aria-hidden>
+              {TABS.map((t, i) => (
+                <span key={t.id} className={`h-1.5 rounded-full transition-all ${i === index ? "w-5 bg-primary" : "w-1.5 bg-line"}`} />
+              ))}
+            </span>
+            <span>Scorri con il dito per cambiare scheda</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => goTo(index + 1)}
+            disabled={index === TABS.length - 1}
+            aria-label="Scheda successiva"
+            className="grid h-8 w-8 place-items-center rounded-full border border-line bg-card text-ink transition disabled:opacity-30"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div key={active} className={`space-y-4 ${direction === "next" ? "animate-slide-next" : direction === "prev" ? "animate-slide-prev" : ""}`}>
         {active === "prezzo" && (
           <>
             <Card>
@@ -227,6 +302,8 @@ export function InfoDrawer({
             </Card>
           </>
         )}
+
+        </div>
 
         <button
           type="button"

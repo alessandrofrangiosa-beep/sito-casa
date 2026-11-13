@@ -64,7 +64,18 @@
 }
 .animate-fade { animation: fade-in 0.25s ease-out both; }
 
+@keyframes slide-next {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-prev {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-next { animation: slide-next 0.22s ease-out both; }
+.animate-slide-prev { animation: slide-prev 0.22s ease-out both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-caption, .animate-sheet, .animate-fade { animation: none; }
+  .animate-caption, .animate-sheet, .animate-fade, .animate-slide-next, .animate-slide-prev { animation: none; }
   html { scroll-behavior: auto; }
 }
