@@ -113,9 +113,8 @@ export const galleryData: GalleryItem[] = [
     id: 15,
     src: "/images/attuali/15-garage.jpg",
     title: "Garage privato",
-    caption: "Box auto privato incluso nel prezzo: comodo e asciutto sotto casa.",
+    caption: "Box auto privato sotto casa, con porta in ferro e chiusura a chiave.",
     alt: "Box auto privato chiuso con auto parcheggiata",
-    badge: "Incluso nel prezzo",
   },
 ];
 
