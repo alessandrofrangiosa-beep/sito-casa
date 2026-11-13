@@ -1,6 +1,6 @@
 # Landing page — Via Vittorio Veneto 390, Torre Annunziata
 
-Landing page per vendere da privato un appartamento di ~120 m² con vista mare, 3 terrazze e garage. È progettata prima di tutto per smartphone. Stack: Next.js (App Router), Tailwind CSS v4 e TypeScript.
+Landing page per vendere da privato un appartamento di ~144 m² con vista mare, 3 terrazze e garage. È progettata prima di tutto per smartphone. Stack: Next.js (App Router), Tailwind CSS v4 e TypeScript.
 
 ## Avvio
 

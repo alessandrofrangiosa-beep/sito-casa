@@ -8,7 +8,7 @@ export const PROPERTY = {
   address: "Via Vittorio Veneto 390",
   city: "Torre Annunziata (NA)",
   floor: "6° piano di 8 con ascensore",
-  sqm: 120,
+  sqm: 144,
   /** Prezzo totale della vendita in blocco (appartamento + garage) */
   price: "€\u00a0250.000",
   /** Prezzo del solo appartamento, mostrato come cifra principale nella hero */

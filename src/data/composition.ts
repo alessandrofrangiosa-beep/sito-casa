@@ -22,7 +22,7 @@ export const composition: CompositionItem[] = [
 /** Dati rapidi mostrati nella barra sotto il prezzo */
 export const quickFacts: { value: string; label: string }[] = [
   { value: "4 locali", label: "sala + 3 camere" },
-  { value: "120 m²", label: "superficie" },
+  { value: "144 m²", label: "superficie" },
   { value: "2", label: "bagni" },
   { value: "3", label: "terrazze" },
   { value: "1", label: "garage" },

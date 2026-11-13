@@ -43,7 +43,7 @@ function PriceBreakdown() {
         <div className="flex items-start justify-between gap-4 pb-3">
           <dt className="min-w-0">
             <span className="font-semibold text-ink">Prezzo appartamento</span>
-            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 120 m² + 3 terrazze</span>
+            <span className="block text-[13px] leading-snug text-slate-ink">Quadrilocale 144 m² + 3 terrazze</span>
           </dt>
           <dd className="whitespace-nowrap font-bold text-ink tabular-nums">{euro(askingPrice)}</dd>
         </div>
@@ -54,7 +54,7 @@ function PriceBreakdown() {
           </div>
         ))}
         <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-t-2 border-ink/80 pt-3">
-          <dt className="min-w-0 font-semibold leading-snug text-ink">= Costo netto reale dei 120 m² vista mare</dt>
+          <dt className="min-w-0 font-semibold leading-snug text-ink">= Costo netto reale dei 144 m² vista mare</dt>
           <dd className="text-right">
             <span className="block whitespace-nowrap text-2xl font-extrabold tracking-tight text-ink tabular-nums">~&nbsp;{euro(net)}</span>
             <span className="mt-1 inline-block rounded-full border border-primary/20 bg-primary-soft px-2.5 py-0.5 text-xs font-semibold text-primary tabular-nums">

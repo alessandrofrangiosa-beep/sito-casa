@@ -23,7 +23,7 @@ export function Hero() {
       <div className="relative mx-auto -mt-10 max-w-5xl px-4">
         <div className="rounded-2xl border border-line bg-card p-5 shadow-soft max-[340px]:p-4 sm:p-8">
           <h1 className="text-[1.45rem] max-[340px]:text-[1.25rem] font-bold leading-[1.2] tracking-tight sm:text-[2.6rem] sm:leading-[1.15]">
-            Quadrilocale 120 m² Vista Mare con 3 Terrazze e Garage Privato
+            Quadrilocale 144 m² Vista Mare con 3 Terrazze e Garage Privato
           </h1>
           <p className="mt-2 flex items-start gap-1.5 text-sm text-slate-ink max-[340px]:text-[12.5px] sm:text-base">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

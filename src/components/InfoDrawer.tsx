@@ -79,7 +79,7 @@ export function InfoDrawer({
           <>
             <Card>
               <dl>
-                <Row label="Appartamento (quadrilocale 120 m² + 3 terrazze)">{PROPERTY.apartmentPrice}</Row>
+                <Row label="Appartamento (quadrilocale 144 m² + 3 terrazze)">{PROPERTY.apartmentPrice}</Row>
                 <Row label="Garage privato">{PROPERTY.garagePrice}</Row>
                 <Row label="Vendita congiunta">
                   {PROPERTY.price} {PROPERTY.priceNote}
