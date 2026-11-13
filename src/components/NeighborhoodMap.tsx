@@ -6,11 +6,10 @@ import { MAP_POINTS, type MapPoint } from "@/data/mapPoints";
 
 /** Zoom da cui compaiono i punti secondari (negozi, farmacie, scuole, bar) */
 const MINOR_ICON_ZOOM = 14.5;
-/**
- * Su touch: millisecondi di blocco contati dal primo pixel della mappa che entra nello schermo.
- * Durante questo tempo il dito che passa sopra la mappa scorre la pagina; poi la mappa si sposta con un dito.
- */
-const UNLOCK_AFTER_MS = 1500;
+/** Su touch: la mappa si sblocca appena la pagina smette di scorrere, se è visibile almeno per questa quota */
+const UNLOCK_VISIBLE_RATIO = 0.9;
+/** Millisecondi senza eventi di scorrimento per considerare la pagina ferma (copre anche lo scorrimento a inerzia) */
+const SCROLL_IDLE_MS = 120;
 
 /** Distanza in pixel dal centro entro cui il nome di un punto si apre da solo */
 const CENTER_RADIUS_PX = 46;
@@ -26,48 +25,44 @@ function markerHtml(p: MapPoint) {
 }
 
 /**
- * Su touch: la mappa parte bloccata (il dito scorre la pagina). Il conto alla rovescia di
- * UNLOCK_AFTER_MS parte dal primo pixel della mappa che entra nello schermo e non si azzera
- * scorrendo; allo scadere la mappa si sposta con un dito. Se la mappa esce del tutto dallo
- * schermo torna bloccata e il conto riparte al rientro.
+ * Su touch: mentre la pagina scorre la mappa è bloccata, così il dito che ci passa sopra scorre
+ * la pagina. Appena la pagina si ferma con la mappa visibile almeno al 90%, si sblocca subito e si
+ * sposta con un dito. Riprendendo a scorrere (o se resta visibile solo in parte) torna bloccata.
  */
 function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map) {
-  let timer: number | undefined;
-  let counting = false;
+  let idleTimer: number | undefined;
 
-  const lock = () => {
-    window.clearTimeout(timer);
-    counting = false;
-    if (map.dragging.enabled()) map.dragging.disable();
+  const visibleRatio = () => {
+    const r = el.getBoundingClientRect();
+    if (r.height <= 0) return 0;
+    const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+    return Math.max(0, visible) / r.height;
+  };
+  const setLocked = (locked: boolean) => {
+    if (locked && map.dragging.enabled()) map.dragging.disable();
+    if (!locked && !map.dragging.enabled()) map.dragging.enable();
+  };
+  const evaluate = () => setLocked(visibleRatio() < UNLOCK_VISIBLE_RATIO);
+  const onScroll = () => {
+    setLocked(true);
+    window.clearTimeout(idleTimer);
+    idleTimer = window.setTimeout(evaluate, SCROLL_IDLE_MS);
   };
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        if (!counting && !map.dragging.enabled()) {
-          counting = true;
-          timer = window.setTimeout(() => {
-            counting = false;
-            map.dragging.enable();
-          }, UNLOCK_AFTER_MS);
-        }
-      } else {
-        lock(); // uscita completa dallo schermo
-      }
-    },
-    { threshold: 0 },
-  );
-  observer.observe(el);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", evaluate, { passive: true });
+  evaluate();
 
   return () => {
-    observer.disconnect();
-    window.clearTimeout(timer);
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", evaluate);
+    window.clearTimeout(idleTimer);
   };
 }
 
 /**
  * Mappa OpenStreetMap del quartiere con i punti di interesse reali.
- * Su smartphone si sposta con un dito 1,5 s dopo essere comparsa sullo schermo; zoom con due dita o con +/−.
+ * Su smartphone si sposta con un dito appena la pagina smette di scorrere con la mappa ben visibile; zoom con due dita o +/−.
  */
 export function NeighborhoodMap() {
   const ref = useRef<HTMLDivElement>(null);
@@ -83,7 +78,7 @@ export function NeighborhoodMap() {
       const coarse = window.matchMedia("(pointer: coarse)").matches;
 
       map = L.map(ref.current, {
-        // Su smartphone parte bloccata e si sblocca da sola 1,5 s dopo essere comparsa sullo schermo (vedi sotto)
+        // Su smartphone è bloccata mentre si scorre e si sblocca appena la pagina si ferma (vedi sotto)
         dragging: !coarse,
         touchZoom: true,
         scrollWheelZoom: false, // la rotellina continua a scorrere la pagina
