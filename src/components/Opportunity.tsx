@@ -1,8 +1,8 @@
-import { Check, HardHat, Wifi } from "lucide-react";
+import { Check, HardHat } from "lucide-react";
 import { BUILDER_BONUS, FIBER } from "@/data/highlights";
 import { SectionTitle } from "./SectionTitle";
 
-/** Dotazioni già presenti (la fibra è in testa, mostrata a parte) */
+/** Dotazioni già presenti: la fibra è il primo punto, con lo stesso stile degli altri */
 const ALREADY_DONE = [
   "Infissi bianchi con vetrocamera già sostituiti",
   "Pavimenti in buono stato: graniglia nera nel salone, alla veneziana nelle altre stanze",
@@ -13,6 +13,8 @@ const ALREADY_DONE = [
   "Vista mare aperta e non ostruibile dal 6° piano con soleggiamento naturale tutto il giorno",
 ];
 
+const ITEMS = [`${FIBER.title}: ${FIBER.text}`, ...ALREADY_DONE];
+
 export function Opportunity() {
   return (
     <section id="opportunita" className="mx-auto max-w-5xl scroll-mt-4 px-4">
@@ -22,17 +24,19 @@ export function Opportunity() {
         intro="Volumi ampi e regolari, tanta luce e la vista sul Golfo: la parte difficile (e costosa) è già fatta. A te resta la parte bella."
       />
 
-      <article className="rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-6">
+      <aside className="flex gap-3.5 rounded-2xl bg-primary p-5 text-white shadow-soft">
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-primary">
+          <HardHat className="h-6 w-6" aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <p className="text-base font-bold leading-snug sm:text-lg">{BUILDER_BONUS.title}</p>
+          <p className="mt-1 text-[15px] leading-snug text-white/90">{BUILDER_BONUS.text}</p>
+        </div>
+      </aside>
+
+      <article className="mt-3 rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-6">
         <ul className="space-y-4">
-          <li className="flex gap-3 rounded-xl border border-primary/20 bg-primary-soft p-3.5">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-white">
-              <Wifi className="h-5 w-5" aria-hidden />
-            </span>
-            <span className="min-w-0 text-base leading-snug text-ink sm:text-lg">
-              <strong className="font-semibold">{FIBER.title}:</strong> {FIBER.text}
-            </span>
-          </li>
-          {ALREADY_DONE.map((t) => (
+          {ITEMS.map((t) => (
             <li key={t} className="flex gap-3 px-1 text-base leading-snug text-ink sm:text-lg">
               <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
                 <Check className="h-4 w-4" strokeWidth={3} aria-hidden />
@@ -42,13 +46,6 @@ export function Opportunity() {
           ))}
         </ul>
       </article>
-
-      <aside className="mt-3 rounded-2xl border border-primary/20 bg-primary-soft p-5">
-        <p className="flex items-center gap-2 text-base font-bold text-primary sm:text-lg">
-          <HardHat className="h-5 w-5 shrink-0" aria-hidden /> {BUILDER_BONUS.title}
-        </p>
-        <p className="mt-2 text-[15px] leading-relaxed text-ink">{BUILDER_BONUS.text}</p>
-      </aside>
     </section>
   );
 }

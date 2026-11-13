@@ -5,6 +5,6 @@ export const FIBER = {
 };
 
 export const BUILDER_BONUS = {
-  title: "Bonus tempi e costi: ditta già attiva nello stabile",
-  text: "L'impresa incaricata dal condominio per le facciate è già sul posto: su richiesta e senza alcun vincolo ricevi il contatto diretto della squadra, per tinteggiare e personalizzare gli interni subito dopo il rogito. Zero tempi di attesa e costi di uscita cantiere ridotti al minimo.",
+  title: "Bonus tempi e costi: ditta già nello stabile",
+  text: "Su richiesta ti diamo il contatto della squadra che sta rifacendo le facciate: tinteggi e personalizzi gli interni subito dopo il rogito, senza attese.",
 };
