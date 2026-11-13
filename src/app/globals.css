@@ -86,20 +86,6 @@
   z-index: 0; /* tiene i livelli interni di Leaflet sotto pulsanti fissi e pannelli */
   isolation: isolate;
 }
-/* Sbloccata per lo spostamento con un dito (dopo aver tenuto premuto) */
-.neighborhood-map::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1000;
-  border: 3px solid transparent;
-  border-radius: inherit;
-  pointer-events: none;
-  transition: border-color 0.2s ease;
-}
-.neighborhood-map.map-unlocked::after {
-  border-color: var(--color-primary);
-}
 .neighborhood-map .leaflet-container,
 .neighborhood-map.leaflet-container {
   font-family: var(--font-sans);

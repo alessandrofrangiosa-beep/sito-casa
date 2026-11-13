@@ -6,12 +6,10 @@ import { MAP_POINTS, type MapPoint } from "@/data/mapPoints";
 
 /** Zoom da cui compaiono i punti secondari (negozi, farmacie, scuole, bar) */
 const MINOR_ICON_ZOOM = 14.5;
-/** Su touch: tenendo il dito fermo così a lungo sulla mappa, la si sblocca per spostarla con un dito */
-const HOLD_TO_PAN_MS = 1000;
-/** Dopo lo sblocco, resta sbloccata per altri spostamenti fatti entro questo tempo */
-const UNLOCK_GRACE_MS = 3000;
-/** Movimento del dito oltre il quale il gesto è uno scorrimento della pagina */
-const MOVE_TOLERANCE_PX = 10;
+/** Su touch: la mappa resta bloccata (il dito scorre la pagina) finché non resta ferma sullo schermo così a lungo */
+const UNLOCK_AFTER_MS = 1500;
+/** Quota della mappa che deve essere visibile per considerarla "sullo schermo" */
+const VISIBLE_RATIO = 0.6;
 
 /** Distanza in pixel dal centro entro cui il nome di un punto si apre da solo */
 const CENTER_RADIUS_PX = 46;
@@ -27,77 +25,44 @@ function markerHtml(p: MapPoint) {
 }
 
 /**
- * Su touch: un dito che scorre sopra la mappa scorre la pagina. Tenendo il dito fermo
- * per HOLD_TO_PAN_MS la mappa si sblocca (bordo evidenziato) e si sposta con un dito;
- * resta sbloccata per UNLOCK_GRACE_MS dopo l'ultimo tocco. Due dita = zoom, sempre.
+ * Su touch: mentre si scorre la pagina la mappa è bloccata, così il dito che ci passa sopra
+ * scorre la pagina. Quando la mappa resta visibile e ferma per UNLOCK_AFTER_MS si sblocca
+ * e si sposta con un dito. Riprendendo a scorrere la pagina (o se esce dallo schermo) si riblocca.
  */
-function setupHoldToPan(el: HTMLElement, map: import("leaflet").Map) {
-  let holdTimer: number | undefined;
-  let relockTimer: number | undefined;
-  let unlocked = false;
-  let panning = false;
-  let start = { x: 0, y: 0 };
-  let last = { x: 0, y: 0 };
+function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map) {
+  let visible = false;
+  let timer: number | undefined;
 
-  const setUnlocked = (v: boolean) => {
-    unlocked = v;
-    el.classList.toggle("map-unlocked", v);
+  const lock = () => {
+    window.clearTimeout(timer);
+    if (map.dragging.enabled()) map.dragging.disable();
   };
-  const clearHold = () => window.clearTimeout(holdTimer);
-
-  const onStart = (e: TouchEvent) => {
-    window.clearTimeout(relockTimer);
-    clearHold();
-    if (e.touches.length !== 1) {
-      panning = false; // due dita: ci pensa lo zoom di Leaflet
-      return;
-    }
-    const t = e.touches[0];
-    start = last = { x: t.clientX, y: t.clientY };
-    panning = unlocked;
-    if (!unlocked) {
-      holdTimer = window.setTimeout(() => {
-        setUnlocked(true);
-        panning = true;
-      }, HOLD_TO_PAN_MS);
-    }
-  };
-  const onMove = (e: TouchEvent) => {
-    if (e.touches.length !== 1) return;
-    const t = e.touches[0];
-    if (!panning) {
-      // il dito si muove prima dello sblocco: è uno scorrimento della pagina
-      if (Math.hypot(t.clientX - start.x, t.clientY - start.y) > MOVE_TOLERANCE_PX) clearHold();
-      return;
-    }
-    if (e.cancelable) e.preventDefault(); // la pagina resta ferma mentre si sposta la mappa
-    map.panBy([last.x - t.clientX, last.y - t.clientY], { animate: false });
-    last = { x: t.clientX, y: t.clientY };
-  };
-  const onEnd = (e: TouchEvent) => {
-    clearHold();
-    if (e.touches.length > 0) return;
-    panning = false;
-    if (unlocked) relockTimer = window.setTimeout(() => setUnlocked(false), UNLOCK_GRACE_MS);
+  const schedule = () => {
+    lock();
+    if (visible) timer = window.setTimeout(() => map.dragging.enable(), UNLOCK_AFTER_MS);
   };
 
-  el.addEventListener("touchstart", onStart, { passive: true });
-  el.addEventListener("touchmove", onMove, { passive: false });
-  el.addEventListener("touchend", onEnd, { passive: true });
-  el.addEventListener("touchcancel", onEnd, { passive: true });
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      visible = entry.intersectionRatio >= VISIBLE_RATIO;
+      schedule();
+    },
+    { threshold: [0, VISIBLE_RATIO, 1] },
+  );
+  observer.observe(el);
+  // ogni scorrimento della pagina riblocca la mappa e fa ripartire il conteggio
+  window.addEventListener("scroll", schedule, { passive: true });
+
   return () => {
-    clearHold();
-    window.clearTimeout(relockTimer);
-    el.removeEventListener("touchstart", onStart);
-    el.removeEventListener("touchmove", onMove);
-    el.removeEventListener("touchend", onEnd);
-    el.removeEventListener("touchcancel", onEnd);
+    observer.disconnect();
+    window.removeEventListener("scroll", schedule);
+    window.clearTimeout(timer);
   };
 }
 
 /**
  * Mappa OpenStreetMap del quartiere con i punti di interesse reali.
- * Su smartphone si sposta con un dito dopo averla tenuta premuta un istante; zoom con due dita o con +/−.
+ * Su smartphone si sposta con un dito quando resta ferma sullo schermo per un istante; zoom con due dita o con +/−.
  */
 export function NeighborhoodMap() {
   const ref = useRef<HTMLDivElement>(null);
@@ -113,7 +78,7 @@ export function NeighborhoodMap() {
       const coarse = window.matchMedia("(pointer: coarse)").matches;
 
       map = L.map(ref.current, {
-        // Su smartphone il dito scorre la pagina: la mappa si sposta solo dopo averla tenuta premuta (vedi sotto)
+        // Su smartphone parte bloccata e si sblocca da sola quando resta ferma sullo schermo (vedi sotto)
         dragging: !coarse,
         touchZoom: true,
         scrollWheelZoom: false, // la rotellina continua a scorrere la pagina
@@ -215,7 +180,7 @@ export function NeighborhoodMap() {
       syncZoom();
       openNearestToCenter();
 
-      if (coarse) cleanupTouch = setupHoldToPan(el, map);
+      if (coarse) cleanupTouch = setupAutoUnlock(el, map);
     })();
 
     return () => {
