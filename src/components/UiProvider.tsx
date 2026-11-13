@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { InfoDrawer, type InfoTab } from "./InfoDrawer";
 import { BookingModal } from "./BookingModal";
 import { FloatingButtons } from "./FloatingButtons";
+import { ScrollManager } from "./ScrollManager";
 
 type UiState = {
   openInfo: (tab?: InfoTab) => void;
@@ -48,6 +49,7 @@ export function UiProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <UiContext.Provider value={value}>
+      <ScrollManager />
       {children}
       <FloatingButtons />
       <InfoDrawer tab={infoTab} onTabChange={setInfoTab} onClose={() => setInfoTab(null)} />
