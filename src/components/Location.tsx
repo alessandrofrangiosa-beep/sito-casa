@@ -13,16 +13,15 @@ const average = (...ids: string[]) => {
   return km(all.reduce((a, b) => a + b, 0) / all.length);
 };
 
-// \u00ad = trattino che compare solo se la parola non entra nella riga (schermi molto stretti)
-// "wide" = tessera su tutta la riga: le due voci con il testo più lungo, così le altre 8 restano a coppie
+// 10 tessere tutte uguali su 2 colonne (5 righe piene)
 const POINTS = [
-  { icon: Waves, title: "Vista mare panoramica", detail: "6° piano", wide: true },
-  { icon: ShoppingBag, title: "Super\u00admercati", detail: nearest("deco", "sisa") },
+  { icon: Waves, title: "Vista mare panoramica", detail: "6° piano" },
+  { icon: ShoppingBag, title: "Supermercati", detail: nearest("deco", "sisa") },
   { icon: Pill, title: "Farmacie", detail: nearest("farmacia") },
   { icon: Coffee, title: "Bar e negozi", detail: nearest("bar") },
+  { icon: School, title: "Scuola elementare, media e superiore", detail: average("elementare", "media", "superiore") },
   { icon: Hospital, title: "Ospedale", detail: nearest("ospedale") },
-  { icon: School, title: "Scuola elementare, media e superiore", detail: average("elementare", "media", "superiore"), wide: true },
-  { icon: Train, title: "Circum\u00advesuviana", detail: nearest("circum") },
+  { icon: Train, title: "Circumvesuviana", detail: nearest("circum") },
   { icon: Landmark, title: "Scavi di Oplonti", detail: nearest("scavi") },
   { icon: Anchor, title: "Lungomare e porto", detail: nearest("molo", "lungomare") },
   { icon: Route, title: "Svincolo A3", detail: nearest("a3-nord", "a3-sud") },
@@ -46,22 +45,19 @@ export function Location() {
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
-        {/* Griglia a tessere tutte uguali: stessa altezza, icona e nome in alto, distanza allineata in basso */}
+        {/* Tessere tutte uguali: in alto icona e distanza sulla stessa riga, sotto il nome a tutta larghezza */}
         <ul className="grid auto-rows-fr grid-cols-2 gap-2 self-start">
-          {POINTS.map(({ icon: Icon, title, detail, wide }) => (
-            <li
-              key={title}
-              className={`flex min-w-0 items-start gap-2.5 rounded-xl border border-line bg-card p-2.5 max-[360px]:gap-2 max-[360px]:p-2 ${
-                wide ? "col-span-2" : ""
-              }`}
-            >
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary max-[360px]:h-7 max-[360px]:w-7">
-                <Icon className="h-4 w-4" aria-hidden />
+          {POINTS.map(({ icon: Icon, title, detail }) => (
+            <li key={title} className="flex min-w-0 flex-col gap-2 rounded-xl border border-line bg-card p-2.5">
+              <span className="flex items-center justify-between gap-2">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
+                  <Icon className="h-4 w-4" aria-hidden />
+                </span>
+                <span className="rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-primary tabular-nums">
+                  {detail}
+                </span>
               </span>
-              <span className="flex min-w-0 flex-1 flex-col justify-between gap-1 self-stretch leading-tight">
-                <span className="text-[13px] font-bold text-ink sm:text-sm">{title}</span>
-                <span className="text-xs font-semibold text-primary tabular-nums">{detail}</span>
-              </span>
+              <span className="text-[13px] leading-tight font-bold text-ink max-[360px]:text-[12px] sm:text-sm">{title}</span>
             </li>
           ))}
         </ul>
