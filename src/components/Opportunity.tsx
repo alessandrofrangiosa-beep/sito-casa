@@ -20,7 +20,6 @@ export function Opportunity() {
       <SectionTitle
         eyebrow="Il potenziale"
         title="Già presente nell'appartamento"
-        intro="Volumi ampi e regolari, tanta luce e la vista sul Golfo: la parte difficile (e costosa) è già fatta. A te resta la parte bella."
       />
 
       <aside className="flex gap-3.5 rounded-2xl bg-primary p-5 text-white shadow-soft">
