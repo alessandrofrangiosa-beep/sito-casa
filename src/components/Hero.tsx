@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Check, MapPin } from "lucide-react";
+import { Check, Handshake, MapPin } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import { quickFacts } from "@/data/composition";
 import { defaultMonthlyPayment, formatEuro } from "@/lib/mortgage";
@@ -33,13 +33,20 @@ export function Hero() {
           </p>
 
           <div className="mt-3 border-t border-line pt-3 sm:mt-4 sm:pt-4">
-            <p className="text-[2rem] max-[340px]:text-[1.7rem] font-extrabold leading-none tracking-tight text-ink tabular-nums sm:text-5xl">
-              {PROPERTY.apartmentPrice}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+              <p className="text-[2rem] max-[340px]:text-[1.7rem] font-extrabold leading-none tracking-tight text-ink tabular-nums sm:text-5xl">
+                {PROPERTY.apartmentPrice}
+              </p>
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[13px] font-bold uppercase tracking-wide text-white shadow-soft max-[340px]:px-2 max-[340px]:text-[11px] sm:gap-1.5 sm:px-3.5 sm:py-1.5 sm:text-base">
+                <Handshake className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" aria-hidden />
+                Trattabile
+              </span>
+            </div>
             <p className="mt-1.5 text-[13px] leading-snug text-slate-ink max-[340px]:text-[12px] sm:text-sm">
               <strong className="font-semibold text-ink tabular-nums">+ {PROPERTY.garagePrice}</strong> garage privato{" "}
               <span className="whitespace-nowrap">
-                (vendita in blocco: <span className="tabular-nums">{PROPERTY.price}</span> {PROPERTY.priceNote})
+                (vendita in blocco: <span className="tabular-nums">{PROPERTY.price}</span>{" "}
+                <strong className="font-semibold text-primary">{PROPERTY.priceNote}</strong>)
               </span>
             </p>
             <a
