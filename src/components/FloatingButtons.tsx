@@ -11,9 +11,12 @@ export function FloatingButtons() {
       <button
         type="button"
         onClick={() => openInfo()}
-        className="pointer-events-auto flex h-11 items-center gap-1.5 rounded-full border border-line bg-white/95 pl-3 pr-4 text-sm font-semibold text-ink shadow-float backdrop-blur transition hover:border-primary/40 hover:text-primary"
+        className="pointer-events-auto flex h-11 items-center gap-2 rounded-full bg-ink pl-1.5 pr-4 text-sm font-semibold text-white shadow-float ring-1 ring-white/20 transition hover:bg-[#1e293b]"
       >
-        <Info className="h-4 w-4 text-primary" /> Info Utili
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-white">
+          <Info className="h-[18px] w-[18px] text-primary" strokeWidth={2.5} aria-hidden />
+        </span>
+        Info Utili
       </button>
       <button
         type="button"
