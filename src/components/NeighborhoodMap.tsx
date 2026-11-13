@@ -230,7 +230,11 @@ export function NeighborhoodMap() {
       {/* Segnaposto: a schermo intero la pagina sotto non cambia altezza */}
       {full && <div className="h-[260px] md:h-[340px]" aria-hidden />}
       <div
-        className={full ? "map-fullscreen fixed inset-0 z-[60] bg-card" : "overflow-hidden rounded-2xl border border-line bg-card shadow-soft"}
+        className={
+          full
+            ? "map-fullscreen fixed inset-0 z-[60] bg-card"
+            : "h-[260px] overflow-hidden rounded-2xl border border-line bg-card shadow-soft md:h-[340px]"
+        }
         role={full ? "dialog" : undefined}
         aria-modal={full ? true : undefined}
         aria-label={full ? "Mappa del quartiere a schermo intero" : undefined}
@@ -239,7 +243,8 @@ export function NeighborhoodMap() {
           ref={ref}
           role="region"
           aria-label="Mappa del quartiere con stazione, scavi, porto, lungomare, svincoli A3, ospedale, negozi, farmacie e scuole"
-          className={`neighborhood-map w-full bg-ice ${full ? "h-full" : "h-[260px] md:h-[340px]"}`}
+          // Classi fisse: Leaflet aggiunge le sue a questo elemento e React non deve sovrascriverle
+          className="neighborhood-map h-full w-full bg-ice"
         />
         {full && (
           <button
