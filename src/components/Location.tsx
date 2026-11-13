@@ -15,7 +15,7 @@ const average = (...ids: string[]) => {
 
 // 10 tessere tutte uguali su 2 colonne (5 righe piene)
 const POINTS = [
-  { icon: Waves, title: "Vista mare panoramica", detail: "6° piano" },
+  { icon: Waves, title: "Vista mare panoramica", detail: "" },
   { icon: ShoppingBag, title: "Supermercati", detail: nearest("deco", "sisa") },
   { icon: Pill, title: "Farmacie", detail: nearest("farmacia") },
   { icon: Coffee, title: "Bar e negozi", detail: nearest("bar") },
@@ -52,8 +52,10 @@ export function Location() {
               <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
                 <Icon className="h-4 w-4" aria-hidden />
               </span>
-              <span className="mt-1.5 text-[13px] leading-tight font-bold text-ink max-[360px]:text-[12px] sm:text-sm">{title}</span>
-              <span className="mt-auto pt-1 text-xs leading-tight font-semibold text-primary tabular-nums">{detail}</span>
+              <span className="mt-2 text-[15px] leading-tight font-bold text-ink max-[360px]:text-[13px] sm:text-base">{title}</span>
+              {detail && (
+                <span className="mt-auto pt-1.5 text-sm leading-tight font-semibold text-primary tabular-nums max-[360px]:text-[13px]">{detail}</span>
+              )}
             </li>
           ))}
         </ul>
