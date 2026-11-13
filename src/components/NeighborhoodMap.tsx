@@ -6,10 +6,11 @@ import { MAP_POINTS, type MapPoint } from "@/data/mapPoints";
 
 /** Zoom da cui compaiono i punti secondari (negozi, farmacie, scuole, bar) */
 const MINOR_ICON_ZOOM = 14.5;
-/** Su touch: la mappa resta bloccata (il dito scorre la pagina) finché non resta ferma sullo schermo così a lungo */
+/**
+ * Su touch: millisecondi di blocco contati dal primo pixel della mappa che entra nello schermo.
+ * Durante questo tempo il dito che passa sopra la mappa scorre la pagina; poi la mappa si sposta con un dito.
+ */
 const UNLOCK_AFTER_MS = 1500;
-/** Quota della mappa che deve essere visibile per considerarla "sullo schermo" */
-const VISIBLE_RATIO = 0.6;
 
 /** Distanza in pixel dal centro entro cui il nome di un punto si apre da solo */
 const CENTER_RADIUS_PX = 46;
@@ -25,44 +26,48 @@ function markerHtml(p: MapPoint) {
 }
 
 /**
- * Su touch: mentre si scorre la pagina la mappa è bloccata, così il dito che ci passa sopra
- * scorre la pagina. Quando la mappa resta visibile e ferma per UNLOCK_AFTER_MS si sblocca
- * e si sposta con un dito. Riprendendo a scorrere la pagina (o se esce dallo schermo) si riblocca.
+ * Su touch: la mappa parte bloccata (il dito scorre la pagina). Il conto alla rovescia di
+ * UNLOCK_AFTER_MS parte dal primo pixel della mappa che entra nello schermo e non si azzera
+ * scorrendo; allo scadere la mappa si sposta con un dito. Se la mappa esce del tutto dallo
+ * schermo torna bloccata e il conto riparte al rientro.
  */
 function setupAutoUnlock(el: HTMLElement, map: import("leaflet").Map) {
-  let visible = false;
   let timer: number | undefined;
+  let counting = false;
 
   const lock = () => {
     window.clearTimeout(timer);
+    counting = false;
     if (map.dragging.enabled()) map.dragging.disable();
-  };
-  const schedule = () => {
-    lock();
-    if (visible) timer = window.setTimeout(() => map.dragging.enable(), UNLOCK_AFTER_MS);
   };
 
   const observer = new IntersectionObserver(
     ([entry]) => {
-      visible = entry.intersectionRatio >= VISIBLE_RATIO;
-      schedule();
+      if (entry.isIntersecting) {
+        if (!counting && !map.dragging.enabled()) {
+          counting = true;
+          timer = window.setTimeout(() => {
+            counting = false;
+            map.dragging.enable();
+          }, UNLOCK_AFTER_MS);
+        }
+      } else {
+        lock(); // uscita completa dallo schermo
+      }
     },
-    { threshold: [0, VISIBLE_RATIO, 1] },
+    { threshold: 0 },
   );
   observer.observe(el);
-  // ogni scorrimento della pagina riblocca la mappa e fa ripartire il conteggio
-  window.addEventListener("scroll", schedule, { passive: true });
 
   return () => {
     observer.disconnect();
-    window.removeEventListener("scroll", schedule);
     window.clearTimeout(timer);
   };
 }
 
 /**
  * Mappa OpenStreetMap del quartiere con i punti di interesse reali.
- * Su smartphone si sposta con un dito quando resta ferma sullo schermo per un istante; zoom con due dita o con +/−.
+ * Su smartphone si sposta con un dito 1,5 s dopo essere comparsa sullo schermo; zoom con due dita o con +/−.
  */
 export function NeighborhoodMap() {
   const ref = useRef<HTMLDivElement>(null);
@@ -78,7 +83,7 @@ export function NeighborhoodMap() {
       const coarse = window.matchMedia("(pointer: coarse)").matches;
 
       map = L.map(ref.current, {
-        // Su smartphone parte bloccata e si sblocca da sola quando resta ferma sullo schermo (vedi sotto)
+        // Su smartphone parte bloccata e si sblocca da sola 1,5 s dopo essere comparsa sullo schermo (vedi sotto)
         dragging: !coarse,
         touchZoom: true,
         scrollWheelZoom: false, // la rotellina continua a scorrere la pagina
