@@ -23,53 +23,55 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
 
   return (
     <section id="esplora" className="mx-auto max-w-5xl scroll-mt-4 px-4">
-      {/* Visita 360°: pulsante a tutta larghezza sopra le tre schede; all'apertura si vedono sempre le foto reali */}
-      {ENABLE_3D_TOUR && (
-        <button
-          type="button"
-          aria-pressed={mode === "tour"}
-          aria-controls="pannello-tour"
-          onClick={() => setMode("tour")}
-          className={`mb-2 flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left shadow-soft transition ${
-            mode === "tour" ? "border-primary bg-primary text-white" : "border-line bg-card text-ink hover:border-primary/40"
-          }`}
-        >
-          <span className="text-2xl" aria-hidden>🧭</span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-[15px] font-bold leading-tight sm:text-base">Visita virtuale 360°</span>
-            <span className={`block text-xs leading-snug sm:text-sm ${mode === "tour" ? "text-white/80" : "text-slate-ink"}`}>
-              Muoviti tra le stanze come su Street View
-            </span>
-          </span>
-          <span className={`shrink-0 text-sm font-semibold ${mode === "tour" ? "text-white" : "text-primary"}`} aria-hidden>
-            {mode === "tour" ? "Aperta" : "Apri →"}
-          </span>
-        </button>
-      )}
-
-      <div role="tablist" aria-label="Modalità di esplorazione" className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-card p-1.5 shadow-soft">
-        {MODES.map((m) => {
-          const active = mode === m.id;
-          return (
+      {/* Un unico selettore: in alto la barra sottile "Visita virtuale 360°" larga quanto le tre schede,
+          una linea di separazione, poi le tre schede divise da linee verticali. All'apertura: foto reali. */}
+      <div className="rounded-2xl border border-line bg-card p-1.5 shadow-soft">
+        {ENABLE_3D_TOUR && (
+          <>
             <button
-              key={m.id}
-              role="tab"
               type="button"
-              aria-selected={active}
-              aria-controls={`pannello-${m.id}`}
-              onClick={() => setMode(m.id)}
-              className={`flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-2.5 text-center transition sm:flex-row sm:gap-2 sm:text-base ${
-                active ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
+              aria-pressed={mode === "tour"}
+              aria-controls="pannello-tour"
+              onClick={() => setMode("tour")}
+              className={`flex h-10 w-full items-center justify-center gap-2 rounded-xl px-3 text-[13px] font-bold transition sm:text-sm ${
+                mode === "tour" ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
               }`}
             >
-              <span className="text-xl sm:text-lg" aria-hidden>{m.emoji}</span>
-              <span className="text-[13px] font-bold leading-tight sm:text-sm">
-                <span className="sm:hidden">{m.short}</span>
-                <span className="hidden sm:inline">{m.label}</span>
-              </span>
+              <span className="text-base leading-none" aria-hidden>🧭</span>
+              Visita virtuale 360°
             </button>
-          );
-        })}
+            <div aria-hidden className="mx-2 my-1.5 h-px bg-line" />
+          </>
+        )}
+
+        <div role="tablist" aria-label="Modalità di esplorazione" className="grid grid-cols-3">
+          {MODES.map((m, i) => {
+            const active = mode === m.id;
+            // Linea verticale tra due schede, nascosta accanto alla scheda selezionata (che ha già il suo sfondo)
+            const showDivider = i > 0 && !active && mode !== MODES[i - 1].id;
+            return (
+              <div key={m.id} className="relative px-0.5">
+                {showDivider && <span aria-hidden className="absolute top-1/2 left-0 h-8 w-px -translate-y-1/2 bg-line" />}
+                <button
+                  role="tab"
+                  type="button"
+                  aria-selected={active}
+                  aria-controls={`pannello-${m.id}`}
+                  onClick={() => setMode(m.id)}
+                  className={`flex min-h-16 w-full flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-2.5 text-center transition sm:flex-row sm:gap-2 sm:text-base ${
+                    active ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
+                  }`}
+                >
+                  <span className="text-xl sm:text-lg" aria-hidden>{m.emoji}</span>
+                  <span className="text-[13px] font-bold leading-tight sm:text-sm">
+                    <span className="sm:hidden">{m.short}</span>
+                    <span className="hidden sm:inline">{m.label}</span>
+                  </span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="mt-4" id={`pannello-${mode}`} role="tabpanel">
