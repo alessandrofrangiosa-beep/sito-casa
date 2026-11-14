@@ -63,7 +63,6 @@ export const galleryData: GalleryItem[] = [
   {
     id: 7,
     src: "/images/attuali/07-vista-mare-interno.jpg",
-    render: "/images/render/render-03-angolo-relax-vista-mare.jpg",
     title: "Vista mare dall'interno",
     caption: "Panorama sul mare direttamente dalle portefinestre con vetrocamera.",
     alt: "Vista sul mare e sulla cupola della città attraverso le portefinestre aperte",
@@ -104,6 +103,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 12,
     src: "/images/attuali/12-affaccio-camera-vista-mare.jpg",
+    render: "/images/render/render-03-angolo-relax-vista-mare.jpg",
     title: "Affaccio vista mare",
     caption: "Vista mare anche dalla zona notte con infissi bianchi già sostituiti.",
     alt: "Portafinestra bianca con affaccio sul mare e sulla costiera",
