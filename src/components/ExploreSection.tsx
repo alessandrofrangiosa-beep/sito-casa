@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import { Carousel } from "./Carousel";
 import { AiStudio } from "./AiStudio";
 import { VirtualTour } from "./VirtualTour";
@@ -33,12 +34,19 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
               aria-pressed={mode === "tour"}
               aria-controls="pannello-tour"
               onClick={() => setMode("tour")}
-              className={`flex h-10 w-full items-center justify-center gap-2 rounded-xl px-3 text-[13px] font-bold transition sm:text-sm ${
-                mode === "tour" ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
+              // Aspetto da pulsante: fondo azzurro, bordo, ombra e freccia a destra (blu pieno quando è aperta)
+              className={`group relative flex h-11 w-full items-center justify-center gap-2 rounded-xl border px-10 text-[14px] font-bold shadow-soft transition active:scale-[0.99] sm:text-[15px] ${
+                mode === "tour"
+                  ? "border-primary bg-primary text-white"
+                  : "border-primary/30 bg-primary-soft text-primary hover:border-primary/60 hover:bg-[#e0efff]"
               }`}
             >
               <span className="text-base leading-none" aria-hidden>🧭</span>
               Visita virtuale 360°
+              <ChevronRight
+                aria-hidden
+                className={`absolute right-3 h-5 w-5 transition group-hover:translate-x-0.5 ${mode === "tour" ? "text-white" : "text-primary"}`}
+              />
             </button>
             <div aria-hidden className="mx-2 my-1.5 h-px bg-line" />
           </>
