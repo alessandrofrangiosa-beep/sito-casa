@@ -111,7 +111,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 13,
     src: "/images/attuali/13-bagno-principale.jpg",
-    render: "/images/render/render-11-bagno-principale.jpg",
+    render: "/images/render/render-18-bagno-principale.jpg",
     title: "Bagno principale interno",
     caption: "Bagno interno finestrato con vasca e sanitari completi già pronti.",
     alt: "Bagno principale finestrato con vasca, lavabo, wc e bidet",
@@ -146,7 +146,7 @@ export const renderData: GalleryItem[] = [
   { id: 8, src: "/images/render/render-08-camera-matrimoniale-graniglia-chiara.jpg", title: "Camera matrimoniale", caption: "Camera in stile naturale, con tende in lino e tessili morbidi.", alt: "Render della camera matrimoniale arredata" },
   { id: 9, src: "/images/render/render-09-studio-vista-mare.jpg", title: "Studio vista mare", caption: "Stanza versatile trasformata in studio-lettura con vista mare.", alt: "Render di uno studio con vista mare" },
   { id: 10, src: "/images/render/render-10-camera-finestra.jpg", title: "Stanza con affaccio", caption: "Seduta sotto la finestra per godersi luce e panorama.", alt: "Render di una stanza con affaccio sulla città" },
-  { id: 11, src: "/images/render/render-11-bagno-principale.jpg", title: "Bagno principale", caption: "Bagno rinfrescato con mobile sospeso in legno e toni sabbia.", alt: "Render del bagno principale rinnovato" },
+  { id: 11, src: "/images/render/render-18-bagno-principale.jpg", title: "Bagno principale", caption: "Bagno principale rinnovato: vasca, sanitari sospesi, mobile in legno e specchio retroilluminato.", alt: "Render del bagno principale rinnovato" },
   { id: 12, src: "/images/render/render-12-bagno-esterno.jpg", title: "Bagno esterno", caption: "Secondo bagno moderno con sanitari sospesi e mobile in rovere.", alt: "Render del bagno esterno rinnovato" },
   { id: 13, src: "/images/render/render-13-garage.jpg", title: "Garage", caption: "Box auto tinteggiato e illuminato: pulito e ordinato.", alt: "Render del garage tinteggiato" },
   { id: 14, src: "/images/render/render-14-cucina.jpg", title: "Cucina", caption: "Cucina lineare in legno chiaro con tavolo da pranzo e portafinestra sulla terrazza.", alt: "Render della cucina arredata" },
