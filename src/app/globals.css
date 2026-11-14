@@ -172,6 +172,7 @@
   background: var(--color-primary);
   color: #fff;
   border-color: transparent;
+  white-space: nowrap; /* "La tua casa" sempre su una riga */
 }
 .neighborhood-map:not(.poi-zoom-mid) .poi-minor {
   display: none;

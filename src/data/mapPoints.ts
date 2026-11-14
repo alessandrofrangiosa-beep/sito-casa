@@ -19,7 +19,7 @@ export type MapPoint = {
 
 export const HOME: MapPoint = {
   id: "casa",
-  label: "La casa",
+  label: "La tua casa",
   emoji: "🏠",
   lat: 40.75960,
   lng: 14.44825,
