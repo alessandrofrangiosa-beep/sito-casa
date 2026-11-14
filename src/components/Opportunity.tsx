@@ -4,14 +4,14 @@ import { SectionTitle } from "./SectionTitle";
 
 /** Dotazioni già presenti: inizio in grassetto per una lettura veloce su smartphone; la fibra è il primo punto */
 const ITEMS: { bold: string; rest: string }[] = [
+  { bold: "Ascensore disponibile:", rest: " si arriva al 6°\u00a0piano comodamente, anche con spesa e passeggino" },
   { bold: `${FIBER.title}:`, rest: ` ${FIBER.text}` },
-  { bold: "Infissi bianchi con vetrocamera", rest: " già sostituiti" },
   { bold: "Pavimenti in buono stato:", rest: " graniglia nera nel salone, alla veneziana nelle altre stanze" },
   { bold: "Bagno completo", rest: " con vasca e sanitari" },
   { bold: "Riscaldamento autonomo", rest: " con termosifoni e caldaia già installati" },
   { bold: "Ingresso e corridoio", rest: " già tinteggiati di bianco" },
   { bold: "Soffitti alti", rest: " che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED" },
-  { bold: "Vista mare aperta a Sud-Ovest (6°\u00a0piano):", rest: " luce naturale piena fino al tramonto e vista non ostruibile sul Golfo." },
+  { bold: "Esposizione a Sud-Ovest:", rest: " casa luminosa, con luce naturale dalla mattina fino al tramonto" },
 ];
 
 export function Opportunity() {
