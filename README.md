@@ -26,7 +26,7 @@ npm run build && npm start   # produzione
 ## Struttura
 
 - `public/images/attuali/01…15-*.jpg`: le 15 foto reali, nell'ordine della visita guidata
-- `public/images/render/render-01…14-*.jpg`: i render 3D, ordinati per stanza; in galleria si vedono tenendo premuto "Premi: Render 3D" sulla foto reale abbinata (anche a schermo intero) (campo `render` in `galleryData.ts`)
+- `public/images/render/render-01…15-*.jpg`: i render 3D, ordinati per stanza; in galleria si vedono tenendo premuto "Premi: Render 3D" sulla foto reale abbinata (anche a schermo intero) (campo `render` in `galleryData.ts`)
 - `public/images/stanze-base-ai/`: le foto base dello studio AI (soggiorno, cucina, camera, balcone vista mare)
 - `src/data/galleryData.ts`: titoli e didascalie di foto, render, stanze AI e stili
 - `src/config/site.ts`: prezzo, dati tecnici, WhatsApp, tour 360°, limiti AI
