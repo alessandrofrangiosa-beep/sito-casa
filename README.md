@@ -20,7 +20,7 @@ npm run build && npm start   # produzione
 | Spese condominiali mensili | `PROPERTY.condoFees` in `src/config/site.ts` |
 | Classe energetica APE | `PROPERTY.energyClass` in `src/config/site.ts` |
 | Planimetria | carica un `.jpg/.png/.webp` in `public/images/planimetria/` (viene collegata automaticamente al build) |
-| Tour 360° | `TOUR_EMBED_URL` in `src/config/site.ts` (con `ENABLE_3D_TOUR = true` la sezione è visibile; senza URL mostra "in arrivo") |
+| Visita 360° | `TOUR_EMBED_URL` in `src/config/site.ts`: è la 4ª scheda della sezione foto (`ENABLE_3D_TOUR = true` la mostra; senza URL dice "in arrivo") |
 
 
 ## Struttura

@@ -3,16 +3,21 @@
 import { useCallback, useState } from "react";
 import { Carousel } from "./Carousel";
 import { AiStudio } from "./AiStudio";
+import { VirtualTour } from "./VirtualTour";
+import { ENABLE_3D_TOUR } from "@/config/site";
 import { galleryData, renderData, type GalleryItem } from "@/data/galleryData";
 import { useUi } from "./UiProvider";
 
-type Mode = "foto" | "render" | "ai";
+type Mode = "foto" | "render" | "ai" | "tour";
 
 const MODES: { id: Mode; emoji: string; label: string; short: string }[] = [
   { id: "foto", emoji: "📷", label: "Foto Attuali", short: "Foto Attuali" },
   { id: "render", emoji: "✨", label: "Render 3D Ipotetico", short: "Render 3D" },
   { id: "ai", emoji: "🎨", label: "Arredala come vuoi tu", short: "Arredala tu" },
+  { id: "tour", emoji: "🧭", label: "Visita virtuale 360°", short: "Visita 360°" },
 ];
+/** La scheda della visita 360° compare solo con ENABLE_3D_TOUR attivo */
+const VISIBLE_MODES = MODES.filter((m) => m.id !== "tour" || ENABLE_3D_TOUR);
 
 export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
   const [mode, setMode] = useState<Mode>("foto");
@@ -21,8 +26,8 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
 
   return (
     <section id="esplora" className="mx-auto max-w-5xl scroll-mt-4 px-4">
-      <div role="tablist" aria-label="Modalità di esplorazione" className="grid grid-cols-3 gap-1.5 rounded-2xl border border-line bg-card p-1.5 shadow-soft">
-        {MODES.map((m) => {
+      <div role="tablist" aria-label="Modalità di esplorazione" className={`grid gap-1.5 rounded-2xl border border-line bg-card p-1.5 shadow-soft ${VISIBLE_MODES.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+        {VISIBLE_MODES.map((m) => {
           const active = mode === m.id;
           return (
             <button
@@ -32,7 +37,7 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
               aria-selected={active}
               aria-controls={`pannello-${m.id}`}
               onClick={() => setMode(m.id)}
-              className={`flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-2.5 text-center transition sm:flex-row sm:gap-2 sm:text-base ${
+              className={`flex min-h-16 flex-col items-center justify-start gap-0.5 rounded-xl sm:justify-center px-1.5 py-2.5 text-center transition sm:flex-row sm:gap-2 sm:text-base ${
                 active ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
               }`}
             >
@@ -62,6 +67,7 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
           </>
         )}
         {mode === "ai" && <AiStudio aiEnabled={aiEnabled} onShowRenders={() => setMode("render")} />}
+        {mode === "tour" && <VirtualTour onShowPhotos={() => setMode("foto")} />}
       </div>
     </section>
   );

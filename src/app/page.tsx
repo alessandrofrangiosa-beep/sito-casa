@@ -3,7 +3,6 @@ import path from "node:path";
 import { UiProvider } from "@/components/UiProvider";
 import { Hero } from "@/components/Hero";
 import { ExploreSection } from "@/components/ExploreSection";
-import { VirtualTour } from "@/components/VirtualTour";
 import { Opportunity } from "@/components/Opportunity";
 import { FloorPlan } from "@/components/FloorPlan";
 import { Location } from "@/components/Location";
@@ -11,7 +10,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
 import { CompositionList } from "@/components/CompositionList";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
-import { ENABLE_3D_TOUR, PROPERTY } from "@/config/site";
+import { PROPERTY } from "@/config/site";
 
 /** Collega automaticamente la prima immagine trovata in /public/images/planimetria (verificata al build). */
 function findFloorPlan(): string | null {
@@ -37,10 +36,8 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 
 export default function Home() {
   const floorPlan = findFloorPlan();
-  // Sezione tour 360°: con ENABLE_3D_TOUR attivo compare il tour (se c'è l'URL) o il riquadro "in arrivo"
-  const showTour = ENABLE_3D_TOUR;
-  // Alternanza bianco / grigio ghiaccio delle fasce, che resta corretta con o senza il tour
-  const tone = (i: number): "white" | "ice" => ((i + (showTour ? 0 : 1)) % 2 === 1 ? "white" : "ice");
+  // Alternanza bianco / grigio ghiaccio delle fasce (la visita 360° è una scheda della sezione foto)
+  const tone = (i: number): "white" | "ice" => (i % 2 === 0 ? "ice" : "white");
   // Solo un booleano: la chiave resta sul server e non arriva mai al browser
   const aiEnabled = Boolean(process.env.OPENAI_API_KEY);
 
@@ -53,21 +50,15 @@ export default function Home() {
           <ExploreSection aiEnabled={aiEnabled} />
         </div>
 
-        {showTour && (
-          <Band tone={tone(0)}>
-            <VirtualTour />
-          </Band>
-        )}
-
-        <Band tone={tone(1)}>
+        <Band tone={tone(0)}>
           <Location />
         </Band>
 
-        <Band tone={tone(2)}>
+        <Band tone={tone(1)}>
           <Opportunity />
         </Band>
 
-        <Band tone={tone(3)}>
+        <Band tone={tone(2)}>
           <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
             <SectionTitle
               eyebrow="Quadrilocale · 4 stanze"
@@ -84,11 +75,11 @@ export default function Home() {
           </section>
         </Band>
 
-        <Band tone={tone(4)}>
+        <Band tone={tone(3)}>
           <MortgageSimulator />
         </Band>
 
-        <Band tone={tone(5)} last>
+        <Band tone={tone(4)} last>
           <FinalCta />
         </Band>
       </main>
