@@ -56,7 +56,7 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
 }
 
 /**
- * Pulsante "Render 3D ✨" (tieni premuto): finché il dito (o il mouse) resta sul pulsante si vede il render,
+ * Pulsante "Premi: Render 3D" (tieni premuto): finché il dito (o il mouse) resta sul pulsante si vede il render,
  * al rilascio torna subito la foto reale. Niente menu "Salva immagine" né selezione di testo su iOS/Android.
  */
 function HoldToCompare({ active, onHold }: { active: boolean; onHold: (on: boolean) => void }) {
@@ -85,7 +85,7 @@ function HoldToCompare({ active, onHold }: { active: boolean; onHold: (on: boole
         active ? "scale-95 border-primary bg-primary" : "border-white/70 bg-ink/80"
       }`}
     >
-      Render 3D ✨
+      Premi: Render 3D
     </button>
   );
 }

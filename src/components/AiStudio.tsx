@@ -13,7 +13,7 @@ const PROMPT_MAX = 180;
 const LS_USED = "ta390_ai_render_used_v2";
 const IS_DEV = process.env.NODE_ENV !== "production";
 const MSG_UNAVAILABLE =
-  "Simulazioni AI temporaneamente non disponibili: tieni premuto ✨ sulle foto reali per vedere i render 3D già pronti.";
+  "Simulazioni AI temporaneamente non disponibili: tieni premuto «Premi: Render 3D» sulle foto reali per vedere i render 3D già pronti.";
 
 function readUsed(): number {
   try {

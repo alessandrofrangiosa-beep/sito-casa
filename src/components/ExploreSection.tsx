@@ -86,7 +86,7 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
           <>
             <Carousel items={galleryData} onIndexChange={onPhoto} priorityFirst />
             <p className="mt-2 text-center text-xs text-slate-ink">
-              Scorri per la visita guidata · 15 foto reali, senza filtri né ritocchi · tieni premuto ✨ per il render 3D
+              Scorri per la visita guidata · 15 foto reali, senza filtri né ritocchi · tieni premuto «Render 3D» per l'arredo
             </p>
           </>
         )}
