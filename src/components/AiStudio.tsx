@@ -13,7 +13,7 @@ const PROMPT_MAX = 180;
 const LS_USED = "ta390_ai_render_used_v2";
 const IS_DEV = process.env.NODE_ENV !== "production";
 const MSG_UNAVAILABLE =
-  "Simulazioni AI temporaneamente non disponibili: esplora i render già pronti nella scheda dedicata.";
+  "Simulazioni AI temporaneamente non disponibili: tieni premuto ✨ sulle foto reali per vedere i render 3D già pronti.";
 
 function readUsed(): number {
   try {
@@ -76,7 +76,7 @@ function AiUnavailable({ onShowRenders }: { onShowRenders?: () => void }) {
             onClick={onShowRenders}
             className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-hover"
           >
-            ✨ Vedi i Render 3D
+            ✨ Vedi i Render 3D sulle foto
           </button>
         )}
       </div>

@@ -35,7 +35,7 @@ const rawWhatsApp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/
 export const WHATSAPP_NUMBER: string | null = /^\d{8,15}$/.test(rawWhatsApp) ? rawWhatsApp : null;
 
 /**
- * Visita virtuale 360° (4ª scheda della sezione foto, accanto a Foto Attuali / Render 3D / Arredala tu).
+ * Visita virtuale 360° (pulsante sopra le schede Foto Attuali / Arredala tu della sezione foto).
  * `true` = scheda visibile: senza TOUR_EMBED_URL mostra il riquadro "in arrivo",
  * con l'URL di embed mostra il tour navigabile (Matterport: https://my.matterport.com/show/?m=XXXX, Kuula, ecc.).
  * `false` = scheda nascosta.

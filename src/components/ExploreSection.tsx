@@ -6,14 +6,13 @@ import { Carousel } from "./Carousel";
 import { AiStudio } from "./AiStudio";
 import { VirtualTour } from "./VirtualTour";
 import { ENABLE_3D_TOUR } from "@/config/site";
-import { galleryData, renderData, type GalleryItem } from "@/data/galleryData";
+import { galleryData, type GalleryItem } from "@/data/galleryData";
 import { useUi } from "./UiProvider";
 
-type Mode = "foto" | "render" | "ai" | "tour";
+type Mode = "foto" | "ai" | "tour";
 
 const MODES: { id: Exclude<Mode, "tour">; emoji: string; label: string; short: string }[] = [
   { id: "foto", emoji: "📷", label: "Foto Attuali", short: "Foto Attuali" },
-  { id: "render", emoji: "✨", label: "Render 3D Ipotetico", short: "Render 3D" },
   { id: "ai", emoji: "🎨", label: "Arredala come vuoi tu", short: "Arredala tu" },
 ];
 
@@ -52,7 +51,7 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
           </>
         )}
 
-        <div role="tablist" aria-label="Modalità di esplorazione" className="grid grid-cols-3">
+        <div role="tablist" aria-label="Modalità di esplorazione" className="grid grid-cols-2">
           {MODES.map((m, i) => {
             const active = mode === m.id;
             // Linea verticale tra due schede, nascosta accanto alla scheda selezionata (che ha già il suo sfondo)
@@ -86,18 +85,12 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
         {mode === "foto" && (
           <>
             <Carousel items={galleryData} onIndexChange={onPhoto} priorityFirst />
-            <p className="mt-2 text-center text-xs text-slate-ink">Scorri per la visita guidata · 15 foto reali, senza filtri né ritocchi</p>
-          </>
-        )}
-        {mode === "render" && (
-          <>
-            <Carousel items={renderData} overlayBadge="Ipotesi di arredo e rimodernamento" />
             <p className="mt-2 text-center text-xs text-slate-ink">
-              Render fotorealistici a scopo illustrativo: mostrano il potenziale, non lo stato attuale.
+              Scorri per la visita guidata · 15 foto reali, senza filtri né ritocchi · tieni premuto ✨ per il render 3D
             </p>
           </>
         )}
-        {mode === "ai" && <AiStudio aiEnabled={aiEnabled} onShowRenders={() => setMode("render")} />}
+        {mode === "ai" && <AiStudio aiEnabled={aiEnabled} onShowRenders={() => setMode("foto")} />}
         {mode === "tour" && <VirtualTour onShowPhotos={() => setMode("foto")} />}
       </div>
     </section>

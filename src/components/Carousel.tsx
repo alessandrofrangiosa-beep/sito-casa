@@ -38,7 +38,7 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
   return (
     <div
       key={item.id}
-      className="animate-caption pointer-events-none absolute inset-x-2 bottom-2 flex items-center gap-2.5 rounded-xl bg-white/92 px-3 py-2 shadow-soft backdrop-blur-md sm:inset-x-3 sm:bottom-3"
+      className="animate-caption pointer-events-none flex w-full items-center gap-2.5 rounded-xl bg-white/92 px-3 py-2 shadow-soft backdrop-blur-md"
       aria-live="polite"
     >
       <span className="grid h-7 min-w-7 shrink-0 place-items-center rounded-lg bg-primary px-1 text-[12px] font-bold text-white">
@@ -52,6 +52,40 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
         Foto {index + 1} di {total}
       </span>
     </div>
+  );
+}
+
+/**
+ * "Tieni premuto: Render 3D ✨": finché il dito (o il mouse) resta sul pulsante si vede il render,
+ * al rilascio torna subito la foto reale. Niente menu "Salva immagine" né selezione di testo su iOS/Android.
+ */
+function HoldToCompare({ active, onHold }: { active: boolean; onHold: (on: boolean) => void }) {
+  const start = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    e.preventDefault();
+    onHold(true);
+  };
+  const stop = () => onHold(false);
+  return (
+    <button
+      type="button"
+      onPointerDown={start}
+      onPointerUp={stop}
+      onPointerLeave={stop}
+      onPointerCancel={stop}
+      onLostPointerCapture={stop}
+      onKeyDown={(e) => (e.key === " " || e.key === "Enter") && (e.preventDefault(), onHold(true))}
+      onKeyUp={stop}
+      onBlur={stop}
+      onContextMenu={(e) => e.preventDefault()}
+      style={{ WebkitTouchCallout: "none" }}
+      aria-pressed={active}
+      className={`pointer-events-auto inline-flex touch-none items-center gap-1.5 rounded-full border px-4 py-2.5 text-sm font-semibold text-white shadow-float backdrop-blur transition select-none ${
+        active ? "scale-95 border-primary bg-primary" : "border-white/70 bg-ink/80"
+      }`}
+    >
+      Tieni premuto: Render 3D ✨
+    </button>
   );
 }
 
@@ -76,6 +110,20 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
   const [lightbox, setLightbox] = useState<number | null>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
   const current = items[index];
+  const [holding, setHolding] = useState(false);
+  const showingRender = holding && Boolean(current.render);
+
+  // Cambiando foto, o se la pagina perde il focus mentre il dito è giù, si torna sempre alla foto reale
+  useEffect(() => setHolding(false), [index]);
+  useEffect(() => {
+    const release = () => setHolding(false);
+    window.addEventListener("blur", release);
+    document.addEventListener("visibilitychange", release);
+    return () => {
+      window.removeEventListener("blur", release);
+      document.removeEventListener("visibilitychange", release);
+    };
+  }, []);
 
   useEffect(() => {
     onIndexChange?.(items[index], index);
@@ -89,7 +137,11 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
 
   return (
     <div>
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-ink shadow-soft">
+      <div
+        className="relative touch-manipulation overflow-hidden rounded-2xl border border-line bg-ink shadow-soft select-none"
+        onContextMenu={(e) => e.preventDefault()}
+        style={{ WebkitTouchCallout: "none" }}
+      >
         <div
           ref={trackRef}
           onScroll={onScroll}
@@ -111,7 +163,23 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
                 className="object-cover sm:object-contain"
                 priority={priorityFirst && i === 0}
                 loading={priorityFirst && i === 0 ? undefined : i < 2 ? "eager" : "lazy"}
+                draggable={false}
               />
+              {item.render && (
+                // Sovrapposto esattamente alla foto e già caricato (foto corrente e vicine): il cambio è istantaneo
+                <Image
+                  src={item.render}
+                  alt={`Render 3D: ${item.title}`}
+                  fill
+                  sizes="(min-width: 1024px) 900px, 100vw"
+                  className={`object-cover transition-opacity duration-150 sm:object-contain ${
+                    showingRender && i === index ? "opacity-100" : "opacity-0"
+                  }`}
+                  loading={Math.abs(i - index) <= 1 ? "eager" : "lazy"}
+                  draggable={false}
+                  aria-hidden={!(showingRender && i === index)}
+                />
+              )}
             </button>
           ))}
         </div>
@@ -125,7 +193,12 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
                 ✨ {overlayBadge}
               </span>
             )}
-            {current.badge && (
+            {showingRender && (
+              <span className="rounded-full bg-ink/75 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
+                ✨ Ipotesi di arredo 3D
+              </span>
+            )}
+            {current.badge && !showingRender && (
               <span key={current.id} className="animate-caption rounded-full border border-primary/20 bg-primary-soft px-2.5 py-1 text-[12px] font-semibold text-primary shadow-soft">
                 ✓ {current.badge}
               </span>
@@ -137,7 +210,10 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
           </span>
         </div>
 
-        <CaptionPill item={current} index={index} total={items.length} />
+        <div className="pointer-events-none absolute inset-x-2 bottom-2 flex flex-col items-center gap-2 sm:inset-x-3 sm:bottom-3">
+          {current.render && <HoldToCompare key={current.id} active={showingRender} onHold={setHolding} />}
+          <CaptionPill item={current} index={index} total={items.length} />
+        </div>
       </div>
 
       {/* Miniature */}

@@ -6,6 +6,8 @@ export type GalleryItem = {
   alt: string;
   /** Badge verde di vantaggio economico/rassicurazione */
   badge?: string;
+  /** Render 3D della stessa stanza: tenendo premuto sulla foto reale si vede l'ipotesi di arredo */
+  render?: string;
 };
 
 /** Visita guidata: 15 foto reali in /public/images/attuali, in ordine di percorso. */
@@ -20,6 +22,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 2,
     src: "/images/attuali/02-ingresso.jpg",
+    render: "/images/render/render-01-ingresso.jpg",
     title: "Ingresso",
     caption: "Ingresso ampio già tinteggiato di bianco con doppie porte a vetri.",
     alt: "Ingresso con pareti bianche, pavimento in graniglia chiara e porte in legno con vetri",
@@ -27,6 +30,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 3,
     src: "/images/attuali/03-soggiorno.jpg",
+    render: "/images/render/render-02-soggiorno.jpg",
     title: "Soggiorno / Sala",
     caption: "Salone luminoso con graniglia nera lucida e infissi nuovi in PVC.",
     alt: "Salone con pavimento in graniglia nera lucida e doppie porte in legno con vetri",
@@ -41,6 +45,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 5,
     src: "/images/attuali/05-terrazza-principale.jpg",
+    render: "/images/render/render-04-terrazza-principale.jpg",
     title: "Terrazza",
     caption: "Terrazza lunga tra cucina e stanza. Ponteggio lavori facciata già pagato.",
     alt: "Terrazza lunga con ringhiera e ponteggio dei lavori di facciata in ultimazione",
@@ -49,6 +54,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 6,
     src: "/images/attuali/06-seconda-terrazza.jpg",
+    render: "/images/render/render-05-seconda-terrazza.jpg",
     title: "Balcone",
     caption: "Balcone riservato e luminoso con infisso scorrevole bianco.",
     alt: "Balcone soleggiato con infisso scorrevole bianco e vista sui monti",
@@ -56,6 +62,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 7,
     src: "/images/attuali/07-vista-mare-interno.jpg",
+    render: "/images/render/render-03-angolo-relax-vista-mare.jpg",
     title: "Vista mare dall'interno",
     caption: "Panorama sul mare direttamente dalle portefinestre con vetrocamera.",
     alt: "Vista sul mare e sulla cupola della città attraverso le portefinestre aperte",
@@ -63,6 +70,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 8,
     src: "/images/attuali/08-corridoio-zona-notte.jpg",
+    render: "/images/render/render-06-corridoio.jpg",
     title: "Corridoio zona notte",
     caption: "Corridoio luminoso già tinteggiato che disimpegna la zona notte.",
     alt: "Corridoio bianco della zona notte con arco in fondo e porte in legno",
@@ -70,6 +78,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 9,
     src: "/images/attuali/09-camera-matrimoniale.jpg",
+    render: "/images/render/render-08-camera-matrimoniale.jpg",
     title: "Camera matrimoniale",
     caption: "Camera matrimoniale ampia e luminosa con termosifone: da rinfrescare con i tuoi colori.",
     alt: "Ampia camera matrimoniale vuota con termosifone e portafinestra",
@@ -77,6 +86,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 10,
     src: "/images/attuali/10-stanza-accessoria-1.jpg",
+    render: "/images/render/render-09-studio-vista-mare.jpg",
     title: "Stanza con balcone",
     caption: "Stanza luminosa con balcone, termosifone e armadio a muro bianco.",
     alt: "Stanza con portafinestra sul balcone, termosifone e armadio a muro bianco",
@@ -91,6 +101,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 12,
     src: "/images/attuali/12-affaccio-camera-vista-mare.jpg",
+    render: "/images/render/render-10-camera-finestra.jpg",
     title: "Affaccio vista mare",
     caption: "Vista mare anche dalla zona notte con infissi bianchi già sostituiti.",
     alt: "Portafinestra bianca con affaccio sul mare e sulla costiera",
@@ -98,6 +109,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 13,
     src: "/images/attuali/13-bagno-principale.jpg",
+    render: "/images/render/render-11-bagno-principale.jpg",
     title: "Bagno principale interno",
     caption: "Bagno interno finestrato con vasca e sanitari completi già pronti.",
     alt: "Bagno principale finestrato con vasca, lavabo, wc e bidet",
@@ -105,6 +117,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 14,
     src: "/images/attuali/14-bagno-esterno-lavanderia.jpg",
+    render: "/images/render/render-12-bagno-esterno.jpg",
     title: "Bagno esterno / Lavanderia",
     caption: "Secondo bagno su terrazza con WC, lavatoio e caldaia già installati.",
     alt: "Secondo bagno sulla terrazza con wc, pilozzo lavatoio e finestra",
@@ -112,6 +125,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 15,
     src: "/images/attuali/15-garage.jpg",
+    render: "/images/render/render-13-garage.jpg",
     title: "Garage privato",
     caption: "Box auto privato sotto casa, con porta in ferro e chiusura a chiave.",
     alt: "Box auto privato chiuso con auto parcheggiata",
