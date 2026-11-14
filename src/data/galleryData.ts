@@ -79,7 +79,8 @@ export const galleryData: GalleryItem[] = [
   {
     id: 9,
     src: "/images/attuali/09-camera-matrimoniale.jpg",
-    render: "/images/render/render-08-camera-matrimoniale.jpg",
+    // Stessa stanza e stessa inquadratura (graniglia chiara, termosifone a sinistra)
+    render: "/images/render/render-08-camera-matrimoniale-graniglia-chiara.jpg",
     title: "Camera matrimoniale",
     caption: "Camera matrimoniale ampia e luminosa con termosifone: da rinfrescare con i tuoi colori.",
     alt: "Ampia camera matrimoniale vuota con termosifone e portafinestra",
@@ -102,7 +103,6 @@ export const galleryData: GalleryItem[] = [
   {
     id: 12,
     src: "/images/attuali/12-affaccio-camera-vista-mare.jpg",
-    render: "/images/render/render-10-camera-finestra.jpg",
     title: "Affaccio vista mare",
     caption: "Vista mare anche dalla zona notte con infissi bianchi già sostituiti.",
     alt: "Portafinestra bianca con affaccio sul mare e sulla costiera",
@@ -142,7 +142,7 @@ export const renderData: GalleryItem[] = [
   { id: 5, src: "/images/render/render-05-seconda-terrazza.jpg", title: "Balcone", caption: "Angolo verde con fioriere e sedute per la colazione al sole.", alt: "Render del balcone con piante" },
   { id: 6, src: "/images/render/render-06-corridoio.jpg", title: "Corridoio", caption: "Corridoio zona notte valorizzato da quadri, piante e luce calda.", alt: "Render del corridoio arredato" },
   { id: 7, src: "/images/render/render-07-nicchia-armadio.jpg", title: "Nicchia ad arco", caption: "L'arco del disimpegno diventa un guardaroba su misura in legno.", alt: "Render della nicchia ad arco con armadio in legno" },
-  { id: 8, src: "/images/render/render-08-camera-matrimoniale.jpg", title: "Camera matrimoniale", caption: "Camera in stile naturale, con tende in lino e tessili morbidi.", alt: "Render della camera matrimoniale arredata" },
+  { id: 8, src: "/images/render/render-08-camera-matrimoniale-graniglia-chiara.jpg", title: "Camera matrimoniale", caption: "Camera in stile naturale, con tende in lino e tessili morbidi.", alt: "Render della camera matrimoniale arredata" },
   { id: 9, src: "/images/render/render-09-studio-vista-mare.jpg", title: "Studio vista mare", caption: "Stanza versatile trasformata in studio-lettura con vista mare.", alt: "Render di uno studio con vista mare" },
   { id: 10, src: "/images/render/render-10-camera-finestra.jpg", title: "Stanza con affaccio", caption: "Seduta sotto la finestra per godersi luce e panorama.", alt: "Render di una stanza con affaccio sulla città" },
   { id: 11, src: "/images/render/render-11-bagno-principale.jpg", title: "Bagno principale", caption: "Bagno rinfrescato con mobile sospeso in legno e toni sabbia.", alt: "Render del bagno principale rinnovato" },
