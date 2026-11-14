@@ -56,7 +56,7 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
 }
 
 /**
- * "Tieni premuto: Render 3D ✨": finché il dito (o il mouse) resta sul pulsante si vede il render,
+ * Pulsante "Render 3D ✨" (tieni premuto): finché il dito (o il mouse) resta sul pulsante si vede il render,
  * al rilascio torna subito la foto reale. Niente menu "Salva immagine" né selezione di testo su iOS/Android.
  */
 function HoldToCompare({ active, onHold }: { active: boolean; onHold: (on: boolean) => void }) {
@@ -80,12 +80,38 @@ function HoldToCompare({ active, onHold }: { active: boolean; onHold: (on: boole
       onContextMenu={(e) => e.preventDefault()}
       style={{ WebkitTouchCallout: "none" }}
       aria-pressed={active}
-      className={`pointer-events-auto inline-flex touch-none items-center gap-1.5 rounded-full border px-4 py-2.5 text-sm font-semibold text-white shadow-float backdrop-blur transition select-none ${
+      aria-label="Tieni premuto per vedere il Render 3D"
+      className={`pointer-events-auto inline-flex touch-none items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-semibold text-white shadow-float backdrop-blur transition select-none ${
         active ? "scale-95 border-primary bg-primary" : "border-white/70 bg-ink/80"
       }`}
     >
-      Tieni premuto: Render 3D ✨
+      Render 3D ✨
     </button>
+  );
+}
+
+/** Stato "tengo premuto": si azzera cambiando foto e se la pagina perde il focus con il dito ancora giù */
+function useHold(index: number) {
+  const [holding, setHolding] = useState(false);
+  useEffect(() => setHolding(false), [index]);
+  useEffect(() => {
+    const release = () => setHolding(false);
+    window.addEventListener("blur", release);
+    document.addEventListener("visibilitychange", release);
+    return () => {
+      window.removeEventListener("blur", release);
+      document.removeEventListener("visibilitychange", release);
+    };
+  }, []);
+  return [holding, setHolding] as const;
+}
+
+/** Badge mostrato mentre si vede il render */
+function RenderBadge() {
+  return (
+    <span className="rounded-full bg-ink/75 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
+      ✨ Ipotesi di arredo 3D
+    </span>
   );
 }
 
@@ -110,20 +136,8 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
   const [lightbox, setLightbox] = useState<number | null>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
   const current = items[index];
-  const [holding, setHolding] = useState(false);
+  const [holding, setHolding] = useHold(index);
   const showingRender = holding && Boolean(current.render);
-
-  // Cambiando foto, o se la pagina perde il focus mentre il dito è giù, si torna sempre alla foto reale
-  useEffect(() => setHolding(false), [index]);
-  useEffect(() => {
-    const release = () => setHolding(false);
-    window.addEventListener("blur", release);
-    document.addEventListener("visibilitychange", release);
-    return () => {
-      window.removeEventListener("blur", release);
-      document.removeEventListener("visibilitychange", release);
-    };
-  }, []);
 
   useEffect(() => {
     onIndexChange?.(items[index], index);
@@ -193,11 +207,7 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
                 ✨ {overlayBadge}
               </span>
             )}
-            {showingRender && (
-              <span className="rounded-full bg-ink/75 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
-                ✨ Ipotesi di arredo 3D
-              </span>
-            )}
+            {showingRender && <RenderBadge />}
             {current.badge && !showingRender && (
               <span key={current.id} className="animate-caption rounded-full border border-primary/20 bg-primary-soft px-2.5 py-1 text-[12px] font-semibold text-primary shadow-soft">
                 ✓ {current.badge}
@@ -254,6 +264,8 @@ function Lightbox({
 }) {
   const { trackRef, index, onScroll, goTo } = useCarousel(items.length, start);
   const item = items[index];
+  const [holding, setHolding] = useHold(index);
+  const showingRender = holding && Boolean(item.render);
 
   useLayoutEffect(() => {
     const el = trackRef.current;
@@ -286,15 +298,41 @@ function Lightbox({
           <X className="h-5 w-5" />
         </button>
       </div>
-      <div className="relative min-h-0 flex-1">
+      <div
+        className="relative min-h-0 flex-1 touch-manipulation select-none"
+        onContextMenu={(e) => e.preventDefault()}
+        style={{ WebkitTouchCallout: "none" }}
+      >
         <div ref={trackRef} onScroll={onScroll} className="no-scrollbar flex h-full snap-x snap-mandatory overflow-x-auto">
-          {items.map((it) => (
+          {items.map((it, i) => (
             <div key={it.src} className="relative h-full w-full shrink-0 snap-center">
-              <Image src={it.src} alt={it.alt} fill sizes="100vw" className="object-contain" />
+              <Image src={it.src} alt={it.alt} fill sizes="100vw" className="object-contain" draggable={false} />
+              {it.render && (
+                <Image
+                  src={it.render}
+                  alt={`Render 3D: ${it.title}`}
+                  fill
+                  sizes="100vw"
+                  className={`object-contain transition-opacity duration-150 ${showingRender && i === index ? "opacity-100" : "opacity-0"}`}
+                  loading={Math.abs(i - index) <= 1 ? "eager" : "lazy"}
+                  draggable={false}
+                  aria-hidden={!(showingRender && i === index)}
+                />
+              )}
             </div>
           ))}
         </div>
         <Arrows index={index} total={items.length} goTo={goTo} dark />
+        {showingRender && (
+          <div className="pointer-events-none absolute top-3 left-3">
+            <RenderBadge />
+          </div>
+        )}
+        {item.render && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
+            <HoldToCompare key={item.id} active={showingRender} onHold={setHolding} />
+          </div>
+        )}
       </div>
       <div key={item.id} className="animate-caption px-5 pb-safe pt-3 text-white">
         <p className="text-lg font-semibold text-white">{item.title}</p>
