@@ -63,7 +63,7 @@ export default function Home() {
             <SectionTitle
               eyebrow="Quadrilocale · 4 stanze"
               title="Distribuzione degli spazi"
-              intro="Zona giorno e zona notte ben separate dal corridoio centrale: 4 stanze, cucina abitabile, 2 bagni, terrazza e 2 balconi."
+              intro="Zona giorno e zona notte ben separate dal corridoio centrale: 4 stanze, cucina abitabile, 2 bagni e 2 balconi."
             />
             <div className="grid gap-4 md:grid-cols-2 md:items-start">
               <CompositionList />
