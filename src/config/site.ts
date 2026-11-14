@@ -36,10 +36,11 @@ export const WHATSAPP_NUMBER: string | null = /^\d{8,15}$/.test(rawWhatsApp) ? r
 
 /**
  * Tour virtuale 360°.
- * Impostare a `true` e compilare TOUR_EMBED_URL con l'URL di embed
- * (Matterport: https://my.matterport.com/show/?m=XXXX, Zillow 3D Home, Kuula, ecc.).
+ * `true` = la sezione è visibile: senza TOUR_EMBED_URL mostra il riquadro "Tour Virtuale 360° in arrivo",
+ * con l'URL di embed mostra il tour navigabile (Matterport: https://my.matterport.com/show/?m=XXXX, Kuula, ecc.).
+ * `false` = sezione nascosta.
  */
-export const ENABLE_3D_TOUR = false;
+export const ENABLE_3D_TOUR = true;
 export const TOUR_EMBED_URL = "";
 
 /** Limiti dello studio "Crea il tuo Render AI" */

@@ -11,7 +11,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
 import { CompositionList } from "@/components/CompositionList";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
-import { ENABLE_3D_TOUR, PROPERTY, TOUR_EMBED_URL } from "@/config/site";
+import { ENABLE_3D_TOUR, PROPERTY } from "@/config/site";
 
 /** Collega automaticamente la prima immagine trovata in /public/images/planimetria (verificata al build). */
 function findFloorPlan(): string | null {
@@ -37,8 +37,8 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 
 export default function Home() {
   const floorPlan = findFloorPlan();
-  // Il tour 360° compare solo quando è attivo e ha un URL; altrimenti la sezione segnaposto è nascosta
-  const showTour = ENABLE_3D_TOUR && Boolean(TOUR_EMBED_URL);
+  // Sezione tour 360°: con ENABLE_3D_TOUR attivo compare il tour (se c'è l'URL) o il riquadro "in arrivo"
+  const showTour = ENABLE_3D_TOUR;
   // Alternanza bianco / grigio ghiaccio delle fasce, che resta corretta con o senza il tour
   const tone = (i: number): "white" | "ice" => ((i + (showTour ? 0 : 1)) % 2 === 1 ? "white" : "ice");
   // Solo un booleano: la chiave resta sul server e non arriva mai al browser
