@@ -30,7 +30,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 3,
     src: "/images/attuali/03-soggiorno.jpg",
-    render: "/images/render/render-02-soggiorno.jpg",
+    render: "/images/render/render-02-soggiorno-pavimento-nero.jpg",
     title: "Soggiorno / Sala",
     caption: "Salone luminoso con graniglia nera lucida e infissi nuovi in PVC.",
     alt: "Salone con pavimento in graniglia nera lucida e doppie porte in legno con vetri",
@@ -38,6 +38,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 4,
     src: "/images/attuali/04-cucina.jpg",
+    render: "/images/render/render-14-cucina.jpg",
     title: "Cucina abitabile",
     caption: "Cucina abitabile con finestra, portafinestra su terrazza e pavimento chiaro.",
     alt: "Cucina abitabile piastrellata con pavimento chiaro e portafinestra sulla terrazza",
@@ -135,7 +136,7 @@ export const galleryData: GalleryItem[] = [
 /** Render 3D ipotetici in /public/images/render, ordinati per stanza lungo lo stesso percorso. */
 export const renderData: GalleryItem[] = [
   { id: 1, src: "/images/render/render-01-ingresso.jpg", title: "Ingresso", caption: "Ingresso caldo e accogliente con consolle, specchio e luce soffusa.", alt: "Render dell'ingresso arredato" },
-  { id: 2, src: "/images/render/render-02-soggiorno.jpg", title: "Soggiorno", caption: "Living luminoso con divano, zona TV e toni naturali.", alt: "Render del soggiorno arredato" },
+  { id: 2, src: "/images/render/render-02-soggiorno-pavimento-nero.jpg", title: "Soggiorno", caption: "Living caldo con divano, libreria e toni naturali sulla graniglia nera originale.", alt: "Render del soggiorno arredato" },
   { id: 3, src: "/images/render/render-03-angolo-relax-vista-mare.jpg", title: "Angolo relax vista mare", caption: "Lettura e relax davanti alla portafinestra affacciata sul Golfo.", alt: "Render di un angolo relax davanti alla vista mare" },
   { id: 4, src: "/images/render/render-04-terrazza-principale.jpg", title: "Terrazza", caption: "Terrazza lunga vissuta come un salotto all'aperto, a lavori ultimati.", alt: "Render della terrazza arredata" },
   { id: 5, src: "/images/render/render-05-seconda-terrazza.jpg", title: "Balcone", caption: "Angolo verde con fioriere e sedute per la colazione al sole.", alt: "Render del balcone con piante" },
@@ -147,6 +148,7 @@ export const renderData: GalleryItem[] = [
   { id: 11, src: "/images/render/render-11-bagno-principale.jpg", title: "Bagno principale", caption: "Bagno rinfrescato con mobile sospeso in legno e toni sabbia.", alt: "Render del bagno principale rinnovato" },
   { id: 12, src: "/images/render/render-12-bagno-esterno.jpg", title: "Bagno esterno", caption: "Secondo bagno moderno con sanitari sospesi e mobile in rovere.", alt: "Render del bagno esterno rinnovato" },
   { id: 13, src: "/images/render/render-13-garage.jpg", title: "Garage", caption: "Box auto tinteggiato e illuminato: pulito e ordinato.", alt: "Render del garage tinteggiato" },
+  { id: 14, src: "/images/render/render-14-cucina.jpg", title: "Cucina", caption: "Cucina lineare in legno chiaro con tavolo da pranzo e portafinestra sulla terrazza.", alt: "Render della cucina arredata" },
 ];
 
 export type AiBaseRoom = { id: string; label: string; src: string };
