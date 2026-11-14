@@ -26,7 +26,7 @@ npm run build && npm start   # produzione
 ## Struttura
 
 - `public/images/attuali/01…15-*.jpg`: le 15 foto reali, nell'ordine della visita guidata
-- `public/images/render/render-01…13-*.jpg`: i render 3D, ordinati per stanza
+- `public/images/render/render-01…13-*.jpg`: i render 3D, ordinati per stanza; in galleria si vedono tenendo premuto "Render 3D ✨" sulla foto reale abbinata (campo `render` in `galleryData.ts`)
 - `public/images/stanze-base-ai/`: le foto base dello studio AI (soggiorno, cucina, camera, balcone vista mare)
 - `src/data/galleryData.ts`: titoli e didascalie di foto, render, stanze AI e stili
 - `src/config/site.ts`: prezzo, dati tecnici, WhatsApp, tour 360°, limiti AI
@@ -39,6 +39,6 @@ npm run build && npm start   # produzione
 
 ## Comportamento senza chiave API o numero WhatsApp
 
-- **Arredala tu**: finché `OPENAI_API_KEY` manca (o il credito OpenAI è esaurito), i visitatori vedono "Simulazioni AI temporaneamente non disponibili: esplora i render già pronti nella scheda dedicata." invece del pulsante di generazione. Su Vercel, dopo aver aggiunto la chiave, serve un nuovo deploy.
+- **Arredala tu**: finché `OPENAI_API_KEY` manca (o il credito OpenAI è esaurito), i visitatori vedono "Simulazioni AI temporaneamente non disponibili: tieni premuto ✨ sulle foto reali per vedere i render 3D già pronti." invece del pulsante di generazione. Su Vercel, dopo aver aggiunto la chiave, serve un nuovo deploy.
 - **Prenota Visita**: finché `NEXT_PUBLIC_WHATSAPP_NUMBER` manca o non è valido (8-15 cifre), il pulsante di invio resta disattivato e compare un avviso discreto. Nessun link `wa.me` viene aperto.
 - I due promemoria rossi `[DA CONTROLLARE]` per chiave API e numero WhatsApp si vedono solo in sviluppo (`npm run dev`), non nel sito pubblicato.
