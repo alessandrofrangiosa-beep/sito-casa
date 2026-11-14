@@ -5,6 +5,10 @@ import { quickFacts } from "@/data/composition";
 import { defaultMonthlyPayment, formatEuro } from "@/lib/mortgage";
 
 
+const LIFT = " con ascensore";
+const hasLift = PROPERTY.floor.endsWith(LIFT);
+const floorWithoutLift = hasLift ? PROPERTY.floor.slice(0, -LIFT.length) : PROPERTY.floor;
+
 export function Hero() {
   return (
     <header className="relative pb-24 sm:pb-16">
@@ -28,7 +32,14 @@ export function Hero() {
           <p className="mt-2 flex items-start gap-1.5 text-[15px] text-slate-ink max-[340px]:text-[13px] sm:text-base">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
             <span>
-              {PROPERTY.address}, {PROPERTY.city} • {PROPERTY.floor}
+              {PROPERTY.address}, {PROPERTY.city} • {floorWithoutLift}
+              {hasLift && (
+                <>
+                  {" "}
+                  {/* "con ascensore" messo in risalto: è un plus importante per un 6° piano */}
+                  <strong className="whitespace-nowrap font-semibold text-primary">con ascensore</strong>
+                </>
+              )}
             </span>
           </p>
 
