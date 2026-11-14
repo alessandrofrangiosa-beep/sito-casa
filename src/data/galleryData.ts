@@ -96,7 +96,7 @@ export const galleryData: GalleryItem[] = [
   {
     id: 11,
     src: "/images/attuali/11-stanza-accessoria-2.jpg",
-    render: "/images/render/render-16-camera-soleggiata.jpg",
+    render: "/images/render/render-20-camera-soleggiata.jpg",
     title: "Stanza soleggiata",
     caption: "Stanza soleggiata con infissi recenti: ideale come studio, cameretta o stanza ospiti.",
     alt: "Stanza soleggiata con portafinestra, termosifone e pavimento alla veneziana",
@@ -151,7 +151,7 @@ export const renderData: GalleryItem[] = [
   { id: 13, src: "/images/render/render-13-garage.jpg", title: "Garage", caption: "Box auto tinteggiato e illuminato: pulito e ordinato.", alt: "Render del garage tinteggiato" },
   { id: 14, src: "/images/render/render-14-cucina.jpg", title: "Cucina", caption: "Cucina lineare in legno chiaro con tavolo da pranzo e portafinestra sulla terrazza.", alt: "Render della cucina arredata" },
   { id: 15, src: "/images/render/render-19-cameretta-balcone.jpg", title: "Cameretta", caption: "Stanza con balcone trasformata in cameretta con scrivania, armadio a tutta altezza e letto singolo.", alt: "Render della stanza con balcone arredata come cameretta" },
-  { id: 16, src: "/images/render/render-16-camera-soleggiata.jpg", title: "Camera da letto", caption: "Stanza soleggiata arredata come camera matrimoniale, con boiserie e tessili caldi.", alt: "Render della stanza soleggiata arredata come camera da letto" },
+  { id: 16, src: "/images/render/render-20-camera-soleggiata.jpg", title: "Camera da letto", caption: "Stanza soleggiata arredata come camera matrimoniale, con boiserie e tessili caldi.", alt: "Render della stanza soleggiata arredata come camera da letto" },
 ];
 
 export type AiBaseRoom = { id: string; label: string; src: string };
