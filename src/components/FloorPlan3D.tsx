@@ -46,7 +46,6 @@ export function FloorPlan3D() {
     (async () => {
       const THREE = await import("three");
       const { TrackballControls } = await import("three/examples/jsm/controls/TrackballControls.js");
-      const { CSS2DRenderer, CSS2DObject } = await import("three/examples/jsm/renderers/CSS2DRenderer.js");
       const mount = mountRef.current;
       if (disposed || !mount) return;
 
@@ -77,11 +76,37 @@ export function FloorPlan3D() {
       renderer.domElement.style.touchAction = "none";
       mount.appendChild(renderer.domElement);
 
-      const labels = new CSS2DRenderer();
-      labels.domElement.style.position = "absolute";
-      labels.domElement.style.inset = "0";
-      labels.domElement.style.pointerEvents = "none";
-      mount.appendChild(labels.domElement);
+      /**
+       * Scritta "stampata" sul pavimento: discreta (grigio chiaro semitrasparente), ruota insieme al modello
+       * e non copre mai la planimetria. `width` in metri; `vertical` = scritta lungo il lato lungo (corridoio, balcone).
+       */
+      const floorText = (text: string, at: readonly [number, number], width: number, vertical = false, opacity = 0.55) => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d")!;
+        const fontPx = 96;
+        ctx.font = `600 ${fontPx}px Inter, system-ui, sans-serif`;
+        const tw = Math.ceil(ctx.measureText(text).width) + 24;
+        canvas.width = tw;
+        canvas.height = Math.round(fontPx * 1.3);
+        ctx.font = `600 ${fontPx}px Inter, system-ui, sans-serif`;
+        ctx.fillStyle = "#475569";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.anisotropy = 8;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const h = (width * canvas.height) / canvas.width;
+        const mesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(width, h),
+          new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity, depthWrite: false }),
+        );
+        mesh.rotation.x = -Math.PI / 2;
+        if (vertical) mesh.rotation.z = Math.PI / 2;
+        mesh.position.set(at[0], 0.07, at[1]);
+        mesh.renderOrder = 1;
+        root.add(mesh);
+      };
 
       scene.add(new THREE.HemisphereLight(0xffffff, 0xe8e2d8, 1.6));
       const sun = new THREE.DirectionalLight(0xffffff, 1.6);
@@ -148,26 +173,21 @@ export function FloorPlan3D() {
         const isBalcony = room.kind === "balcony";
         pts.forEach((p, i) => addWall(p, pts[(i + 1) % pts.length], isBalcony ? RAILING_HEIGHT : LOW_WALL, isBalcony ? railMat : wallMat, !isBalcony));
 
-        // Etichetta: solo il nome dell'ambiente (le superfici sono nella planimetria 2D), così il 3D resta leggibile
+        // Nome dell'ambiente scritto sul pavimento, in piccolo (le superfici sono nella planimetria 2D)
         const xs = room.pts.map((p) => p[0]);
         const ys = room.pts.map((p) => p[1]);
-        const el = document.createElement("div");
-        el.className = `fp3d-label${room.kind === "balcony" ? " fp3d-label-soft" : ""}`;
-        el.innerHTML = `<strong>${room.name}</strong>`;
-        const label = new CSS2DObject(el);
-        const [lx, lz] =
-          room.name === "Corridoio" ? toM([421, 1100]) : room.name === "Ingresso" ? toM([440, 650]) : toM([(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]);
-        label.position.set(lx, LOW_WALL + 0.25, lz);
-        root.add(label);
+        const w = (Math.max(...xs) - Math.min(...xs)) / PX_PER_METER;
+        const d = (Math.max(...ys) - Math.min(...ys)) / PX_PER_METER;
+        const vertical = d > w * 2.2; // corridoio e balcone laterale: scritta lungo il lato lungo
+        const room2d: [number, number] =
+          room.name === "Corridoio" ? [421, 1100] : room.name === "Ingresso" ? [430, 700] : [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2];
+        const space = vertical ? d : w;
+        const textW = Math.min(space * 0.75, 0.38 * room.name.length, 2.6);
+        floorText(room.name, toM(room2d), textW, vertical, room.kind === "balcony" ? 0.45 : 0.55);
       }
 
-      const streetEl = document.createElement("div");
-      streetEl.className = "fp3d-street";
-      streetEl.textContent = STREET_LABEL.text;
-      const street = new CSS2DObject(streetEl);
-      const [sx, sz] = toM(STREET_LABEL.at);
-      street.position.set(sx, 0.1, sz);
-      root.add(street);
+      // Nome della strada a terra, davanti al balcone su Via Vittorio Veneto
+      floorText(STREET_LABEL.text.toUpperCase(), toM(STREET_LABEL.at), 4.2, false, 0.4);
 
       // Rotazione libera su tutti gli assi (anche "di lato"), zoom e spostamento
       const controls = new TrackballControls(camera, renderer.domElement);
@@ -207,7 +227,6 @@ export function FloorPlan3D() {
         renderer.setSize(w, h, false);
         renderer.domElement.style.width = `${w}px`;
         renderer.domElement.style.height = `${h}px`;
-        labels.setSize(w, h);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         controls.handleResize();
@@ -240,7 +259,6 @@ export function FloorPlan3D() {
         }
         controls.update();
         renderer.render(scene, camera);
-        labels.render(scene, camera);
       };
       loop();
 
