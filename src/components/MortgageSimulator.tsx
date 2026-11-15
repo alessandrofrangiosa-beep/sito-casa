@@ -315,13 +315,17 @@ export function MortgageSimulator() {
             <input
               id="budget-lavori"
               type="range"
-              min={0}
+              min={C.renovationMinSpend}
               max={C.renovationMaxSpend}
               step={2_000}
               value={works}
               onChange={(e) => setWorks(Number(e.target.value))}
               className="mt-1.5 h-2 w-full cursor-pointer accent-[#b0553a]"
             />
+            <div className="mt-1 flex justify-between text-xs whitespace-nowrap text-slate-ink tabular-nums">
+              <span>da {formatEuro(C.renovationMinSpend)}</span>
+              <span>fino a {formatEuro(C.renovationMaxSpend)}</span>
+            </div>
           </div>
         </article>
       </div>
