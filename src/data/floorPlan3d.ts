@@ -84,7 +84,8 @@ export const OPENINGS_3D: Opening3D[] = [
   { type: "glassDoor", a: [808, 900], b: [808, 965] },
   // Bagno e lavanderia
   { type: "door", a: [473, 1068], b: [473, 1128], into: [510, 1100] },
-  { type: "door", a: [752, 1062], b: [752, 1100], leaf: false },
+  // Bagno-lavanderia: solo una finestra in fondo al bagno (nessuna porta tra i due ambienti)
+  { type: "window", a: [728, 1060], b: [728, 1102] },
   { type: "window", a: [835, 1055], b: [835, 1100] },
   // Stanza 16,8: porta sul corridoio e portafinestra sul balcone laterale
   { type: "door", a: [473, 1185], b: [473, 1245], into: [510, 1215] },
