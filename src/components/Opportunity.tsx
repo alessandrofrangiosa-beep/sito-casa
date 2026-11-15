@@ -6,6 +6,7 @@ import { SectionTitle } from "./SectionTitle";
 const ITEMS: { bold: string; rest: string }[] = [
   { bold: "Casa già sgomberata:", rest: " libera subito, né attese né spese per lo sgombero: puoi entrare appena dopo il rogito" },
   { bold: "Ascensore disponibile:", rest: " si arriva al 6°\u00a0piano comodamente, anche con spesa e passeggino" },
+  { bold: "Cortile interno del palazzo:", rest: " spazio comune all'interno dell'edificio, al riparo dal traffico della strada" },
   { bold: `${FIBER.title}:`, rest: ` ${FIBER.text}` },
   { bold: "Pavimenti in buono stato:", rest: " graniglia nera nel salone, alla veneziana nelle altre stanze" },
   { bold: "Bagno completo", rest: " con vasca e sanitari" },
