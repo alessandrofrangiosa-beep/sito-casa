@@ -251,7 +251,7 @@ export function MortgageSimulator() {
             {formatEuro(Math.round((tax.sulPrezzo - tax.prima.totale) / 100) * 100)} <span className="text-base font-bold">risparmiati</span>
           </p>
           <p className="mt-1.5 text-sm leading-snug text-slate-ink">
-            <strong className="text-ink">Perché?</strong> Comprando da privato come prima casa, le tasse si pagano sul valore
+            <strong className="text-ink">Perché?</strong> Comprando da <strong className="text-ink">privato</strong> come prima casa, le tasse si pagano sul valore
             catastale (circa {formatEuro(Math.round(tax.prima.valoreCatastale / 1000) * 1000)}) e non sul prezzo di{" "}
             {formatEuro(C.propertyPrice)}. <strong className="text-ink">Paghi solo {formatEuroCents(tax.prima.totale)}</strong>{" "}
             invece di {formatEuro(tax.sulPrezzo)}.
