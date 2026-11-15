@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Material, Mesh } from "three";
-import { Box, Layers, Maximize2, RotateCcw, X } from "lucide-react";
+import { Box, Layers, RotateCcw, X } from "lucide-react";
 import { CEILING_HEIGHT, PX_PER_METER, ROOMS_3D, STREET_LABEL, type RoomKind } from "@/data/floorPlan3d";
 
 const FLOOR_COLORS: Record<RoomKind, number> = {
@@ -29,11 +29,12 @@ type Api = {
  * Anteprima nella pagina che ruota lentamente; a schermo intero si ruota sui due assi con un dito
  * (o il mouse), si ingrandisce con due dita / rotellina e si sposta con due dita / tasto destro.
  */
-export function FloorPlan3D() {
+export function FloorPlan3D({ onClose }: { onClose: () => void }) {
   const mountRef = useRef<HTMLDivElement>(null);
   const apiRef = useRef<Api | null>(null);
-  const fullRef = useRef(false);
-  const [full, setFull] = useState(false);
+  // Si apre sempre a schermo intero: niente anteprima rimpicciolita nella pagina
+  const fullRef = useRef(true);
+  const full = true;
   const [tall, setTall] = useState(false);
   const [view, setView] = useState<"3d" | "top">("3d");
   const [ready, setReady] = useState(false);
@@ -246,7 +247,6 @@ export function FloorPlan3D() {
         raf = requestAnimationFrame(loop);
         if (!visible && !fullRef.current) return;
         // Anteprima nella pagina: il modello gira lentamente su sé stesso
-        if (!fullRef.current) root.rotation.y += 0.004;
         controls.update();
         renderer.render(scene, camera);
       };
@@ -289,35 +289,33 @@ export function FloorPlan3D() {
     };
   }, []);
 
-  const open = useCallback(() => {
-    window.history.pushState({ ta390Plan3d: true }, "");
-    setFull(true);
-  }, []);
+  // Il tasto Indietro del telefono chiude la vista 3D invece di lasciare il sito
   const close = useCallback(() => {
     if (window.history.state?.ta390Plan3d) window.history.back();
-    else setFull(false);
-  }, []);
+    else onClose();
+  }, [onClose]);
 
   useEffect(() => {
-    fullRef.current = full;
-    const raf = requestAnimationFrame(() => {
-      apiRef.current?.refit();
-      setView("3d");
-    });
-    if (!full) return () => cancelAnimationFrame(raf);
+    window.history.pushState({ ta390Plan3d: true }, "");
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
-    const onPop = () => setFull(false);
+    const onPop = () => onClose();
     window.addEventListener("keydown", onKey);
     window.addEventListener("popstate", onPop);
     return () => {
-      cancelAnimationFrame(raf);
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("popstate", onPop);
     };
-  }, [full, close]);
+  }, [close, onClose]);
+
+  // Appena il modello è pronto: inquadratura iniziale e comandi attivi
+  useEffect(() => {
+    if (!ready) return;
+    const raf = requestAnimationFrame(() => apiRef.current?.refit());
+    return () => cancelAnimationFrame(raf);
+  }, [ready]);
 
   useEffect(() => apiRef.current?.setTall(tall), [tall, ready]);
 
@@ -328,7 +326,6 @@ export function FloorPlan3D() {
 
   return (
     <div>
-      {full && <div className="aspect-[4/3]" aria-hidden />}
       <div
         className={full ? "fixed inset-0 z-[60] flex flex-col bg-white" : "relative overflow-hidden rounded-2xl border border-line bg-white shadow-soft"}
         role={full ? "dialog" : undefined}
@@ -362,18 +359,7 @@ export function FloorPlan3D() {
             <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
             Trascina per girare e inclinare la planimetria · pizzica o rotellina per avvicinarti · due dita per spostarti
           </p>
-        ) : (
-          <button
-            type="button"
-            onClick={open}
-            className="absolute inset-0 flex items-end justify-center bg-transparent p-3"
-            aria-label="Apri la planimetria 3D a schermo intero"
-          >
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-soft">
-              <Maximize2 className="h-4 w-4" aria-hidden /> Esplora in 3D
-            </span>
-          </button>
-        )}
+        ) : null}
       </div>
     </div>
   );

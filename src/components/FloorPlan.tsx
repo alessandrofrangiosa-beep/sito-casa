@@ -14,10 +14,10 @@ type Plan = { src: string; label: string };
 /** Planimetrie: schede Appartamento / Garage (immagine ingrandibile) e Vista 3D esplorabile */
 export function FloorPlan({ plans }: { plans: Plan[] }) {
   const [tab, setTab] = useState(0);
+  const [show3d, setShow3d] = useState(false);
   const tabs = [...plans.map((p) => p.label), "Vista 3D"];
-  const is3d = plans.length > 0 && tab === plans.length;
-  const src = plans.length ? (is3d ? null : plans[Math.min(tab, plans.length - 1)].src) : null;
-  const label = src ? plans[tab].label : "";
+  const src = plans.length ? plans[Math.min(tab, plans.length - 1)].src : null;
+  const label = src ? plans[Math.min(tab, plans.length - 1)].label : "";
 
   return (
     <div>
@@ -28,10 +28,15 @@ export function FloorPlan({ plans }: { plans: Plan[] }) {
               key={t}
               role="tab"
               type="button"
-              aria-selected={tab === i}
-              onClick={() => setTab(i)}
+              aria-selected={i < plans.length ? tab === i : show3d}
+              // "Vista 3D" apre subito il modello a schermo intero; le altre schede cambiano l'immagine
+              onClick={() => (i < plans.length ? setTab(i) : setShow3d(true))}
               className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-[13px] font-semibold transition sm:text-sm ${
-                tab === i ? "bg-primary text-white shadow-soft" : "text-slate-ink hover:bg-ice"
+                (i < plans.length ? tab === i : show3d)
+                  ? "bg-primary text-white shadow-soft"
+                  : i === plans.length
+                    ? "text-primary hover:bg-primary-soft"
+                    : "text-slate-ink hover:bg-ice"
               }`}
             >
               {i === plans.length && <Box className="h-4 w-4" aria-hidden />}
@@ -40,16 +45,8 @@ export function FloorPlan({ plans }: { plans: Plan[] }) {
           ))}
         </div>
       )}
-      {is3d ? (
-        <>
-          <FloorPlan3D />
-          <p className="mt-2 text-xs leading-snug text-slate-ink">
-            Modello 3D ricavato dalla planimetria catastale (proporzioni indicative, altezza vani 3,00 m): le superfici di ogni stanza sono nella scheda Appartamento.
-          </p>
-        </>
-      ) : (
-        <PlanImage key={src ?? "none"} src={src} label={label} />
-      )}
+      <PlanImage key={src ?? "none"} src={src} label={label} />
+      {show3d && <FloorPlan3D onClose={() => setShow3d(false)} />}
     </div>
   );
 }
