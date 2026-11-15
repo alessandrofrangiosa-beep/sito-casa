@@ -4,6 +4,7 @@ import { SectionTitle } from "./SectionTitle";
 
 /** Dotazioni già presenti: inizio in grassetto per una lettura veloce su smartphone; la fibra è il primo punto */
 const ITEMS: { bold: string; rest: string }[] = [
+  { bold: "Casa già sgomberata:", rest: " libera subito e senza attese per lo sgombero, puoi entrare appena dopo il rogito" },
   { bold: "Ascensore disponibile:", rest: " si arriva al 6°\u00a0piano comodamente, anche con spesa e passeggino" },
   { bold: `${FIBER.title}:`, rest: ` ${FIBER.text}` },
   { bold: "Pavimenti in buono stato:", rest: " graniglia nera nel salone, alla veneziana nelle altre stanze" },
