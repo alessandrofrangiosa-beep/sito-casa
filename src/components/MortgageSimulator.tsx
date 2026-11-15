@@ -245,12 +245,17 @@ export function MortgageSimulator() {
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-terracotta-soft text-terracotta">
             <Landmark className="h-5 w-5" aria-hidden />
           </span>
-          <h4 className="mt-3 text-base font-bold leading-snug text-ink">Tasse al rogito abbattute col prezzo-valore</h4>
-          <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">{formatEuroCents(tax.prima.totale)}</p>
-          <p className="mt-1.5 text-sm leading-snug text-slate-ink">
-            invece di <strong className="text-ink tabular-nums">{formatEuro(tax.seconda.totale)}</strong> come seconda casa, o{" "}
-            <strong className="text-ink tabular-nums">{formatEuro(tax.sulPrezzo)}</strong> se il 9% si pagasse sul prezzo pieno.
+          <h4 className="mt-3 text-base font-bold leading-snug text-ink">Tasse dal notaio ridotte col prezzo-valore</h4>
+          {/* In verde il risparmio; sotto, il perché e quanto si paga davvero */}
+          <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">
+            {formatEuro(Math.round((tax.sulPrezzo - tax.prima.totale) / 100) * 100)} <span className="text-base font-bold">risparmiati</span>
           </p>
+          <p className="mt-1.5 text-sm leading-snug text-slate-ink">
+            Le tasse si calcolano sul valore catastale (circa {formatEuro(tax.prima.valoreCatastale)}), non sui{" "}
+            {formatEuro(C.propertyPrice)} del prezzo. <strong className="text-ink">Paghi solo {formatEuroCents(tax.prima.totale)}</strong>{" "}
+            invece di {formatEuro(tax.sulPrezzo)}.
+          </p>
+          <p className="mt-1 text-xs leading-snug text-slate-ink">Come seconda casa pagheresti {formatEuro(tax.seconda.totale)}.</p>
           <label className="mt-auto flex items-center justify-between gap-2 border-t border-sand-line pt-3 text-xs text-slate-ink">
             Rendita catastale (dalla visura)
             <span className="flex items-center gap-1 font-semibold text-ink">
@@ -292,12 +297,14 @@ export function MortgageSimulator() {
             <Hammer className="h-5 w-5" aria-hidden />
           </span>
           <h4 className="mt-3 text-base font-bold leading-snug text-ink">Bonus ristrutturazione 50% (Abitazione Principale)</h4>
-          <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">{formatEuro(bonus.lavori)}</p>
+          <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">
+            {formatEuro(bonus.lavori)} <span className="text-base font-bold">risparmiati</span>
+          </p>
           <p className="mt-1.5 text-sm leading-snug text-slate-ink">
-            recuperati in 10 anni ({formatEuro(bonus.perYear)}/anno su {formatEuro(works)} di lavori) trasferendo qui la residenza
-            e dimora abituale: i lavori ti costano davvero{" "}
-            <strong className="text-ink tabular-nums">{formatEuro(bonus.netto)}</strong>. Più{" "}
-            <strong className="text-ink tabular-nums">{formatEuro(bonus.mobili)}</strong> di bonus mobili.
+            Se diventa la tua prima casa (residenza), lo Stato ti restituisce metà dei lavori:{" "}
+            <strong className="text-ink tabular-nums">{formatEuro(bonus.perYear)} l&apos;anno per 10 anni</strong> su{" "}
+            {formatEuro(works)} di lavori. In più{" "}
+            <strong className="text-ink tabular-nums">{formatEuro(bonus.mobili)}</strong> di bonus per i mobili.
           </p>
           <div className="mt-auto border-t border-sand-line pt-3">
             <div className="flex items-baseline justify-between gap-2 text-xs text-slate-ink">
