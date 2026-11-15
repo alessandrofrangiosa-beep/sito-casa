@@ -15,9 +15,9 @@ const average = (...ids: string[]) => {
 
 // 10 tessere tutte uguali su 2 colonne (5 righe piene)
 const POINTS = [
-  // Delivery: Glovo copre l'area "Scafati - Pompei - Torre Annunziata"; su Just Eat al CAP 80058
-  // risultano 16 locali che consegnano, di cui 13 pizzerie (ricerca di novembre 2026)
-  { icon: Bike, title: "Delivery Glovo e Just Eat", detail: "16 locali, 13 pizzerie" },
+  // Delivery (ricerca di novembre 2026): Glovo copre l'area "Scafati - Pompei - Torre Annunziata" con oltre 90
+  // ristoranti solo di cucina italiana più supermercati e negozi; Just Eat consegna al CAP 80058 con ~16 attività
+  { icon: Bike, title: "Delivery Glovo e Just Eat", detail: "100+ attività" },
   { icon: ShoppingBag, title: "Supermercati", detail: nearest("deco", "sisa") },
   { icon: Pill, title: "Farmacie", detail: nearest("farmacia") },
   { icon: Coffee, title: "Bar e negozi", detail: nearest("bar") },
