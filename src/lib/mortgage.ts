@@ -117,18 +117,67 @@ export function defaultMonthlyPayment(): number {
   return monthlyPayment(loan, estimatedFixedRate((loan / C.propertyPrice) * 100), C.defaultYears);
 }
 
+/** Rata dei valori di partenza al netto della detrazione IRPEF del primo anno (19% degli interessi, max € 760/anno) */
+export function defaultNetMonthlyPayment(): number {
+  const loan = C.propertyPrice - C.standardDownPayment;
+  const rate = estimatedFixedRate((loan / C.propertyPrice) * 100);
+  const irpefYear = Math.min(firstYearInterest(loan, rate, C.defaultYears), C.irpefInterestCap) * C.irpefInterestRate;
+  return monthlyPayment(loan, rate, C.defaultYears) - irpefYear / 12;
+}
+
+/** Detrazione IRPEF 19% sugli interessi accumulata nei primi N anni (tetto di 4.000 € di interessi l'anno) */
+export function irpefInterestDeduction(principal: number, annualRatePct: number, years: number, horizonYears: number): number {
+  const r = annualRatePct / 100 / 12;
+  const rata = monthlyPayment(principal, annualRatePct, years);
+  let debt = principal;
+  let total = 0;
+  for (let y = 0; y < Math.min(horizonYears, years); y++) {
+    let interest = 0;
+    for (let m = 0; m < 12 && debt > 0; m++) {
+      const i = debt * r;
+      interest += i;
+      debt -= rata - i;
+    }
+    total += Math.min(interest, C.irpefInterestCap) * C.irpefInterestRate;
+  }
+  return total;
+}
+
 /**
  * Risparmi mostrati nella hero, calcolati con gli stessi parametri del calcolatore
- * (rendita di esempio, mutuo standard all'80%, budget lavori di esempio).
+ * (rendita di esempio, mutuo standard all'80% a 30 anni, budget lavori di esempio):
+ * 1. vendita da privato: zero provvigioni + imposte d'atto col prezzo-valore;
+ * 2. agevolazioni mutuo prima casa: imposta sostitutiva 0,25% + detrazione 19% interessi nei primi 10 anni;
+ * 3. lavori: condominiali già pagati dal proprietario + bonus ristrutturazione e mobili.
  */
 export function heroSavings() {
-  const immediate = C.condoWorksPaid + C.agencyFeeMax;
   const notaryPrima = notaryTaxes(C.defaultRenditaCatastale, true);
   const notarySeconda = notaryTaxes(C.defaultRenditaCatastale, false);
   const notarySaving = notarySeconda.totale - notaryPrima.totale;
+  const privateSale = C.agencyFeeMax + notarySaving;
+
   const loan = C.propertyPrice - C.standardDownPayment;
+  const rate = estimatedFixedRate((loan / C.propertyPrice) * 100);
   const mortgageTaxSaving = loan * (C.sostitutivaOrdinaria - C.sostitutivaPrimaCasa);
-  const rogito = notarySaving + mortgageTaxSaving;
-  const bonus = C.defaultRenovationBudget * C.renovationBonusRate + C.furnitureMaxSpend * C.furnitureBonusRate;
-  return { immediate, notaryPrima, notarySaving, mortgageTaxSaving, rogito, bonus, total: immediate + rogito + bonus };
+  const irpef10 = irpefInterestDeduction(loan, rate, C.defaultYears, 10);
+  const mortgage = mortgageTaxSaving + irpef10;
+
+  const renovationBonus = C.defaultRenovationBudget * C.renovationBonusRate;
+  const furnitureBonus = C.furnitureMaxSpend * C.furnitureBonusRate;
+  const works = C.condoWorksPaid + renovationBonus + furnitureBonus;
+
+  return {
+    notaryPrima,
+    notarySaving,
+    privateSale,
+    mortgageTaxSaving,
+    irpef10,
+    mortgage,
+    renovationBonus,
+    furnitureBonus,
+    works,
+    total: privateSale + mortgage + works,
+    /** Totale anche nel caso più prudente (provvigione d'agenzia minima) */
+    totalMin: privateSale - (C.agencyFeeMax - C.agencyFeeMin) + mortgage + works,
+  };
 }

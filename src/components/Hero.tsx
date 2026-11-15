@@ -2,26 +2,27 @@ import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import { quickFacts } from "@/data/composition";
-import { PROPERTY_FINANCE_CONFIG as C, defaultMonthlyPayment, formatEuro, formatEuroCents, heroSavings } from "@/lib/mortgage";
+import { PROPERTY_FINANCE_CONFIG as C, defaultMonthlyPayment, defaultNetMonthlyPayment, formatEuro, formatEuroCents, heroSavings } from "@/lib/mortgage";
 
 
 const S = heroSavings();
 const floorTo = (n: number, step: number) => Math.floor(n / step) * step;
+const round100 = (n: number) => Math.round(n / 100) * 100;
 const SAVINGS = [
   {
-    value: formatEuro(S.immediate),
-    short: "risparmiati subito",
-    detail: `${formatEuro(C.condoWorksPaid)} di lavori condominiali (facciate e balconi) già saldati dal proprietario + ${formatEuro(C.agencyFeeMin)}–${formatEuro(C.agencyFeeMax).replace("€\u00a0", "")} di provvigioni d'agenzia azzerate.`,
+    value: `~${formatEuro(round100(S.privateSale))}`,
+    short: "vendita da privato",
+    detail: `0 provvigioni d'agenzia (fino a ${formatEuro(C.agencyFeeMax)}) e imposte d'atto col prezzo-valore: solo ${formatEuroCents(S.notaryPrima.totale)} (−${formatEuro(S.notarySaving)}).`,
   },
   {
-    value: `~${formatEuro(Math.round(S.rogito / 100) * 100)}`,
-    short: "tagliati al rogito",
-    detail: `Solo ${formatEuroCents(S.notaryPrima.totale)} di imposte d'atto col prezzo-valore prima casa (−${formatEuro(S.notarySaving)}) e imposta sul mutuo allo 0,25% (−${formatEuro(S.mortgageTaxSaving)}).`,
+    value: `~${formatEuro(round100(S.mortgage))}`,
+    short: "agevolazioni mutuo",
+    detail: `Imposta sostitutiva allo 0,25% (−${formatEuro(S.mortgageTaxSaving)}) e detrazione IRPEF 19% sugli interessi: ${formatEuro(round100(S.irpef10))} nei primi 10 anni.`,
   },
   {
-    value: formatEuro(S.bonus),
-    short: "bonus lavori + arredi",
-    detail: `Recuperi il 50% di lavori e arredi visti nei render 3D (abitazione principale) e con la garanzia Consap eviti fino a ${formatEuro(C.standardDownPayment)} di anticipo.`,
+    value: formatEuro(S.works),
+    short: "lavori e bonus",
+    detail: `${formatEuro(C.condoWorksPaid)} di lavori su facciate e balconi già pagati + bonus 50% su lavori e arredi dei render 3D (${formatEuro(S.renovationBonus + S.furnitureBonus)}).`,
   },
 ];
 
@@ -78,19 +79,36 @@ export function Hero() {
                 (vendita in blocco: <span className="tabular-nums">{PROPERTY.price}</span> {PROPERTY.priceNote})
               </span>
             </p>
-            <a
-              href="#simula-mutuo"
-              className="mt-2 inline-block rounded-2xl border border-primary/20 bg-card px-3 py-1.5 text-[13.5px] font-medium leading-snug text-slate-ink transition hover:border-primary/50 max-[340px]:text-[12px] sm:text-sm"
-            >
-              Oppure con mutuo: rata stimata da{" "}
-              <strong className="whitespace-nowrap font-semibold text-ink tabular-nums">~ {formatEuro(defaultMonthlyPayment())}/mese</strong>{" "}
-              <span className="whitespace-nowrap font-semibold text-primary">→ Simula</span>
-            </a>
-            {/* Vantaggio economico reale: 3 metriche (cifre calcolate dagli stessi parametri del calcolatore mutuo) */}
+            {/* Un'unica card: rata media del mutuo + vantaggio economico reale (cifre dagli stessi parametri del calcolatore) */}
             <div className="mt-2 rounded-xl border border-sage/30 bg-sage-soft px-3 py-2.5 max-[340px]:px-2.5 sm:p-4 [@media(max-height:700px)]:py-2">
+              {/* Rata del mutuo: lorda e netta (dopo la detrazione IRPEF 19% sugli interessi) */}
+              <a
+                href="#simula-mutuo"
+                className="mb-2 block border-b border-sage/20 pb-2 text-[13.5px] leading-snug text-slate-ink max-[340px]:text-[12px] sm:mb-3 sm:pb-3 sm:text-base"
+              >
+                <span className="flex items-baseline justify-between gap-2">
+                  <span>
+                    {/* Schermi bassi (es. iPhone SE): rata lorda e netta sulla stessa riga */}
+                    <span className="[@media(max-height:700px)]:max-sm:hidden">Rata mutuo prima casa:</span>
+                    <span className="hidden [@media(max-height:700px)]:max-sm:inline">Rata mutuo:</span>{" "}
+                    <strong className="font-bold whitespace-nowrap text-ink tabular-nums">~ {formatEuro(defaultMonthlyPayment())}/mese</strong>
+                    <span className="hidden [@media(max-height:700px)]:max-sm:inline">
+                      {" "}
+                      · <strong className="font-bold whitespace-nowrap text-sage tabular-nums">~ {formatEuro(defaultNetMonthlyPayment())} netti</strong>
+                    </span>
+                  </span>
+                </span>
+                <span className="flex items-baseline justify-between gap-2 [@media(max-height:700px)]:max-sm:hidden">
+                  <span>
+                    <strong className="font-bold whitespace-nowrap text-sage tabular-nums">~ {formatEuro(defaultNetMonthlyPayment())}/mese</strong>{" "}
+                    netti con la detrazione IRPEF
+                  </span>
+                  <span className="shrink-0 font-semibold whitespace-nowrap text-primary">Simula →</span>
+                </span>
+              </a>
               <p className="flex items-baseline justify-between gap-2 text-[13.5px] leading-snug font-bold text-ink max-[340px]:text-[12.5px] sm:block sm:text-base">
                 <span className="sm:hidden">
-                  Vantaggio reale: <span className="text-sage">oltre {formatEuro(floorTo(S.total, 5_000))}</span> di risparmi
+                  Vantaggio reale: <span className="text-sage">oltre {formatEuro(floorTo(S.totalMin, 5_000))}</span> di risparmi
                 </span>
                 {/* Schermi bassi (es. iPhone SE): il link sta accanto al titolo per lasciare visibile la barra delle caratteristiche */}
                 <a
@@ -101,8 +119,8 @@ export function Hero() {
                 </a>
                 <span className="hidden sm:inline">
                   Vantaggio economico reale per chi acquista:{" "}
-                  <span className="text-sage">oltre {formatEuro(floorTo(S.total, 5_000))}</span> di risparmi tra atto, lavori già
-                  pagati e bonus
+                  <span className="text-sage">oltre {formatEuro(floorTo(S.totalMin, 5_000))}</span> tra vendita da privato,
+                  agevolazioni sul mutuo, lavori già pagati e bonus
                 </span>
               </p>
               <ul className="mt-2 grid grid-cols-3 gap-2 sm:mt-3 sm:gap-4">
