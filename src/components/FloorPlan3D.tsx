@@ -451,7 +451,10 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
             </button>
           </div>
         )}
-        <div ref={mountRef} className={`relative w-full ${full ? "min-h-0 flex-1" : "aspect-[4/3]"}`} />
+        <div className={`relative w-full ${full ? "min-h-0 flex-1" : "aspect-[4/3]"}`}>
+          <div ref={mountRef} className="absolute inset-0" />
+          <Legend />
+        </div>
         {full ? (
           <p className="flex items-center justify-center gap-1.5 px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-xs text-slate-ink">
             <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -459,6 +462,70 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
           </p>
         ) : null}
       </div>
+    </div>
+  );
+}
+
+/** Disegni della legenda: stessi colori del modello 3D (muro bianco, anta in legno, vetro azzurro) */
+const WALL = "#e2e8f0";
+const WALL_LINE = "#64748b";
+const WOOD = "#b98a5e";
+const GLASS = "#7cc4f2";
+
+function DoorIcon() {
+  return (
+    <svg viewBox="0 0 28 28" className="h-5 w-5 shrink-0 sm:h-7 sm:w-7" aria-hidden>
+      <rect x="1" y="21" width="6" height="4" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <rect x="21" y="21" width="6" height="4" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <path d="M7 23 A14 14 0 0 1 21 23" fill="none" stroke={WALL_LINE} strokeWidth="0.8" strokeDasharray="2 1.5" />
+      <rect x="6" y="9" width="2.6" height="14" fill={WOOD} stroke="#7c5a3a" strokeWidth="0.6" transform="rotate(20 7.3 23)" />
+    </svg>
+  );
+}
+
+function GlassDoorIcon() {
+  return (
+    <svg viewBox="0 0 28 28" className="h-5 w-5 shrink-0 sm:h-7 sm:w-7" aria-hidden>
+      <rect x="1" y="3" width="6" height="22" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <rect x="21" y="3" width="6" height="22" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <rect x="7" y="5" width="14" height="20" fill={GLASS} fillOpacity="0.55" stroke={WALL_LINE} strokeWidth="0.8" />
+      <line x1="14" y1="5" x2="14" y2="25" stroke={WALL_LINE} strokeWidth="0.6" />
+    </svg>
+  );
+}
+
+function WindowIcon() {
+  return (
+    <svg viewBox="0 0 28 28" className="h-5 w-5 shrink-0 sm:h-7 sm:w-7" aria-hidden>
+      <rect x="1" y="3" width="6" height="22" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <rect x="21" y="3" width="6" height="22" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <rect x="7" y="16" width="14" height="9" fill={WALL} stroke={WALL_LINE} strokeWidth="0.8" />
+      <rect x="7" y="5" width="14" height="11" fill={GLASS} fillOpacity="0.55" stroke={WALL_LINE} strokeWidth="0.8" />
+    </svg>
+  );
+}
+
+/** Legenda di porte e finestre: su telefono una riga in alto (spazio libero), su schermi grandi in basso a sinistra. Non blocca i gesti. */
+function Legend() {
+  const items = [
+    { icon: <DoorIcon />, label: "Porta", note: "anta in legno socchiusa" },
+    { icon: <GlassDoorIcon />, label: "Portafinestra", note: "vetro fino a terra, sui balconi" },
+    { icon: <WindowIcon />, label: "Finestra", note: "vetro sopra il davanzale" },
+  ];
+  return (
+    <div className="pointer-events-none absolute top-2 left-1/2 -translate-x-1/2 rounded-xl border border-line bg-white/90 px-2.5 py-1.5 shadow-soft backdrop-blur-sm sm:top-auto sm:bottom-3 sm:left-3 sm:translate-x-0 sm:px-3 sm:py-2">
+      <p className="mb-1 hidden text-[11px] font-semibold tracking-wide text-slate-ink uppercase sm:block">Legenda</p>
+      <ul className="flex items-center gap-3 sm:block sm:space-y-1">
+        {items.map((it) => (
+          <li key={it.label} className="flex items-center gap-1.5 sm:gap-2">
+            {it.icon}
+            <span className="text-xs leading-tight whitespace-nowrap text-ink">
+              <strong className="font-semibold">{it.label}</strong>
+              <span className="hidden text-slate-ink sm:block">{it.note}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
