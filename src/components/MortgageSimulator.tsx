@@ -351,7 +351,7 @@ export function MortgageSimulator() {
           <p>
             Se ristrutturi puoi aggiungere il Bonus Mobili: 50% su massimo € 5.000 di mobili ed elettrodomestici. Servono
             pagamenti con bonifico &laquo;parlante&raquo; e, per alcuni interventi, la pratica edilizia. Le aliquote indicate
-            valgono per le spese del 2026: per quelle successive verifica con il tuo commercialista.
+            valgono per le spese sostenute nel 2026 e nel 2027, grazie alla proroga.
           </p>
         </Faq>
       </div>

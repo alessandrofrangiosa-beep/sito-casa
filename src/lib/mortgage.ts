@@ -45,7 +45,7 @@ export const PROPERTY_FINANCE_CONFIG = {
   irpefInterestRate: 0.19,
   irpefInterestCap: 4_000,
 
-  /** Bonus ristrutturazione abitazione principale e bonus mobili (spese 2026) */
+  /** Bonus ristrutturazione abitazione principale e bonus mobili al 50% (spese 2026 e 2027, prorogati) */
   renovationBonusRate: 0.5,
   renovationMaxSpend: 96_000,
   defaultRenovationBudget: 40_000,
