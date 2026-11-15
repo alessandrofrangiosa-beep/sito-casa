@@ -265,7 +265,7 @@ export function MortgageSimulator() {
                 type="number"
                 inputMode="decimal"
                 min={0}
-                step={10}
+                step="any"
                 value={rendita}
                 onChange={(e) => setRendita(Math.max(0, Number(e.target.value) || 0))}
                 className="w-20 rounded-lg border border-sand-line bg-card px-2 py-1 text-right text-sm tabular-nums"
@@ -345,19 +345,19 @@ export function MortgageSimulator() {
             concessione del mutuo resta una valutazione della banca.
           </p>
         </Faq>
-        <Faq q="Perché pago solo ~€ 1.500 di imposta di registro su una casa da € 250.000?">
+        <Faq q="Perché pago solo circa € 1.300 di imposte su una casa da € 250.000?">
           <p>
             Comprando da un privato si applica il &laquo;prezzo-valore&raquo;: le imposte si calcolano sul valore catastale
             (rendita × 115,5 per la prima casa), non sul prezzo pagato.
           </p>
           <p>
-            Con una rendita di {formatEuro(rendita)} il valore catastale è {formatEuroCents(tax.prima.valoreCatastale)}: il 2%
+            Con una rendita di {formatEuroCents(rendita)} il valore catastale è {formatEuroCents(tax.prima.valoreCatastale)}: il 2%
             fa {formatEuroCents(tax.prima.registro)}, più € 50 di imposta ipotecaria e € 50 di catastale. Totale{" "}
             {formatEuroCents(tax.prima.totale)}. Basta chiederlo al notaio nell&apos;atto.
           </p>
           <p>
             Il calcolo vale acquistando insieme, con lo stesso atto, l&apos;appartamento e il garage privato come pertinenza
-            prima casa (categoria C/6): la rendita da inserire è quella complessiva dei due immobili.
+            prima casa (categoria C/6): la rendita è quella ufficiale della visura catastale, € 480,30 per l&apos;appartamento + € 50,35 per il garage = € 530,65.
           </p>
         </Faq>
         <Faq q="Come funzionano i bonus per rifare cucina, bagno e camere come nelle foto 3D?">

@@ -28,7 +28,8 @@ export const PROPERTY_FINANCE_CONFIG = {
   standardMaxLtv: 80,
 
   /** Prezzo-valore: valore catastale = rendita × 1,05 × 110 (prima casa) o × 120 (altri casi) */
-  defaultRenditaCatastale: 650,
+  /** Rendita catastale ufficiale: appartamento € 480,30 + garage € 50,35 (visura del 15/11/2026) */
+  defaultRenditaCatastale: 530.65,
   catastoCoeffPrimaCasa: 115.5,
   catastoCoeffSecondaCasa: 126,
   registroPrimaCasa: 0.02,

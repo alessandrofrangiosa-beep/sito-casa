@@ -181,7 +181,7 @@ export function InfoDrawer({
           <>
             <Card>
               <dl>
-                <Row label="Appartamento (quadrilocale 144 m² + 2 balconi)">{PROPERTY.apartmentPrice}</Row>
+                <Row label="Appartamento (quadrilocale 140 m² + 2 balconi)">{PROPERTY.apartmentPrice}</Row>
                 <Row label="Garage privato">{PROPERTY.garagePrice}</Row>
                 <Row label="Vendita congiunta">
                   {PROPERTY.price} {PROPERTY.priceNote}
@@ -195,9 +195,9 @@ export function InfoDrawer({
               <Bullet>
                 Vendita congiunta di appartamento e garage: <strong>{PROPERTY.price} {PROPERTY.priceNote}</strong>.
               </Bullet>
-              <Bullet>Trattativa diretta con il proprietario, senza intermediari: 0% commissioni d&apos;agenzia.</Bullet>
+              <Bullet>Trattativa diretta con i proprietari, senza intermediari: 0% commissioni d&apos;agenzia.</Bullet>
               <Bullet>
-                {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi già saldati dal proprietario.
+                {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi già saldati dai proprietari.
               </Bullet>
             </ul>
           </>
@@ -207,11 +207,11 @@ export function InfoDrawer({
           <>
             <Card>
               <dl>
-                <Row label="Superficie">~{PROPERTY.sqm} m²</Row>
+                <Row label="Superficie catastale">{PROPERTY.catasto.appartamento.superficie}</Row>
                 <Row label="Tipologia">Quadrilocale: 4 stanze</Row>
                 <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
-                <Row label="Pertinenze">2 balconi + garage privato ampio, adatto anche a SUV</Row>
+                <Row label="Pertinenze">2 balconi + garage privato di {PROPERTY.catasto.garage.superficie} al piano seminterrato, adatto anche a SUV</Row>
                 <Row label="Ripostiglio">Nessuno</Row>
               </dl>
             </Card>
@@ -260,7 +260,7 @@ export function InfoDrawer({
               <Bullet>Stabile con ascensore.</Bullet>
               <Bullet>
                 {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi{" "}
-                <strong>già deliberati e saldati dal proprietario</strong>.
+                <strong>già deliberati e saldati dai proprietari</strong>.
               </Bullet>
               <Bullet>Il ponteggio visibile in foto è in fase di ultimazione.</Bullet>
               <Bullet>
@@ -287,8 +287,23 @@ export function InfoDrawer({
               <Bullet>Libero subito.</Bullet>
               <Bullet>Documentazione controllata e pronta per mutuo e rogito immediato.</Bullet>
               <Bullet>Immobile mutuabile, catastali in regola.</Bullet>
-              <Bullet>Trattativa diretta con il proprietario, senza intermediari.</Bullet>
+              <Bullet>Trattativa diretta con i proprietari, senza intermediari.</Bullet>
             </ul>
+            <SubTitle>Dati catastali (visura ufficiale)</SubTitle>
+            <Card>
+              <dl>
+                <Row label="Appartamento">
+                  Cat. {PROPERTY.catasto.appartamento.categoria} (abitazione civile), classe {PROPERTY.catasto.appartamento.classe},{" "}
+                  {PROPERTY.catasto.appartamento.vani} vani · rendita {PROPERTY.catasto.appartamento.rendita}
+                </Row>
+                <Row label="Garage">
+                  Cat. {PROPERTY.catasto.garage.categoria} (autorimessa), classe {PROPERTY.catasto.garage.classe},{" "}
+                  {PROPERTY.catasto.garage.superficie}, piano {PROPERTY.catasto.garage.piano} · rendita {PROPERTY.catasto.garage.rendita}
+                </Row>
+                <Row label="Rendita totale">{PROPERTY.catasto.renditaTotale}</Row>
+                <Row label="Planimetria catastale">Aggiornata e depositata (2023)</Row>
+              </dl>
+            </Card>
             <Card>
               <dl>
                 <Row label="Classe energetica (APE)">

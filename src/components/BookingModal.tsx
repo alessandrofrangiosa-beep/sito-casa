@@ -133,7 +133,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
         <div className="flex gap-3 rounded-2xl border border-primary/20 bg-primary-soft p-4 text-sm leading-relaxed text-ink">
           <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
           <p>
-            Le visite si svolgono <strong>solo in presenza</strong>, su appuntamento, direttamente con il proprietario
+            Le visite si svolgono <strong>solo in presenza</strong>, su appuntamento, direttamente con i proprietari
             (nessuna videochiamata). Per rispetto del tempo di tutti, ti chiediamo poche informazioni prima di fissare.
           </p>
         </div>

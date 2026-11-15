@@ -20,7 +20,7 @@ export function FinalCta() {
           La vista mare va vissuta dal vivo.
         </h2>
         <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-white/80">
-          Tratti direttamente con il proprietario: nessuna provvigione, nessun intermediario, risposte chiare. Libero subito,
+          Tratti direttamente con i proprietari: nessuna provvigione, nessun intermediario, risposte chiare. Libero subito,
           con rogito e consegna immediata.
         </p>
         <div className="mt-5 flex gap-3 rounded-xl border border-white/15 bg-white/5 p-4">
