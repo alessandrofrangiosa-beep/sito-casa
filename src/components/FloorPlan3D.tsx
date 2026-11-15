@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Material, Mesh } from "three";
+import type { LineBasicMaterial, Material, Mesh } from "three";
 import { Box, Layers, RotateCcw, X } from "lucide-react";
-import { CEILING_HEIGHT, PX_PER_METER, ROOMS_3D, STREET_LABEL, type RoomKind } from "@/data/floorPlan3d";
+import { CEILING_HEIGHT, OPENINGS_3D, PX_PER_METER, ROOMS_3D, STREET_LABEL, type RoomKind } from "@/data/floorPlan3d";
 
 const FLOOR_COLORS: Record<RoomKind, number> = {
   room: 0xf3e9da,
@@ -25,7 +25,7 @@ type Api = {
 };
 
 /**
- * Planimetria in 3D (three.js): ogni stanza è un pavimento colorato con i suoi muri, con nome, m² e misure.
+ * Planimetria in 3D (three.js): ogni stanza è un pavimento colorato con i suoi muri, porte e finestre e il nome scritto a terra.
  * Anteprima nella pagina che ruota lentamente; a schermo intero si ruota sui due assi con un dito
  * (o il mouse), si ingrandisce con due dita / rotellina e si sposta con due dita / tasto destro.
  */
@@ -134,29 +134,136 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
       const wallEdgeMat = new THREE.LineBasicMaterial({ color: 0x475569 });
       const railMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.35, roughness: 0.6 });
 
-      const addWall = (a: readonly [number, number], b: readonly [number, number], height: number, mat: Material, edges: boolean) => {
-        const dx = b[0] - a[0];
-        const dz = b[1] - a[1];
-        const len = Math.hypot(dx, dz);
-        if (len < 0.05) return;
-        const geo = new THREE.BoxGeometry(len + WALL_THICKNESS, 1, WALL_THICKNESS);
+      const doorMat = new THREE.MeshStandardMaterial({ color: 0xb98a5e, roughness: 0.7 });
+      const glassMat = new THREE.MeshStandardMaterial({
+        color: 0x7cc4f2,
+        transparent: true,
+        opacity: 0.45,
+        roughness: 0.1,
+        metalness: 0.1,
+        depthWrite: false,
+      });
+      const frameMat = new THREE.LineBasicMaterial({ color: 0x64748b });
+      type P = readonly [number, number];
+
+      /** Blocco orientato lungo il segmento p→q, tra le quote y0 e y1 (metri) */
+      const addBox = (p: P, q: P, y0: number, y1: number, depth: number, mat: Material, lines: LineBasicMaterial | null, shadow = true) => {
+        const len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+        if (len < 0.02 || y1 - y0 < 0.01) return;
+        const geo = new THREE.BoxGeometry(len, y1 - y0, depth);
         const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set((a[0] + b[0]) / 2, 0.5, (a[1] + b[1]) / 2);
-        mesh.rotation.y = -Math.atan2(dz, dx);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        const holder = new THREE.Group();
-        holder.add(mesh);
-        if (edges) {
-          const line = new THREE.LineSegments(new THREE.EdgesGeometry(geo), wallEdgeMat);
+        mesh.position.set((p[0] + q[0]) / 2, (y0 + y1) / 2, (p[1] + q[1]) / 2);
+        mesh.rotation.y = -Math.atan2(q[1] - p[1], q[0] - p[0]);
+        mesh.castShadow = shadow;
+        mesh.receiveShadow = shadow;
+        walls.add(mesh);
+        if (lines) {
+          const line = new THREE.LineSegments(new THREE.EdgesGeometry(geo), lines);
           line.position.copy(mesh.position);
           line.rotation.copy(mesh.rotation);
-          holder.add(line);
+          walls.add(line);
         }
-        holder.userData.baseHeight = height;
-        holder.scale.y = height;
-        walls.add(holder);
+        return mesh;
       };
+
+      // Muri di tutte le stanze e vani di porte e finestre, in metri
+      const wallEdges: { a: P; b: P; rail: boolean }[] = [];
+      for (const room of ROOMS_3D) {
+        const pts = room.pts.map(toM);
+        pts.forEach((p, i) => wallEdges.push({ a: p, b: pts[(i + 1) % pts.length], rail: room.kind === "balcony" }));
+      }
+      const openings = OPENINGS_3D.map((o) => ({
+        ...o,
+        a: toM(o.a),
+        b: toM(o.b),
+        into: o.into ? toM(o.into) : undefined,
+        tol: (o.tol ?? 32) / PX_PER_METER,
+      }));
+      const DOOR_H = 2.1;
+      const GLASS_DOOR_H = 2.3;
+      const WINDOW_TOP = 2.2;
+
+      /** (Ri)costruisce muri, porte e finestre per l'altezza scelta: muri bassi in sezione o pieni a 3 m */
+      const buildWalls = (tall: boolean) => {
+        for (const o of [...walls.children]) {
+          walls.remove(o);
+          (o as Mesh).geometry?.dispose?.();
+        }
+        const H = tall ? CEILING_HEIGHT : LOW_WALL;
+        // Con i muri bassi il davanzale si abbassa, così il vetro della finestra resta ben visibile
+        const SILL_H = tall ? 0.9 : 0.5;
+        const half = WALL_THICKNESS / 2;
+
+        for (const e of wallEdges) {
+          const len = Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]);
+          if (len < 0.05) continue;
+          const u = [(e.b[0] - e.a[0]) / len, (e.b[1] - e.a[1]) / len] as const;
+          const at = (t: number): P => [e.a[0] + u[0] * t, e.a[1] + u[1] * t];
+          const h = e.rail ? RAILING_HEIGHT : H;
+          const mat = e.rail ? railMat : wallMat;
+          const lines = e.rail ? null : wallEdgeMat;
+
+          // Vani che cadono su questo muro (paralleli e vicini)
+          const cuts: { t0: number; t1: number; type: string }[] = [];
+          for (const o of openings) {
+            if (e.rail && o.type === "window") continue;
+            const ol = Math.hypot(o.b[0] - o.a[0], o.b[1] - o.a[1]);
+            const ou = [(o.b[0] - o.a[0]) / ol, (o.b[1] - o.a[1]) / ol];
+            if (Math.abs(u[0] * ou[1] - u[1] * ou[0]) > 0.05) continue;
+            const rel = [o.a[0] - e.a[0], o.a[1] - e.a[1]];
+            if (Math.abs(u[0] * rel[1] - u[1] * rel[0]) > o.tol) continue;
+            const ta = rel[0] * u[0] + rel[1] * u[1];
+            const tb = (o.b[0] - e.a[0]) * u[0] + (o.b[1] - e.a[1]) * u[1];
+            const t0 = Math.max(0, Math.min(ta, tb));
+            const t1 = Math.min(len, Math.max(ta, tb));
+            if (t1 - t0 > 0.1) cuts.push({ t0, t1, type: o.type });
+          }
+          cuts.sort((x, y) => x.t0 - y.t0);
+
+          // Tratti pieni (allungati di mezzo spessore agli angoli) e parti sopra/sotto i vani
+          const solid = (s: number, f: number) => {
+            if (f - s < 0.02) return;
+            addBox(at(s === 0 ? -half : s), at(f === len ? len + half : f), 0, h, WALL_THICKNESS, mat, lines);
+          };
+          let pos = 0;
+          for (const c of cuts) {
+            if (c.t0 > pos) solid(pos, c.t0);
+            if (!e.rail) {
+              const p = at(Math.max(pos, c.t0));
+              const q = at(c.t1);
+              if (c.type === "door" && h > DOOR_H) addBox(p, q, DOOR_H, h, WALL_THICKNESS, mat, lines);
+              if (c.type === "glassDoor" && h > GLASS_DOOR_H) addBox(p, q, GLASS_DOOR_H, h, WALL_THICKNESS, mat, lines);
+              if (c.type === "window") {
+                addBox(p, q, 0, Math.min(SILL_H, h), WALL_THICKNESS, mat, lines);
+                if (h > WINDOW_TOP) addBox(p, q, WINDOW_TOP, h, WALL_THICKNESS, mat, lines);
+              }
+            }
+            pos = Math.max(pos, c.t1);
+          }
+          solid(pos, len);
+        }
+
+        // Ante delle porte (socchiuse a 70°) e vetri di finestre e portafinestre
+        for (const o of openings) {
+          const w = Math.hypot(o.b[0] - o.a[0], o.b[1] - o.a[1]);
+          if (o.type === "door") {
+            if (o.leaf === false || !o.into) continue;
+            const u = [(o.b[0] - o.a[0]) / w, (o.b[1] - o.a[1]) / w];
+            let n = [-u[1], u[0]];
+            if ((o.into[0] - o.a[0]) * n[0] + (o.into[1] - o.a[1]) * n[1] < 0) n = [-n[0], -n[1]];
+            const ang = (70 * Math.PI) / 180;
+            const d = [u[0] * Math.cos(ang) + n[0] * Math.sin(ang), u[1] * Math.cos(ang) + n[1] * Math.sin(ang)];
+            const end: P = [o.a[0] + d[0] * (w - 0.04), o.a[1] + d[1] * (w - 0.04)];
+            addBox(o.a, end, 0.06, Math.min(DOOR_H - 0.05, H), 0.045, doorMat, frameMat);
+          } else {
+            const y0 = o.type === "window" ? SILL_H : 0.06;
+            const y1 = Math.min(o.type === "window" ? WINDOW_TOP : GLASS_DOOR_H, H);
+            const g = addBox(o.a, o.b, y0, y1, 0.04, glassMat, frameMat, false);
+            if (g) g.renderOrder = 2;
+          }
+        }
+      };
+      buildWalls(false);
 
       for (const room of ROOMS_3D) {
         const pts = room.pts.map(toM);
@@ -168,10 +275,6 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
         const floor = new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ color: FLOOR_COLORS[room.kind], roughness: 0.85 }));
         floor.receiveShadow = true;
         root.add(floor);
-
-        // Muri (ringhiera semitrasparente per i balconi)
-        const isBalcony = room.kind === "balcony";
-        pts.forEach((p, i) => addWall(p, pts[(i + 1) % pts.length], isBalcony ? RAILING_HEIGHT : LOW_WALL, isBalcony ? railMat : wallMat, !isBalcony));
 
         // Nome dell'ambiente scritto sul pavimento, in piccolo (le superfici sono nella planimetria 2D)
         const xs = room.pts.map((p) => p[0]);
@@ -254,12 +357,7 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
 
       apiRef.current = {
         reset: (v) => placeCamera(v),
-        setTall: (t) => {
-          for (const w of walls.children) {
-            const base = w.userData.baseHeight as number;
-            w.scale.y = base === RAILING_HEIGHT ? base : t ? CEILING_HEIGHT : LOW_WALL;
-          }
-        },
+        setTall: (t) => buildWalls(t),
         refit: () => {
           resize();
           controls.enabled = fullRef.current;

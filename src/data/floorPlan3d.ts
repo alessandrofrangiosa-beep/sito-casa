@@ -45,3 +45,51 @@ export const ROOMS_3D: Room3D[] = [
 
 /** Etichetta della strada, sopra il balcone su Via Vittorio Veneto */
 export const STREET_LABEL = { text: "Via Vittorio Veneto", at: [682, 70] as [number, number] };
+
+export type OpeningType = "door" | "window" | "glassDoor";
+
+/**
+ * Porte e finestre ricavate dalla planimetria catastale (posizioni indicative).
+ * `a`→`b` è il vano sul muro (in pixel del disegno); la porta è incernierata in `a` e si apre verso `into`.
+ * Il vano taglia tutti i muri paralleli entro `tol` pixel (default 32): così si apre anche il muro della stanza accanto.
+ * - door: porta interna o di ingresso (anta in legno socchiusa)
+ * - glassDoor: portafinestra verso il balcone
+ * - window: finestra con davanzale a 90 cm
+ */
+export type Opening3D = {
+  type: OpeningType;
+  a: [number, number];
+  b: [number, number];
+  into?: [number, number];
+  /** false = vano senza anta (passaggio o porta scorrevole) */
+  leaf?: boolean;
+  tol?: number;
+};
+
+export const OPENINGS_3D: Opening3D[] = [
+  // Ingresso dell'appartamento dal ballatoio condominiale
+  { type: "door", a: [282, 742], b: [348, 742], into: [315, 700] },
+  // Stanza 17,6: porta dall'ingresso e portafinestra sul balcone su Via Vittorio Veneto
+  { type: "door", a: [535, 545], b: [590, 545], into: [560, 500] },
+  { type: "glassDoor", a: [635, 240], b: [720, 240] },
+  // Stanza 16,1: porta dall'ingresso, porta dal disimpegno e finestra
+  { type: "door", a: [615, 570], b: [615, 625], into: [660, 600] },
+  { type: "door", a: [615, 820], b: [615, 765], into: [660, 790] },
+  { type: "window", a: [898, 600], b: [898, 690] },
+  // Corridoio: porta dall'ingresso; passaggio scorrevole disimpegno-cucina
+  { type: "door", a: [390, 748], b: [455, 748], into: [420, 790] },
+  { type: "door", a: [490, 836], b: [585, 836], leaf: false },
+  // Cucina: porta sul corridoio e portafinestra sul balcone laterale
+  { type: "door", a: [473, 940], b: [473, 995], into: [510, 965] },
+  { type: "glassDoor", a: [808, 900], b: [808, 965] },
+  // Bagno e lavanderia
+  { type: "door", a: [473, 1068], b: [473, 1128], into: [510, 1100] },
+  { type: "door", a: [752, 1062], b: [752, 1100], leaf: false },
+  { type: "window", a: [835, 1055], b: [835, 1100] },
+  // Stanza 16,8: porta sul corridoio e portafinestra sul balcone laterale
+  { type: "door", a: [473, 1185], b: [473, 1245], into: [510, 1215] },
+  { type: "glassDoor", a: [808, 1195], b: [808, 1275] },
+  // Stanza 20,2: porta dal corridoio e portafinestra verso il balcone laterale
+  { type: "door", a: [565, 1405], b: [565, 1465], into: [600, 1440] },
+  { type: "glassDoor", a: [840, 1400], b: [905, 1400], tol: 45 },
+];
