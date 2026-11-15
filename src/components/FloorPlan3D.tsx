@@ -17,7 +17,6 @@ const LOW_WALL = 1.1;
 const WALL_THICKNESS = 0.14;
 const RAILING_HEIGHT = 1;
 
-const fmt = (n: number) => n.toFixed(1).replace(".", ",");
 
 type Api = {
   reset: (view: "3d" | "top") => void;
@@ -149,17 +148,12 @@ export function FloorPlan3D() {
         const isBalcony = room.kind === "balcony";
         pts.forEach((p, i) => addWall(p, pts[(i + 1) % pts.length], isBalcony ? RAILING_HEIGHT : LOW_WALL, isBalcony ? railMat : wallMat, !isBalcony));
 
-        // Etichetta: nome, m² e misure (per le stanze rettangolari)
+        // Etichetta: solo il nome dell'ambiente (le superfici sono nella planimetria 2D), così il 3D resta leggibile
         const xs = room.pts.map((p) => p[0]);
         const ys = room.pts.map((p) => p[1]);
-        const rect = room.pts.length === 4;
-        const w = (Math.max(...xs) - Math.min(...xs)) / PX_PER_METER;
-        const d = (Math.max(...ys) - Math.min(...ys)) / PX_PER_METER;
         const el = document.createElement("div");
         el.className = `fp3d-label${room.kind === "balcony" ? " fp3d-label-soft" : ""}`;
-        el.innerHTML = `<strong>${room.name}</strong><span>${room.area} m²</span>${
-          rect && Number(room.area.replace(",", ".")) >= 5 ? `<em>≈ ${fmt(w)} × ${fmt(d)} m</em>` : ""
-        }`;
+        el.innerHTML = `<strong>${room.name}</strong>`;
         const label = new CSS2DObject(el);
         const [lx, lz] =
           room.name === "Corridoio" ? toM([421, 1100]) : room.name === "Ingresso" ? toM([440, 650]) : toM([(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]);

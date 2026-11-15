@@ -44,7 +44,7 @@ export function FloorPlan({ plans }: { plans: Plan[] }) {
         <>
           <FloorPlan3D />
           <p className="mt-2 text-xs leading-snug text-slate-ink">
-            Modello 3D ricavato dalla planimetria catastale: superfici nette indicative (±3% circa), altezza vani 3,00 m.
+            Modello 3D ricavato dalla planimetria catastale (proporzioni indicative, altezza vani 3,00 m): le superfici di ogni stanza sono nella scheda Appartamento.
           </p>
         </>
       ) : (
