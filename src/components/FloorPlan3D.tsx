@@ -35,7 +35,8 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
   // Si apre sempre a schermo intero: niente anteprima rimpicciolita nella pagina
   const fullRef = useRef(true);
   const full = true;
-  const [tall, setTall] = useState(false);
+  // Muri a 3 m attivi di default: si vede subito l'altezza reale delle stanze
+  const [tall, setTall] = useState(true);
   const [view, setView] = useState<"3d" | "top">("3d");
   const [ready, setReady] = useState(false);
 
@@ -263,7 +264,7 @@ export function FloorPlan3D({ onClose }: { onClose: () => void }) {
           }
         }
       };
-      buildWalls(false);
+      buildWalls(true);
 
       for (const room of ROOMS_3D) {
         const pts = room.pts.map(toM);
