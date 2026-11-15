@@ -129,7 +129,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/15-garage.jpg",
     render: "/images/render/render-13-garage.jpg",
     title: "Garage privato",
-    caption: "Box auto privato sotto casa con due ingressi in metallo: una saracinesca e un portone.",
+    caption: "Box auto privato sotto casa con due ingressi in metallo (saracinesca e portone) e presa elettrica.",
     alt: "Box auto privato chiuso con auto parcheggiata",
   },
 ];

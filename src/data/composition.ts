@@ -16,7 +16,7 @@ export const composition: CompositionItem[] = [
     area: "Bagni",
     text: "2 bagni: 1 bagno principale completo interno con vasca + 1 bagno esterno/lavanderia finestrato sul balcone con WC, pilozzo e caldaia",
   },
-  { area: "Esterni", text: "2 balconi e garage privato di 15 m² al piano seminterrato, adatto anche a un SUV, con due ingressi in metallo (saracinesca e portone)" },
+  { area: "Esterni", text: "2 balconi e garage privato di 15 m² al piano seminterrato, adatto anche a un SUV, con due ingressi in metallo (saracinesca e portone) e presa elettrica" },
 ];
 
 /** Dati rapidi mostrati nella barra sotto il prezzo */

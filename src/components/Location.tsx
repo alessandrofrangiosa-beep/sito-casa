@@ -43,7 +43,7 @@ export function Location() {
         </span>
         <p className="min-w-0 text-[15px] leading-snug text-ink">
           <strong className="font-semibold">Zero stress parcheggio in Via Vittorio Veneto</strong> grazie all&apos;ampio garage
-          privato in cui entra tranquillamente anche un SUV, con due ingressi in metallo: saracinesca e portone.
+          privato in cui entra tranquillamente anche un SUV, con due ingressi in metallo (saracinesca e portone) e presa elettrica.
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-[1fr_1.1fr]">
