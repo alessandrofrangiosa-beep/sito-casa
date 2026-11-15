@@ -20,7 +20,6 @@ const RAILING_HEIGHT = 1;
 
 type Api = {
   reset: (view: "3d" | "top") => void;
-  rotate: (axis: "x" | "y" | "z") => void;
   setTall: (tall: boolean) => void;
   refit: () => void;
 };
@@ -45,7 +44,7 @@ export function FloorPlan3D() {
 
     (async () => {
       const THREE = await import("three");
-      const { TrackballControls } = await import("three/examples/jsm/controls/TrackballControls.js");
+      const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
       const mount = mountRef.current;
       if (disposed || !mount) return;
 
@@ -189,15 +188,17 @@ export function FloorPlan3D() {
       // Nome della strada a terra, davanti al balcone su Via Vittorio Veneto
       floorText(STREET_LABEL.text.toUpperCase(), toM(STREET_LABEL.at), 4.2, false, 0.4);
 
-      // Rotazione libera su tutti gli assi (anche "di lato"), zoom e spostamento
-      const controls = new TrackballControls(camera, renderer.domElement);
-      controls.rotateSpeed = 3.2;
-      controls.zoomSpeed = 1.2;
-      controls.panSpeed = 0.9;
-      controls.staticMoving = false;
-      controls.dynamicDampingFactor = 0.15;
-      controls.minDistance = 5;
+      // Solo due movimenti: girare la planimetria (attorno all'asse verticale) e inclinare la vista
+      // fino quasi all'altezza degli occhi per vedere i muri; più zoom e spostamento con due dita.
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.minDistance = 4;
       controls.maxDistance = 45;
+      controls.minPolarAngle = 0;
+      controls.maxPolarAngle = Math.PI / 2 - 0.2; // fino a ~79°: si vedono bene i muri senza finire "di taglio"
+      controls.screenSpacePanning = true;
+      controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
       controls.enabled = false;
 
       const placeCamera = (v: "3d" | "top") => {
@@ -208,11 +209,10 @@ export function FloorPlan3D() {
         const dist = need / Math.tan(fov / 2) + 1;
         root.quaternion.identity();
         controls.target.set(0, 0, 0);
+        camera.up.set(0, 1, 0);
         if (v === "top") {
-          camera.up.set(0, 0, -1); // nord (Via Vittorio Veneto) in alto
-          camera.position.set(0, dist * 1.2, 0);
+          camera.position.set(0, dist * 1.2, 0.01); // nord (Via Vittorio Veneto) in alto
         } else {
-          camera.up.set(0, 1, 0);
           // Vista frontale inclinata: il lato lungo del piano resta in verticale, come sullo schermo del telefono
           camera.position.set(dist * 0.18, dist * 0.82, dist * 0.6);
         }
@@ -229,7 +229,6 @@ export function FloorPlan3D() {
         renderer.domElement.style.height = `${h}px`;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
-        controls.handleResize();
       };
       resize();
       placeCamera("3d");
@@ -242,21 +241,12 @@ export function FloorPlan3D() {
       const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0 });
       io.observe(mount);
 
-      let turn: { from: import("three").Quaternion; to: import("three").Quaternion; start: number } | null = null;
-      const AXES = { x: new THREE.Vector3(1, 0, 0), y: new THREE.Vector3(0, 1, 0), z: new THREE.Vector3(0, 0, 1) };
-
       let raf = 0;
       const loop = () => {
         raf = requestAnimationFrame(loop);
         if (!visible && !fullRef.current) return;
         // Anteprima nella pagina: il modello gira lentamente su sé stesso
         if (!fullRef.current) root.rotation.y += 0.004;
-        // Rotazione animata di 90° chiesta dai pulsanti X / Y / Z
-        if (turn) {
-          const t = Math.min(1, (performance.now() - turn.start) / 350);
-          root.quaternion.slerpQuaternions(turn.from, turn.to, t * (2 - t));
-          if (t === 1) turn = null;
-        }
         controls.update();
         renderer.render(scene, camera);
       };
@@ -264,11 +254,6 @@ export function FloorPlan3D() {
 
       apiRef.current = {
         reset: (v) => placeCamera(v),
-        rotate: (axis) => {
-          const from = root.quaternion.clone();
-          const to = new THREE.Quaternion().setFromAxisAngle(AXES[axis], Math.PI / 2).multiply(from);
-          turn = { from, to, start: performance.now() };
-        },
         setTall: (t) => {
           for (const w of walls.children) {
             const base = w.userData.baseHeight as number;
@@ -361,20 +346,6 @@ export function FloorPlan3D() {
             <button type="button" className={chip(tall)} onClick={() => setTall((t) => !t)} aria-pressed={tall}>
               Muri 3 m
             </button>
-            <span className="inline-flex items-center gap-1 rounded-full border border-line bg-card py-1 pr-1 pl-2.5 text-xs font-semibold text-slate-ink shadow-soft">
-              Ruota
-              {(["x", "y", "z"] as const).map((a) => (
-                <button
-                  key={a}
-                  type="button"
-                  onClick={() => apiRef.current?.rotate(a)}
-                  aria-label={`Ruota di 90° sull'asse ${a.toUpperCase()}`}
-                  className="grid h-7 w-7 place-items-center rounded-full bg-primary-soft text-xs font-bold text-primary uppercase hover:bg-primary hover:text-white"
-                >
-                  {a}
-                </button>
-              ))}
-            </span>
             <button
               type="button"
               onClick={close}
@@ -389,7 +360,7 @@ export function FloorPlan3D() {
         {full ? (
           <p className="flex items-center justify-center gap-1.5 px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-xs text-slate-ink">
             <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
-            Trascina per ruotare liberamente (assi X, Y e Z) · pizzica o rotellina per ingrandire · due dita per spostare
+            Trascina per girare e inclinare la planimetria · pizzica o rotellina per avvicinarti · due dita per spostarti
           </p>
         ) : (
           <button
