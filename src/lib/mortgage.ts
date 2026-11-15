@@ -48,8 +48,8 @@ export const PROPERTY_FINANCE_CONFIG = {
 
   /** Bonus ristrutturazione abitazione principale e bonus mobili al 50% (spese 2026 e 2027, prorogati) */
   renovationBonusRate: 0.5,
-  /** Lo slider dei lavori parte da qui: costo minimo realistico per il restyling dei render */
-  renovationMinSpend: 40_000,
+  /** Minimo dello slider dei lavori; il valore di partenza resta defaultRenovationBudget (40.000) */
+  renovationMinSpend: 1_000,
   renovationMaxSpend: 96_000,
   defaultRenovationBudget: 40_000,
   renovationYears: 10,

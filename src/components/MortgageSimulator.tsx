@@ -317,7 +317,7 @@ export function MortgageSimulator() {
               type="range"
               min={C.renovationMinSpend}
               max={C.renovationMaxSpend}
-              step={2_000}
+              step={1_000}
               value={works}
               onChange={(e) => setWorks(Number(e.target.value))}
               className="mt-1.5 h-2 w-full cursor-pointer accent-[#b0553a]"
