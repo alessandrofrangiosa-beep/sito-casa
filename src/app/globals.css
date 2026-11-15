@@ -11,6 +11,13 @@
   --color-primary-hover: #0a5282;
   --color-primary-soft: #eff6ff;
   --color-whatsapp: #16a34a;
+  /* Accenti caldi della sezione mutuo e agevolazioni: sabbia, salvia (risparmi), terracotta (badge) */
+  --color-sand: #f7f2ea;
+  --color-sand-line: #e9dfcf;
+  --color-sage: #4f6f52;
+  --color-sage-soft: #e7efe4;
+  --color-terracotta: #b0553a;
+  --color-terracotta-soft: #f7e9e2;
 
   --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
