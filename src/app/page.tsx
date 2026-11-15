@@ -12,16 +12,16 @@ import { CompositionList } from "@/components/CompositionList";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
 import { PROPERTY } from "@/config/site";
 
-/** Collega automaticamente la prima immagine trovata in /public/images/planimetria (verificata al build). */
-function findFloorPlan(): string | null {
+/** Collega automaticamente le immagini in /public/images/planimetria (verificate al build); "garage" nel nome = planimetria del box. */
+function findFloorPlans(): { src: string; label: string }[] {
   try {
     const dir = path.join(process.cwd(), "public", "images", "planimetria");
-    const file = readdirSync(dir)
+    return readdirSync(dir)
       .filter((f) => /\.(jpe?g|png|webp|avif)$/i.test(f))
-      .sort()[0];
-    return file ? `/images/planimetria/${file}` : null;
+      .sort()
+      .map((f) => ({ src: `/images/planimetria/${f}`, label: /garage/i.test(f) ? "Garage" : "Appartamento" }));
   } catch {
-    return null;
+    return [];
   }
 }
 
@@ -35,7 +35,7 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 }
 
 export default function Home() {
-  const floorPlan = findFloorPlan();
+  const floorPlans = findFloorPlans();
   // Alternanza bianco / grigio ghiaccio delle fasce (la visita 360° è una scheda della sezione foto)
   const tone = (i: number): "white" | "ice" => (i % 2 === 0 ? "ice" : "white");
   // Solo un booleano: la chiave resta sul server e non arriva mai al browser
@@ -68,8 +68,8 @@ export default function Home() {
             <div className="grid gap-4 md:grid-cols-2 md:items-start">
               <CompositionList />
               <div>
-                <p className="mb-2 text-sm font-semibold text-ink">Planimetria{floorPlan ? " · tocca per ingrandire" : ""}</p>
-                <FloorPlan src={floorPlan} />
+                <p className="mb-2 text-sm font-semibold text-ink">Planimetria</p>
+                <FloorPlan plans={floorPlans} />
               </div>
             </div>
           </section>
