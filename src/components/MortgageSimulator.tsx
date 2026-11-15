@@ -291,10 +291,11 @@ export function MortgageSimulator() {
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-terracotta-soft text-terracotta">
             <Hammer className="h-5 w-5" aria-hidden />
           </span>
-          <h4 className="mt-3 text-base font-bold leading-snug text-ink">Bonus ristrutturazione 50% prima casa</h4>
+          <h4 className="mt-3 text-base font-bold leading-snug text-ink">Bonus ristrutturazione 50% (Abitazione Principale)</h4>
           <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">{formatEuro(bonus.lavori)}</p>
           <p className="mt-1.5 text-sm leading-snug text-slate-ink">
-            recuperati in 10 anni ({formatEuro(bonus.perYear)}/anno): i lavori ti costano davvero{" "}
+            recuperati in 10 anni ({formatEuro(bonus.perYear)}/anno su {formatEuro(works)} di lavori) trasferendo qui la residenza
+            e dimora abituale: i lavori ti costano davvero{" "}
             <strong className="text-ink tabular-nums">{formatEuro(bonus.netto)}</strong>. Più{" "}
             <strong className="text-ink tabular-nums">{formatEuro(bonus.mobili)}</strong> di bonus mobili.
           </p>
@@ -342,6 +343,10 @@ export function MortgageSimulator() {
             fa {formatEuroCents(tax.prima.registro)}, più € 50 di imposta ipotecaria e € 50 di catastale. Totale{" "}
             {formatEuroCents(tax.prima.totale)}. Basta chiederlo al notaio nell&apos;atto.
           </p>
+          <p>
+            Il calcolo vale acquistando insieme, con lo stesso atto, l&apos;appartamento e il garage privato come pertinenza
+            prima casa (categoria C/6): la rendita da inserire è quella complessiva dei due immobili.
+          </p>
         </Faq>
         <Faq q="Come funzionano i bonus per rifare cucina, bagno e camere come nelle foto 3D?">
           <p>
@@ -350,8 +355,10 @@ export function MortgageSimulator() {
           </p>
           <p>
             Se ristrutturi puoi aggiungere il Bonus Mobili: 50% su massimo € 5.000 di mobili ed elettrodomestici. Servono
-            pagamenti con bonifico &laquo;parlante&raquo; e, per alcuni interventi, la pratica edilizia. Le aliquote indicate
-            valgono per le spese sostenute nel 2026 e nel 2027, grazie alla proroga.
+            pagamenti con bonifico &laquo;parlante&raquo; e, per alcuni interventi, la pratica edilizia.
+            Le aliquote maggiorate al 50% per l&apos;abitazione principale (fino a € 96.000 di spesa per la ristrutturazione
+            e fino a € 5.000 per il Bonus Mobili) sono confermate per le spese sostenute sia nel 2026 sia per tutto il 2027: hai
+            tutto il tempo di fare il rogito e avviare i lavori in tranquillità.
           </p>
         </Faq>
       </div>

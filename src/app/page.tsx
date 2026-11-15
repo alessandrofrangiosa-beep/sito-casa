@@ -68,7 +68,7 @@ export default function Home() {
             <div className="grid gap-4 md:grid-cols-2 md:items-start">
               <CompositionList />
               <div>
-                <p className="mb-2 text-sm font-semibold text-ink">Planimetria · tocca per ingrandire</p>
+                <p className="mb-2 text-sm font-semibold text-ink">Planimetria{floorPlan ? " · tocca per ingrandire" : ""}</p>
                 <FloorPlan src={floorPlan} />
               </div>
             </div>

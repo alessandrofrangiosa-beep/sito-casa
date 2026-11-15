@@ -52,6 +52,11 @@ export const PROPERTY_FINANCE_CONFIG = {
   renovationYears: 10,
   furnitureBonusRate: 0.5,
   furnitureMaxSpend: 5_000,
+
+  /** Vantaggi già acquisiti con questa vendita (riquadro "Vantaggio economico reale" nella hero) */
+  condoWorksPaid: 15_000,
+  agencyFeeMin: 7_500,
+  agencyFeeMax: 10_000,
 } as const;
 
 const C = PROPERTY_FINANCE_CONFIG;
@@ -110,4 +115,20 @@ export function formatEuroCents(n: number): string {
 export function defaultMonthlyPayment(): number {
   const loan = C.propertyPrice - C.defaultDownPayment;
   return monthlyPayment(loan, estimatedFixedRate((loan / C.propertyPrice) * 100), C.defaultYears);
+}
+
+/**
+ * Risparmi mostrati nella hero, calcolati con gli stessi parametri del calcolatore
+ * (rendita di esempio, mutuo standard all'80%, budget lavori di esempio).
+ */
+export function heroSavings() {
+  const immediate = C.condoWorksPaid + C.agencyFeeMax;
+  const notaryPrima = notaryTaxes(C.defaultRenditaCatastale, true);
+  const notarySeconda = notaryTaxes(C.defaultRenditaCatastale, false);
+  const notarySaving = notarySeconda.totale - notaryPrima.totale;
+  const loan = C.propertyPrice - C.standardDownPayment;
+  const mortgageTaxSaving = loan * (C.sostitutivaOrdinaria - C.sostitutivaPrimaCasa);
+  const rogito = notarySaving + mortgageTaxSaving;
+  const bonus = C.defaultRenovationBudget * C.renovationBonusRate + C.furnitureMaxSpend * C.furnitureBonusRate;
+  return { immediate, notaryPrima, notarySaving, mortgageTaxSaving, rogito, bonus, total: immediate + rogito + bonus };
 }

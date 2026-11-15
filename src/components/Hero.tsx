@@ -1,9 +1,29 @@
 import Image from "next/image";
-import { Check, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import { quickFacts } from "@/data/composition";
-import { defaultMonthlyPayment, formatEuro } from "@/lib/mortgage";
+import { PROPERTY_FINANCE_CONFIG as C, defaultMonthlyPayment, formatEuro, formatEuroCents, heroSavings } from "@/lib/mortgage";
 
+
+const S = heroSavings();
+const floorTo = (n: number, step: number) => Math.floor(n / step) * step;
+const SAVINGS = [
+  {
+    value: formatEuro(S.immediate),
+    short: "risparmiati subito",
+    detail: `${formatEuro(C.condoWorksPaid)} di lavori condominiali (facciate e balconi) già saldati dal proprietario + ${formatEuro(C.agencyFeeMin)}–${formatEuro(C.agencyFeeMax).replace("€\u00a0", "")} di provvigioni d'agenzia azzerate.`,
+  },
+  {
+    value: `~${formatEuro(Math.round(S.rogito / 100) * 100)}`,
+    short: "tagliati al rogito",
+    detail: `Solo ${formatEuroCents(S.notaryPrima.totale)} di imposte d'atto col prezzo-valore prima casa (−${formatEuro(S.notarySaving)}) e imposta sul mutuo allo 0,25% (−${formatEuro(S.mortgageTaxSaving)}).`,
+  },
+  {
+    value: formatEuro(S.bonus),
+    short: "bonus lavori + arredi",
+    detail: `Recuperi il 50% di lavori e arredi visti nei render 3D (abitazione principale) e con la garanzia Consap eviti fino a ${formatEuro(C.standardDownPayment)} di anticipo.`,
+  },
+];
 
 const LIFT = " con ascensore";
 const hasLift = PROPERTY.floor.endsWith(LIFT);
@@ -66,20 +86,44 @@ export function Hero() {
               <strong className="whitespace-nowrap font-semibold text-ink tabular-nums">~ {formatEuro(defaultMonthlyPayment())}/mese</strong>{" "}
               <span className="whitespace-nowrap font-semibold text-primary">→ Simula</span>
             </a>
-            <ul className="mt-2 space-y-0.5 rounded-xl border border-primary/20 bg-primary-soft px-3 py-2 text-[14.5px] leading-snug text-primary max-[340px]:px-2.5 max-[340px]:text-[12px] sm:text-base">
-              <li className="flex gap-1.5">
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={3} aria-hidden />
-                <span>
-                  Risparmi <strong className="font-semibold tabular-nums">{PROPERTY.agencySavings}</strong> di provvigioni d&apos;agenzia
+            {/* Vantaggio economico reale: 3 metriche (cifre calcolate dagli stessi parametri del calcolatore mutuo) */}
+            <div className="mt-2 rounded-xl border border-sage/30 bg-sage-soft px-3 py-2.5 max-[340px]:px-2.5 sm:p-4 [@media(max-height:700px)]:py-2">
+              <p className="flex items-baseline justify-between gap-2 text-[13.5px] leading-snug font-bold text-ink max-[340px]:text-[12.5px] sm:block sm:text-base">
+                <span className="sm:hidden">
+                  Vantaggio reale: <span className="text-sage">oltre {formatEuro(floorTo(S.total, 5_000))}</span> di risparmi
                 </span>
-              </li>
-              <li className="flex gap-1.5">
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={3} aria-hidden />
-                <span>
-                  <strong className="font-semibold tabular-nums">{PROPERTY.condoWorksPaid}</strong> di lavori su facciate, balconi e migliorie già pagati dal proprietario
+                {/* Schermi bassi (es. iPhone SE): il link sta accanto al titolo per lasciare visibile la barra delle caratteristiche */}
+                <a
+                  href="#simula-mutuo"
+                  className="hidden shrink-0 text-xs font-semibold whitespace-nowrap text-primary [@media(max-height:700px)]:max-sm:inline"
+                >
+                  Dettaglio ↓
+                </a>
+                <span className="hidden sm:inline">
+                  Vantaggio economico reale per chi acquista:{" "}
+                  <span className="text-sage">oltre {formatEuro(floorTo(S.total, 5_000))}</span> di risparmi tra atto, lavori già
+                  pagati e bonus
                 </span>
-              </li>
-            </ul>
+              </p>
+              <ul className="mt-2 grid grid-cols-3 gap-2 sm:mt-3 sm:gap-4">
+                {SAVINGS.map((it) => (
+                  <li key={it.short} className="min-w-0">
+                    <strong className="block text-[15px] leading-tight font-extrabold whitespace-nowrap text-sage tabular-nums max-[340px]:text-[13.5px] sm:text-xl">
+                      {it.value}
+                    </strong>
+                    <span className="mt-0.5 block text-[11.5px] leading-snug font-semibold text-ink max-[340px]:text-[10.5px] sm:text-sm">
+                      {it.short}
+                    </span>
+                    <span className="mt-1 hidden text-xs leading-snug text-slate-ink sm:block">{it.detail}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-1.5 text-right sm:mt-2 [@media(max-height:700px)]:max-sm:hidden">
+                <a href="#simula-mutuo" className="text-xs font-semibold text-primary hover:text-primary-hover hover:underline sm:text-sm">
+                  Vedi il dettaglio di tutti i risparmi ↓
+                </a>
+              </div>
+            </div>
           </div>
 
           <dl className="mt-3 grid grid-cols-5 divide-x divide-line rounded-xl border border-line bg-ice">

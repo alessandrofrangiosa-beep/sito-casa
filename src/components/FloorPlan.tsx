@@ -2,11 +2,15 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Expand, X, ZoomIn, ZoomOut } from "lucide-react";
-import { DaControllare } from "./DaControllare";
+import { Expand, FileText, X, ZoomIn, ZoomOut } from "lucide-react";
+import { PROPERTY, WHATSAPP_NUMBER } from "@/config/site";
+import { useUi } from "./UiProvider";
+
+const FLOORPLAN_MESSAGE = `Ciao, ho visto l'appartamento in ${PROPERTY.address} sul sito. Potrei ricevere la planimetria catastale?`;
 
 export function FloorPlan({ src }: { src: string | null }) {
   const [open, setOpen] = useState(false);
+  const { openBooking } = useUi();
   const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
@@ -22,9 +26,31 @@ export function FloorPlan({ src }: { src: string | null }) {
   }, [open]);
 
   if (!src) {
+    // Finché l'immagine non è caricata: planimetria disponibile su richiesta (WhatsApp) o in visita
+    const button =
+      "inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-hover";
     return (
-      <div className="grid aspect-[4/3] place-items-center rounded-2xl border-2 border-dashed border-red-400 bg-red-50 p-6 text-center">
-        <DaControllare>Caricare immagine planimetria</DaControllare>
+      <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 rounded-2xl border border-line bg-card p-6 text-center shadow-soft">
+        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary">
+          <FileText className="h-7 w-7" aria-hidden />
+        </span>
+        <p className="max-w-xs text-[15px] leading-snug font-semibold text-ink">
+          Planimetria catastale verificata disponibile in sede di visita o su richiesta WhatsApp
+        </p>
+        {WHATSAPP_NUMBER ? (
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(FLOORPLAN_MESSAGE)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={button}
+          >
+            Richiedi planimetria su WhatsApp
+          </a>
+        ) : (
+          <button type="button" onClick={openBooking} className={button}>
+            Richiedi planimetria su WhatsApp
+          </button>
+        )}
       </div>
     );
   }
