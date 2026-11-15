@@ -1,4 +1,4 @@
-import { Bike, Car, Anchor, Hospital, Landmark, Pill, Route, School, ShoppingBag, Train, UtensilsCrossed } from "lucide-react";
+import { Bike, Car, Anchor, Coffee, Hospital, Landmark, Pill, Route, School, ShoppingBag, Train } from "lucide-react";
 import { SectionTitle } from "./SectionTitle";
 import { NeighborhoodMap } from "./NeighborhoodMap";
 import { MAP_POINTS } from "@/data/mapPoints";
@@ -15,12 +15,12 @@ const average = (...ids: string[]) => {
 
 // 10 tessere tutte uguali su 2 colonne (5 righe piene)
 const POINTS = [
-  // Delivery: Glovo copre l'area "Scafati - Pompei - Torre Annunziata"; Just Eat consegna al CAP 80058 (verificato novembre 2026)
-  { icon: Bike, title: "Delivery a domicilio", detail: "Glovo · Just Eat" },
+  // Delivery: Glovo copre l'area "Scafati - Pompei - Torre Annunziata"; su Just Eat al CAP 80058
+  // risultano 16 locali che consegnano, di cui 13 pizzerie (ricerca di novembre 2026)
+  { icon: Bike, title: "Delivery Glovo e Just Eat", detail: "16 locali, 13 pizzerie" },
   { icon: ShoppingBag, title: "Supermercati", detail: nearest("deco", "sisa") },
   { icon: Pill, title: "Farmacie", detail: nearest("farmacia") },
-  // ~60 ristoranti e pizzerie in città (guida Sluurpy); il bar più vicino dalla mappa
-  { icon: UtensilsCrossed, title: "60+ ristoranti, pizzerie e bar", detail: nearest("bar") },
+  { icon: Coffee, title: "Bar e negozi", detail: nearest("bar") },
   { icon: School, title: "Scuola elementare, media e superiore", detail: average("elementare", "media", "superiore") },
   { icon: Hospital, title: "Ospedale", detail: nearest("ospedale") },
   { icon: Train, title: "Circumvesuviana", detail: nearest("circum") },
