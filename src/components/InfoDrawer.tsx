@@ -211,7 +211,7 @@ export function InfoDrawer({
                 <Row label="Tipologia">Quadrilocale: 4 stanze</Row>
                 <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
-                <Row label="Pertinenze">2 balconi + garage privato di {PROPERTY.catasto.garage.superficie} al piano seminterrato, adatto anche a SUV</Row>
+                <Row label="Pertinenze">2 balconi + garage privato di {PROPERTY.catasto.garage.superficie} al piano seminterrato, adatto anche a SUV, con 2 ingressi in metallo (saracinesca e portone)</Row>
                 <Row label="Ripostiglio">Nessuno</Row>
               </dl>
             </Card>
