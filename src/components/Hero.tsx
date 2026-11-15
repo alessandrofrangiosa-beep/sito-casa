@@ -98,12 +98,9 @@ export function Hero() {
                     </span>
                   </span>
                 </span>
-                <span className="flex items-baseline justify-between gap-2 [@media(max-height:700px)]:max-sm:hidden">
-                  <span>
-                    <strong className="font-bold whitespace-nowrap text-sage tabular-nums">~ {formatEuro(defaultNetMonthlyPayment())}/mese</strong>{" "}
-                    netti con la detrazione IRPEF
-                  </span>
-                  <span className="shrink-0 font-semibold whitespace-nowrap text-primary">Simula →</span>
+                <span className="block [@media(max-height:700px)]:max-sm:hidden">
+                  <strong className="font-bold whitespace-nowrap text-sage tabular-nums">~ {formatEuro(defaultNetMonthlyPayment())}/mese</strong>{" "}
+                  netti con la detrazione IRPEF
                 </span>
               </a>
               <p className="flex items-baseline justify-between gap-2 text-[13.5px] leading-snug font-bold text-ink max-[340px]:text-[12.5px] sm:block sm:text-base">
