@@ -10,7 +10,7 @@ export type GalleryItem = {
   render?: string;
 };
 
-/** Visita guidata: 15 foto reali in /public/images/attuali, in ordine di percorso. */
+/** Visita guidata: 14 foto reali in /public/images/attuali, in ordine di percorso. */
 export const galleryData: GalleryItem[] = [
   {
     id: 1,
@@ -60,13 +60,6 @@ export const galleryData: GalleryItem[] = [
     title: "Secondo balcone",
     caption: "Terrazzino (~5,1 m²) sul lato Nord, riservato e luminoso, con affaccio aperto su Via Vittorio Veneto.",
     alt: "Balcone soleggiato con infisso scorrevole bianco e vista sui monti",
-  },
-  {
-    id: 7,
-    src: "/images/attuali/07-vista-mare-interno.jpg",
-    title: "Vista mare dall'interno",
-    caption: "Panorama sul mare direttamente dalle portefinestre con vetrocamera.",
-    alt: "Vista sul mare e sulla cupola della città attraverso le portefinestre aperte",
   },
   {
     id: 8,
