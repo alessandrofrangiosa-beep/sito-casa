@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BadgeCheck, ChevronDown, Hammer, Landmark, PiggyBank, ShieldCheck } from "lucide-react";
+import { ChevronDown, Hammer, Landmark, PiggyBank, ShieldCheck } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import {
   PROPERTY_FINANCE_CONFIG as C,
@@ -376,14 +376,6 @@ export function MortgageSimulator() {
       </div>
 
       <div className="mt-6 space-y-2 px-1">
-        <a
-          href="https://www.mutuionline.it"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
-        >
-          <BadgeCheck className="h-4 w-4" aria-hidden /> Confronta i tassi aggiornati delle banche su MutuiOnline →
-        </a>
         <p className="text-xs leading-snug text-slate-ink">
           Simulazione a scopo puramente illustrativo basata sulla normativa fiscale vigente 2026/2027 e su tassi medi di
           mercato: non costituisce offerta contrattuale né consulenza creditizia o fiscale. La concessione del mutuo e della
