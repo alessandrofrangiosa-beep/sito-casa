@@ -226,10 +226,17 @@ export function InfoDrawer({
             <Card>
               <dl>
                 <Row label="Piano">{PROPERTY.floor}</Row>
+                <Row label="Esposizione">Doppia, angolare Nord-Est</Row>
+                <Row label="Lato Est">Balcone lungo ~9,2 m²: cucina, lavanderia e 2 camere con luce diretta del mattino</Row>
+                <Row label="Lato Nord">Terrazzino ~5,1 m²: camera da 17,6 m² con affaccio aperto su Via Vittorio Veneto</Row>
                 <Row label="Vista">Mare panoramica, non ostruibile</Row>
-                <Row label="Luce">Naturale tutto il giorno</Row>
+                <Row label="Luce">Ottima al mattino, senza il caldo pomeridiano dell&apos;esposizione a Ovest</Row>
               </dl>
             </Card>
+            <Bullet>
+              Al 6° piano la doppia esposizione angolare Nord-Est garantisce <strong>ottima luminosità naturale al mattino</strong>,{" "}
+              <strong>ventilazione su due lati</strong> e <strong>freschezza d&apos;estate</strong>, senza il caldo del pomeriggio.
+            </Bullet>
           </>
         )}
 

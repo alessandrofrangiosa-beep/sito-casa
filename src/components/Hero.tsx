@@ -50,6 +50,10 @@ export function Hero() {
               <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary-soft px-2.5 py-0.5 text-[13px] font-semibold text-primary sm:text-sm">
                 Trattabile
               </span>
+              {/* Badge esposizione: sui telefoni molto bassi (es. iPhone SE) lo spazio serve alla barra delle caratteristiche */}
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/70 bg-amber-50 px-2.5 py-0.5 text-[13px] font-semibold text-amber-800 sm:text-sm [@media(max-height:600px)]:max-sm:hidden">
+                <span aria-hidden>☀️</span> Doppia esposizione Nord-Est
+              </span>
             </div>
             <p className="mt-1.5 text-[14.5px] leading-snug text-slate-ink max-[340px]:text-[12.5px] sm:text-base">
               <strong className="font-semibold text-ink tabular-nums">+ {PROPERTY.garagePrice}</strong> garage privato{" "}

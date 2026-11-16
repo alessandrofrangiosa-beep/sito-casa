@@ -16,8 +16,9 @@ export const galleryData: GalleryItem[] = [
     id: 1,
     src: "/images/attuali/01-vista-mare-golfo.jpg",
     title: "Vista mare aperta",
-    caption: "Vista aperta sul Golfo dal 6° piano: luce naturale tutto il giorno.",
+    caption: "Vista aperta sul Golfo dal 6° piano, con la luce del mattino su due lati.",
     alt: "Panorama dal 6° piano sul Golfo di Napoli con la penisola sorrentina all'orizzonte",
+    badge: "Esposizione Nord-Est",
   },
   {
     id: 2,
@@ -48,7 +49,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/05-balcone-principale.jpg",
     render: "/images/render/render-04-balcone-principale.jpg",
     title: "Balcone principale",
-    caption: "Balcone lungo tra cucina e stanza. Ponteggio lavori facciata già pagato.",
+    caption: "Balcone lungo (~9,2 m²) sul lato Est: cucina, lavanderia e due camere con il sole del mattino. Ponteggio lavori facciata già pagato.",
     alt: "Balcone lungo con ringhiera e ponteggio dei lavori di facciata in ultimazione",
     badge: "Lavori già pagati",
   },
@@ -57,7 +58,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/06-secondo-balcone.jpg",
     render: "/images/render/render-05-secondo-balcone.jpg",
     title: "Secondo balcone",
-    caption: "Balcone riservato e luminoso con infisso scorrevole bianco.",
+    caption: "Terrazzino (~5,1 m²) sul lato Nord, riservato e luminoso, con affaccio aperto su Via Vittorio Veneto.",
     alt: "Balcone soleggiato con infisso scorrevole bianco e vista sui monti",
   },
   {
