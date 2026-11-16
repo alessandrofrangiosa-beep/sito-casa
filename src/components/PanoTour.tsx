@@ -100,6 +100,7 @@ export function PanoTour() {
   const dotRef = useRef<SVGCircleElement>(null);
   const coneRef = useRef<SVGPathElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
+  const artRef = useRef<HTMLDivElement>(null);
   const apiRef = useRef<{ jump: (id: string) => void; go: (to: string) => void; setFull: () => void } | null>(null);
   const fullRef = useRef(false);
 
@@ -697,6 +698,22 @@ export function PanoTour() {
         skyMat.uniforms.center.value.set(pos[0], eye, pos[1]);
         sky.position.set(pos[0], eye, -pos[1]);
         if (cur.mat.uniforms.tex.value) renderer.render(scene, camera);
+        // Avviso "artefatto" quando la zona deformata della foto è al centro della vista
+        const art = artRef.current;
+        if (art) {
+          const vyaw = heading - cur.s.off;
+          const hf = (2 * Math.atan(Math.tan((camera.fov * D2R) / 2) * camera.aspect)) / D2R;
+          const on =
+            !move &&
+            (cur.s.artifacts ?? []).some(
+              (a) => Math.abs(angDiff(vyaw, a.yaw)) < a.w + hf * 0.3 && Math.abs(pitch - a.pitch) < camera.fov * 0.45,
+            );
+          if (art.dataset.on !== String(on)) {
+            art.dataset.on = String(on);
+            art.style.opacity = on ? "1" : "0";
+            art.style.transform = `translate(-50%, ${on ? "0" : "-6px"})`;
+          }
+        }
         placeOverlay();
       };
 
@@ -873,6 +890,21 @@ export function PanoTour() {
           <path ref={coneRef} fill="#0e6ba8" fillOpacity={0.3} pointerEvents="none" />
           <circle ref={dotRef} r={36} fill="#0e6ba8" stroke="#fff" strokeWidth={12} pointerEvents="none" />
         </svg>
+
+        {/* Avviso puntuale: compare solo guardando le zone della foto in cui la ricostruzione non è fedele */}
+        <div
+          ref={artRef}
+          data-on="false"
+          role="status"
+          aria-live="polite"
+          className={`pointer-events-none absolute left-1/2 z-20 flex w-max max-w-[calc(100%-1.5rem)] items-center gap-2 rounded-xl bg-amber-400 px-3 py-2 text-[13px] leading-snug font-semibold text-ink opacity-0 shadow-soft transition-[opacity,transform] duration-300 sm:text-sm ${
+            full ? "top-[calc(max(0.75rem,env(safe-area-inset-top))+3.25rem)]" : "top-16"
+          }`}
+          style={{ transform: "translate(-50%, -6px)" }}
+        >
+          <span aria-hidden>⚠️</span>
+          <span>Non rappresenta la realtà: questa porta è un artefatto della ricostruzione 3D</span>
+        </div>
 
         {/* Avviso sugli artefatti: ben leggibile ma piccolo, in basso a destra, e non intercetta i gesti */}
         <div

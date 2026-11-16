@@ -25,6 +25,11 @@ export type PanoStation = {
   off: number;
   yaw: number;
   links: PanoLink[];
+  /**
+   * Punti della foto in cui la ricostruzione 3D non è fedele (es. porte aperte deformate): quando li si guarda
+   * compare un avviso. `yaw`/`pitch` nella foto (gradi), `w` = semi-ampiezza orizzontale della zona.
+   */
+  artifacts?: { yaw: number; pitch: number; w: number }[];
 };
 
 export const PANO_STATIONS: PanoStation[] = [
@@ -144,6 +149,7 @@ export const PANO_STATIONS: PanoStation[] = [
     off: 94.50,
     yaw: -10,
     links: [{ to: "cucina", via: [[11.65, -13.257]] }, { to: "stanza-20", via: [[12.447, -19.417], [12.447, -19.986]] }, { to: "stanza-16", via: [[11.65, -17.568]] }],
+    artifacts: [{ yaw: 89, pitch: -5, w: 8 }, { yaw: 118, pitch: 0, w: 11 }],
   },
   {
     id: "stanza-20",
@@ -157,6 +163,7 @@ export const PANO_STATIONS: PanoStation[] = [
     off: 94.50,
     yaw: -75,
     links: [{ to: "balcone", via: [[12.447, -19.986], [12.447, -19.417]] }],
+    artifacts: [{ yaw: -155, pitch: -3, w: 14 }],
   },
 ];
 
