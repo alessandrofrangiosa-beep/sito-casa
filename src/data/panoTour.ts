@@ -1,74 +1,180 @@
 /**
- * Tour virtuale "a camminata": le foto panoramiche reali (9 del tour a 360° + il corridoio, dalla panoramica del
- * proprietario convertita nello stesso formato) proiettate su un modello 3D
- * dell'appartamento ricavato dalla planimetria (stanze in metri, porte aperte, soffitti).
+ * Tour virtuale 3D: 10 foto a 360° reali (9 dal tour ricavato dal video della casa + il corridoio dalla foto
+ * panoramica del proprietario), ognuna con la geometria della propria stanza.
  *
- * Coordinate del modello: metri, x verso destra e z verso il basso della planimetria (1 m = 70,3 px del disegno
- * di src/data/floorPlan3d.ts), y in alto; il pavimento è a y = 0.
+ * Come sono stati ricavati i dati (script di analisi, non nel sito):
+ * - orientamento e posizione di ripresa di ogni foto dalla ricostruzione 3D del video (tutte le foto condividono
+ *   lo stesso riferimento: `off` = rotazione tra la foto e gli assi della casa);
+ * - forma di ogni stanza (scatola allineata agli assi) misurata sulla foto stessa: linee pavimento-parete e
+ *   soffitto-parete; altezza dell'obiettivo uguale per tutte le riprese (1,35 m, stesso telefono), da cui le
+ *   misure in metri, che coincidono con la planimetria (es. stanza 20,2 m²: 3,95 × 5,09 m);
+ * - porte: direzione in cui ogni foto vede la porta verso la stanza vicina (`links[].yaw`). Il passaggio tra due
+ *   stanze avviene esattamente sulla porta, dove le due foto si sovrappongono.
  *
- * Per ogni foto è stata stimata la posizione esatta di ripresa (`pos`), l'altezza dell'obiettivo (`h`) e la
- * rotazione (`alpha`: direzione in pianta, in gradi, del centro della foto), allineando le linee pavimento-parete e
- * soffitto-parete della foto con le stanze della planimetria e le porte con le aperture. Così, stando nel punto di
- * ripresa, la vista è identica alla foto; spostandosi, la prospettiva cambia come nella realtà.
+ * Convenzioni: metri; asse x e z della casa; `box` = [x min, x max, z min, z max] rispetto al punto di ripresa;
+ * direzione (gradi) = atan2(dx, dz); yaw della foto = direzione − `off` (0 = centro della foto, positivo a destra).
+ * `plan` / `planAlpha`: posizione e rotazione sulla mini-planimetria (pixel di src/data/floorPlan3d.ts).
  */
+export type PanoLink = { to: string; yaw?: number; direct?: [number, number] };
+
 export type PanoStation = {
   id: string;
   name: string;
-  /** Foto panoramica (alta risoluzione) e anteprima leggera che compare subito */
   src: string;
   preview: string;
-  /** Punto di ripresa (m) e altezza dell'obiettivo dal pavimento (m) */
-  pos: [number, number];
+  /** Altezza dell'obiettivo e del soffitto (m) */
   h: number;
-  /** Direzione in pianta (gradi) del centro della foto */
-  alpha: number;
-  /** Direzione di vista (gradi, rispetto al centro della foto) quando si arriva dal menu */
+  ceil: number;
+  box: [number, number, number, number];
+  off: number;
+  /** Direzione di vista (yaw della foto) quando si arriva dal menu */
   yaw: number;
+  plan: [number, number];
+  planAlpha: number;
+  links: PanoLink[];
 };
 
-const pano = (n: number) => ({ src: `/images/tour/room${n}.jpg`, preview: `/images/tour/room${n}-sm.jpg` });
-
 export const PANO_STATIONS: PanoStation[] = [
-  { id: "ingresso", name: "Ingresso", ...pano(1), pos: [5.8729, 9.6742], h: 1.229, alpha: 2.62, yaw: 55 },
-  { id: "soggiorno", name: "Soggiorno 16,1 m²", ...pano(4), pos: [10.6407, 10.0014], h: 1.536, alpha: 6.98, yaw: -33.5 },
-  { id: "stanza-17-balcone", name: "Stanza 17,6 m² · balcone", ...pano(3), pos: [9.6007, 4.7895], h: 1.376, alpha: 8.92, yaw: -95 },
-  { id: "stanza-17", name: "Stanza 17,6 m²", ...pano(2), pos: [9.813, 6.768], h: 1.422, alpha: 4.2, yaw: -110 },
+  {
+    id: "ingresso",
+    name: "Ingresso",
+    src: "/images/tour/room1.jpg",
+    preview: "/images/tour/room1-sm.jpg",
+    h: 1.35,
+    ceil: 3.041,
+    box: [-1.783, 0.837, -1.254, 1.712],
+    off: 4.5,
+    yaw: 55,
+    plan: [412.9, 680.1],
+    planAlpha: 2.62,
+    links: [{ to: "stanza-17-balcone", yaw: -48.06 }, { to: "soggiorno", yaw: -22.06 }, { to: "corridoio", yaw: 75.97 }],
+  },
+  {
+    id: "soggiorno",
+    name: "Soggiorno 16,1 m²",
+    src: "/images/tour/room4.jpg",
+    preview: "/images/tour/room4-sm.jpg",
+    h: 1.35,
+    ceil: 3.537,
+    box: [-1.805, 1.579, -1.947, 1.667],
+    off: 4.5,
+    yaw: -33.5,
+    plan: [748.0, 703.1],
+    planAlpha: 6.98,
+    links: [{ to: "ingresso", yaw: -150.97 }, { to: "cucina", yaw: 134.65 }],
+  },
+  {
+    id: "stanza-17-balcone",
+    name: "Stanza 17,6 m² · balcone",
+    src: "/images/tour/room3.jpg",
+    preview: "/images/tour/room3-sm.jpg",
+    h: 1.35,
+    ceil: 3.0,
+    box: [-1.32, 2.954, -1.895, 2.069],
+    off: 4.5,
+    yaw: -95,
+    plan: [674.9, 336.7],
+    planAlpha: 8.92,
+    links: [{ to: "ingresso", yaw: 111.06 }, { to: "stanza-17", direct: [2.077, 0.332] }],
+  },
+  {
+    id: "stanza-17",
+    name: "Stanza 17,6 m²",
+    src: "/images/tour/room2.jpg",
+    preview: "/images/tour/room2-sm.jpg",
+    h: 1.35,
+    ceil: 2.933,
+    box: [-3.285, 0.953, -2.285, 1.706],
+    off: 4.5,
+    yaw: -110,
+    plan: [689.9, 475.8],
+    planAlpha: 4.2,
+    links: [{ to: "stanza-17-balcone", direct: [-2.031, -0.325] }],
+  },
   {
     id: "corridoio",
     name: "Corridoio",
     src: "/images/tour/corridoio.jpg",
     preview: "/images/tour/corridoio-sm.jpg",
-    pos: [6.0564, 14.2441],
-    h: 1.491,
-    alpha: -129.28,
+    h: 1.35,
+    ceil: 2.219,
+    box: [-3.269, 3.333, -0.674, 0.579],
+    off: -131.52,
     yaw: -140,
+    plan: [425.8, 1001.4],
+    planAlpha: -129.28,
+    links: [{ to: "ingresso", yaw: 36.0 }, { to: "cucina", yaw: 93.6 }, { to: "bagno", yaw: -166.8 }, { to: "stanza-16", yaw: -150.0 }],
   },
-  { id: "cucina", name: "Cucina", ...pano(5), pos: [7.7925, 13.2762], h: 1.741, alpha: 2.8, yaw: 11.5 },
-  { id: "bagno", name: "Bagno", ...pano(6), pos: [9.0314, 15.3719], h: 1.482, alpha: 6.84, yaw: -5 },
-  { id: "stanza-16", name: "Stanza 16,8 m²", ...pano(7), pos: [8.2136, 18.3726], h: 1.573, alpha: 4.99, yaw: -15 },
-  { id: "balcone", name: "Balcone vista mare", ...pano(9), pos: [12.8465, 14.3758], h: 1.569, alpha: 9.28, yaw: -10 },
-  { id: "stanza-20", name: "Stanza 20,2 m²", ...pano(8), pos: [11.3722, 22.5009], h: 1.412, alpha: 9.1, yaw: -75 },
+  {
+    id: "cucina",
+    name: "Cucina",
+    src: "/images/tour/room5.jpg",
+    preview: "/images/tour/room5-sm.jpg",
+    h: 1.35,
+    ceil: 2.531,
+    box: [-0.956, 1.388, -1.718, 3.592],
+    off: 4.5,
+    yaw: 11.5,
+    plan: [547.8, 933.3],
+    planAlpha: 2.8,
+    links: [{ to: "soggiorno", yaw: -99.5 }, { to: "balcone", yaw: -3.5 }, { to: "corridoio", yaw: 153.67 }],
+  },
+  {
+    id: "bagno",
+    name: "Bagno",
+    src: "/images/tour/room6.jpg",
+    preview: "/images/tour/room6-sm.jpg",
+    h: 1.35,
+    ceil: 2.786,
+    box: [-1.129, 0.764, -1.625, 2.151],
+    off: 4.5,
+    yaw: -5,
+    plan: [634.9, 1080.6],
+    planAlpha: 6.84,
+    links: [{ to: "corridoio", yaw: 177.26 }],
+  },
+  {
+    id: "stanza-16",
+    name: "Stanza 16,8 m²",
+    src: "/images/tour/room7.jpg",
+    preview: "/images/tour/room7-sm.jpg",
+    h: 1.35,
+    ceil: 3.27,
+    box: [-2.037, 1.36, -1.827, 2.912],
+    off: 4.5,
+    yaw: -15,
+    plan: [577.4, 1291.6],
+    planAlpha: 4.99,
+    links: [{ to: "corridoio", yaw: -149.15 }],
+  },
+  {
+    id: "balcone",
+    name: "Balcone vista mare",
+    src: "/images/tour/room9.jpg",
+    preview: "/images/tour/room9-sm.jpg",
+    h: 1.35,
+    ceil: 2.471,
+    box: [-2.307, 2.721, -1.09, 0.232],
+    off: 4.5,
+    yaw: -10,
+    plan: [903.1, 1010.6],
+    planAlpha: 9.28,
+    links: [{ to: "cucina", yaw: -130.62 }, { to: "stanza-20", yaw: 92.03 }],
+  },
+  {
+    id: "stanza-20",
+    name: "Stanza 20,2 m²",
+    src: "/images/tour/room8.jpg",
+    preview: "/images/tour/room8-sm.jpg",
+    h: 1.35,
+    ceil: 2.945,
+    box: [-2.569, 1.378, -3.334, 1.759],
+    off: 4.5,
+    yaw: -75,
+    plan: [799.5, 1581.8],
+    planAlpha: 9.1,
+    links: [{ to: "balcone", yaw: -85.83 }],
+  },
 ];
 
 export const PANO_START = "ingresso";
-
-/**
- * Stanze del modello (indici di ROOMS_3D): piccola correzione di scala stimata dalle foto, altezza del soffitto
- * vista nelle foto, foto usate per "dipingere" la stanza (la più vicina se sono due) e lati con la sola ringhiera.
- */
-export type WalkRoom = { scale: [number, number]; ceil: number; panos: string[]; railing?: number[] };
-
-export const WALK_ROOMS: Record<number, WalkRoom> = {
-  0: { scale: [1, 1], ceil: 3, panos: ["stanza-17-balcone"], railing: [0, 1, 3] },
-  1: { scale: [0.95, 0.984], ceil: 3, panos: ["stanza-17", "stanza-17-balcone"] },
-  2: { scale: [0.983, 1.011], ceil: 3, panos: ["ingresso"] },
-  3: { scale: [1.08, 1.0], ceil: 4.12, panos: ["soggiorno"] },
-  4: { scale: [1, 1], ceil: 3, panos: ["soggiorno", "cucina"] },
-  5: { scale: [0.971, 0.979], ceil: 3, panos: ["ingresso", "corridoio"] },
-  6: { scale: [1.054, 0.927], ceil: 3.28, panos: ["cucina"] },
-  7: { scale: [0.981, 1.057], ceil: 4.46, panos: ["bagno"] },
-  8: { scale: [1, 1], ceil: 3, panos: ["balcone"] },
-  9: { scale: [1.071, 0.92], ceil: 3.23, panos: ["stanza-16"] },
-  10: { scale: [1.059, 0.952], ceil: 3, panos: ["balcone"], railing: [1] },
-  11: { scale: [1.006, 1.04], ceil: 3, panos: ["stanza-20"] },
-};
