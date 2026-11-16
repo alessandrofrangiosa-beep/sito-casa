@@ -72,8 +72,25 @@ function CheckLine({
   );
 }
 
+/** Piccolo pulsante "Scopri di più": porta alla sezione (foto o Info Utili) senza spuntare la casella */
+function MoreButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick();
+      }}
+      className="mt-1.5 flex items-center gap-1 rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary transition hover:bg-[#dbeafe]"
+    >
+      Scopri di più <span aria-hidden>→</span>
+    </button>
+  );
+}
+
 export function BookingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { photosSeen, infoOpened, openInfo } = useUi();
+  const { photosSeen, openInfo, showPhotos } = useUi();
   const [name, setName] = useState("");
   const [sawPhotos, setSawPhotos] = useState(false);
   const [readInfo, setReadInfo] = useState(false);
@@ -154,14 +171,11 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
             <span className="text-slate-ink">
               ({Math.min(photosSeen, galleryData.length)}/{galleryData.length} viste)
             </span>
+            <MoreButton onClick={showPhotos} />
           </CheckLine>
           <CheckLine checked={readInfo} onChange={setReadInfo}>
             Ho letto le Info Utili (prezzo, composizione, impianti, condominio, documenti){" "}
-            {!infoOpened && (
-              <button type="button" onClick={() => openInfo()} className="font-semibold text-primary underline">
-                Aprile ora
-              </button>
-            )}
+            <MoreButton onClick={() => openInfo()} />
           </CheckLine>
         </Step>
 

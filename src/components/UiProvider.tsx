@@ -9,6 +9,8 @@ import { ScrollManager } from "./ScrollManager";
 type UiState = {
   openInfo: (tab?: InfoTab) => void;
   openBooking: () => void;
+  /** Chiude la prenotazione e porta alle foto della visita guidata */
+  showPhotos: () => void;
   /** Foto della visita guidata effettivamente viste (per la pre-qualificazione) */
   markPhotoSeen: (id: number) => void;
   photosSeen: number;
@@ -38,13 +40,18 @@ export function UiProvider({ children }: { children: React.ReactNode }) {
     setInfoTab(null);
     setBookingOpen(true);
   }, []);
+  const showPhotos = useCallback(() => {
+    setBookingOpen(false);
+    // dopo la chiusura del pannello (che blocca lo scorrimento) si scorre alla sezione foto
+    window.setTimeout(() => document.getElementById("esplora")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+  }, []);
   const markPhotoSeen = useCallback((id: number) => {
     setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
   }, []);
 
   const value = useMemo(
-    () => ({ openInfo, openBooking, markPhotoSeen, photosSeen: seen.size, infoOpened }),
-    [openInfo, openBooking, markPhotoSeen, seen.size, infoOpened],
+    () => ({ openInfo, openBooking, showPhotos, markPhotoSeen, photosSeen: seen.size, infoOpened }),
+    [openInfo, openBooking, showPhotos, markPhotoSeen, seen.size, infoOpened],
   );
 
   return (
