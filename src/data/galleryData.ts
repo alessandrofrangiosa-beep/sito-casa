@@ -144,7 +144,7 @@ export const renderData: GalleryItem[] = [
   { id: 12, src: "/images/render/render-12-bagno-esterno.jpg", title: "Bagno esterno", caption: "Secondo bagno moderno con sanitari sospesi e mobile in rovere.", alt: "Render del bagno esterno rinnovato" },
   { id: 13, src: "/images/render/render-13-garage.jpg", title: "Garage", caption: "Box auto tinteggiato e illuminato: pulito e ordinato.", alt: "Render del garage tinteggiato" },
   { id: 14, src: "/images/render/render-14-cucina.jpg", title: "Cucina", caption: "Cucina lineare in legno chiaro con tavolo da pranzo e portafinestra sul balcone.", alt: "Render della cucina arredata" },
-  { id: 15, src: "/images/render/render-19-cameretta-balcone.jpg", title: "Cameretta", caption: "Stanza con balcone trasformata in cameretta con scrivania, armadio a tutta altezza e letto singolo.", alt: "Render della stanza con balcone arredata come cameretta" },
+  { id: 15, src: "/images/render/render-19-cameretta-balcone.jpg", title: "Cameretta", caption: "Stanza con balcone trasformata in cameretta con letto a castello, armadio a tutta altezza e tappeto morbido.", alt: "Render della stanza con balcone arredata come cameretta" },
   { id: 16, src: "/images/render/render-20-camera-soleggiata.jpg", title: "Camera da letto", caption: "Stanza soleggiata arredata come camera matrimoniale, con boiserie e tessili caldi.", alt: "Render della stanza soleggiata arredata come camera da letto" },
 ];
 
