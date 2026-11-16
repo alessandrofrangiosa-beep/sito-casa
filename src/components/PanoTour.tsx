@@ -6,8 +6,6 @@ import { ChevronDown, Footprints, Info, Maximize2, Minimize2, MousePointerClick 
 import { ROOMS_3D } from "@/data/floorPlan3d";
 import { PANO_START, PANO_STATIONS, type PanoStation } from "@/data/panoTour";
 
-type FsElement = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
-type FsDocument = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => Promise<void> | void };
 type V2 = [number, number];
 
 const BY_ID = new Map(PANO_STATIONS.map((s) => [s.id, s]));
@@ -764,23 +762,11 @@ export function PanoTour() {
     };
   }, []);
 
-  // Schermo intero: nativo dove possibile (Android, computer), altrimenti a tutta finestra (iPhone)
-  const exitNative = () => {
-    const d = document as FsDocument;
-    if (d.fullscreenElement) void d.exitFullscreen?.().catch(() => {});
-    else if (d.webkitFullscreenElement) void d.webkitExitFullscreen?.();
-  };
+  // Schermo intero "a tutta finestra" (non quello nativo del browser): così Chrome non mostra il suo avviso
+  // "trascina dall'alto e scorri dal bordo per uscire". Si chiude con Esci, Esc o il tasto Indietro.
   const openFull = useCallback(() => {
     setFull(true);
     window.history.pushState({ ta390Pano: true }, "");
-    const el = boxRef.current as FsElement | null;
-    try {
-      const req = el?.requestFullscreen?.bind(el) ?? el?.webkitRequestFullscreen?.bind(el);
-      const p = req?.();
-      if (p && typeof (p as Promise<void>).catch === "function") (p as Promise<void>).catch(() => {});
-    } catch {
-      /* non disponibile: resta la vista a tutta finestra */
-    }
   }, []);
   const closeFull = useCallback(() => {
     if (window.history.state?.ta390Pano) window.history.back();
@@ -793,25 +779,14 @@ export function PanoTour() {
     if (!full) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onPop = () => {
-      exitNative();
-      setFull(false);
-    };
+    const onPop = () => setFull(false);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeFull();
-    const onFs = () => {
-      const d = document as FsDocument;
-      if (!d.fullscreenElement && !d.webkitFullscreenElement) closeFull();
-    };
     window.addEventListener("popstate", onPop);
     window.addEventListener("keydown", onKey);
-    document.addEventListener("fullscreenchange", onFs);
-    document.addEventListener("webkitfullscreenchange", onFs);
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
-      document.removeEventListener("fullscreenchange", onFs);
-      document.removeEventListener("webkitfullscreenchange", onFs);
     };
   }, [full, closeFull]);
 
@@ -861,7 +836,7 @@ export function PanoTour() {
         ref={boxRef}
         className={
           full
-            ? "fixed inset-0 z-[70] bg-ink"
+            ? "fixed inset-0 z-[70] h-dvh w-screen bg-ink"
             : "relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-line bg-ink shadow-soft sm:aspect-[4/3]"
         }
         role={full ? "dialog" : undefined}
