@@ -926,12 +926,12 @@ export function PanoTour() {
 
         <div ref={fadeRef} className="pointer-events-none absolute inset-0 z-[15] bg-ink opacity-0 transition-opacity duration-200" />
 
-        <div className={`absolute left-3 z-20 ${full ? "top-[max(0.75rem,env(safe-area-inset-top))]" : "top-3"}`}>
+        <div className={`absolute left-3 z-20 max-w-[calc(100%-10.75rem)] sm:max-w-[calc(100%-12.5rem)] ${full ? "top-[max(0.75rem,env(safe-area-inset-top))]" : "top-3"}`}>
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
             aria-expanded={menuOpen}
-            className="inline-flex max-w-[60vw] items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-2 text-sm font-bold text-ink shadow-soft backdrop-blur-sm"
+            className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-white/95 px-3 py-2 sm:px-3.5 text-sm font-bold text-ink shadow-soft backdrop-blur-sm"
           >
             <span className="truncate">{station.name}</span>
             <ChevronDown className={`h-4 w-4 shrink-0 transition ${menuOpen ? "rotate-180" : ""}`} aria-hidden />
@@ -959,12 +959,12 @@ export function PanoTour() {
           type="button"
           onClick={full ? closeFull : openFull}
           aria-label={full ? "Esci dallo schermo intero" : "Schermo intero"}
-          className={`absolute right-3 z-20 inline-flex items-center gap-1.5 rounded-full bg-ink/75 px-3 py-2 text-sm font-semibold text-white shadow-soft backdrop-blur-sm transition hover:bg-ink ${
+          className={`absolute right-3 z-20 inline-flex items-center gap-1 rounded-full bg-ink/75 px-2.5 py-2 text-xs font-semibold whitespace-nowrap sm:gap-1.5 sm:px-3 sm:text-sm text-white shadow-soft backdrop-blur-sm transition hover:bg-ink ${
             full ? "top-[max(0.75rem,env(safe-area-inset-top))]" : "top-3"
           }`}
         >
           {full ? <Minimize2 className="h-4 w-4" aria-hidden /> : <Maximize2 className="h-4 w-4" aria-hidden />}
-          <span className={full ? "" : "hidden sm:inline"}>{full ? "Esci" : "Schermo intero"}</span>
+          <span>{full ? "Esci" : "Schermo intero"}</span>
         </button>
 
         {(busy || failed) && (
