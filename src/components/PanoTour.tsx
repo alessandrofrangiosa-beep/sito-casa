@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Mesh, ShaderMaterial, Texture } from "three";
-import { ChevronDown, Footprints, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronDown, Footprints, Info, Maximize2, Minimize2 } from "lucide-react";
 import { ROOMS_3D } from "@/data/floorPlan3d";
 import { PANO_START, PANO_STATIONS, type PanoStation } from "@/data/panoTour";
 
@@ -873,6 +873,24 @@ export function PanoTour() {
           <path ref={coneRef} fill="#0e6ba8" fillOpacity={0.3} pointerEvents="none" />
           <circle ref={dotRef} r={36} fill="#0e6ba8" stroke="#fff" strokeWidth={12} pointerEvents="none" />
         </svg>
+
+        {/* Avviso sugli artefatti: ben leggibile ma piccolo, in basso a destra, e non intercetta i gesti */}
+        <div
+          className={`pointer-events-none absolute right-3 z-10 flex max-w-[10.5rem] items-start gap-1.5 rounded-xl bg-ink/70 px-2.5 py-1.5 text-[11px] leading-snug text-white shadow-soft backdrop-blur-sm sm:max-w-[16rem] sm:text-xs ${
+            full ? "bottom-[max(0.75rem,env(safe-area-inset-bottom))]" : "bottom-3"
+          }`}
+          role="note"
+        >
+          <Info className="mt-px h-3.5 w-3.5 shrink-0 text-amber-300" aria-hidden />
+          {/* Telefono: versione breve; schermi grandi: testo completo */}
+          <span className="sm:hidden">
+            <strong className="font-semibold">3D indicativo:</strong> possibili artefatti, non sempre fedele alla realtà
+          </span>
+          <span className="hidden sm:inline">
+            <strong className="font-semibold">Ricostruzione 3D indicativa:</strong> alcune immagini possono contenere
+            artefatti e non rappresentare fedelmente la realtà.
+          </span>
+        </div>
 
         <div ref={fadeRef} className="pointer-events-none absolute inset-0 z-[15] bg-ink opacity-0 transition-opacity duration-200" />
 
