@@ -250,3 +250,17 @@
   .fp3d-label span { font-size: 10.5px; }
   .fp3d-label em { font-size: 9px; }
 }
+
+/* Mini-planimetria del tour 3D: anello che pulsa sui punti di ripresa toccabili */
+@keyframes pano-pulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2.4); }
+}
+.pano-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pano-pulse 1.8s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pano-pulse { animation: none; opacity: 0.5; }
+}

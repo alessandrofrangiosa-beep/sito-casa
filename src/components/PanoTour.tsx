@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Mesh, ShaderMaterial, Texture } from "three";
-import { ChevronDown, Footprints, Info, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronDown, Footprints, Info, Maximize2, Minimize2, MousePointerClick } from "lucide-react";
 import { ROOMS_3D } from "@/data/floorPlan3d";
 import { PANO_START, PANO_STATIONS, type PanoStation } from "@/data/panoTour";
 
@@ -815,6 +815,36 @@ export function PanoTour() {
     };
   }, [full, closeFull]);
 
+  /** Stanza della planimetria → punto di ripresa in cui si arriva toccandola (stanze senza foto: la più vicina) */
+  const roomStation = useMemo(() => {
+    const inside = (poly: [number, number][], x: number, y: number) => {
+      let r = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const [xi, yi] = poly[i];
+        const [xj, yj] = poly[j];
+        if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) r = !r;
+      }
+      return r;
+    };
+    return ROOMS_3D.map((r) => {
+      const own = PANO_STATIONS.filter((s) => inside(r.pts, s.pos[0] * PX_M, -s.pos[1] * PX_M));
+      // stanza con due punti di ripresa (17,6 m²): quello vicino al balcone
+      if (own.length) return (own.find((s) => s.id.endsWith("balcone")) ?? own[0]).id;
+      const cx = r.pts.reduce((a, p) => a + p[0], 0) / r.pts.length;
+      const cy = r.pts.reduce((a, p) => a + p[1], 0) / r.pts.length;
+      let best: string | null = null;
+      let bd = Infinity;
+      for (const s of PANO_STATIONS) {
+        const d = Math.hypot(s.pos[0] * PX_M - cx, -s.pos[1] * PX_M - cy);
+        if (d < bd) {
+          bd = d;
+          best = s.id;
+        }
+      }
+      return best;
+    });
+  }, []);
+
   const plan = useMemo(() => {
     const pts = ROOMS_3D.flatMap((r) => r.pts);
     const pad = 110;
@@ -861,35 +891,60 @@ export function PanoTour() {
           />
         </div>
 
-        <svg
-          viewBox={`${plan.minX} ${plan.minY} ${plan.w} ${plan.h}`}
-          className={`absolute left-3 z-10 h-28 rounded-xl bg-white/85 shadow-soft backdrop-blur-sm sm:h-40 ${
+        {/* Mini-planimetria cliccabile: tocca una stanza per andarci (teletrasporto) */}
+        <div
+          className={`absolute left-3 z-10 flex flex-col items-start gap-1 ${
             full ? "bottom-[max(0.75rem,env(safe-area-inset-bottom))]" : "bottom-3"
           }`}
-          style={{ aspectRatio: plan.w / plan.h }}
-          aria-label="Mini planimetria: tocca un punto per andarci"
-          role="group"
         >
-          {ROOMS_3D.map((r, i) => (
-            <polygon
-              key={i}
-              points={r.pts.map((p) => p.join(",")).join(" ")}
-              fill={r.kind === "balcony" ? "#e2e8f0" : "#ffffff"}
-              stroke="#64748b"
-              strokeWidth={9}
-              strokeLinejoin="round"
-            />
-          ))}
-          {PANO_STATIONS.map((s) => (
-            <g key={s.id} onClick={() => apiRef.current?.jump(s.id)} className="cursor-pointer">
-              <title>{s.name}</title>
-              <circle cx={s.pos[0] * PX_M} cy={-s.pos[1] * PX_M} r={70} fill="transparent" />
-              <circle cx={s.pos[0] * PX_M} cy={-s.pos[1] * PX_M} r={22} fill="#94a3b8" stroke="#fff" strokeWidth={10} />
-            </g>
-          ))}
-          <path ref={coneRef} fill="#0e6ba8" fillOpacity={0.3} pointerEvents="none" />
-          <circle ref={dotRef} r={36} fill="#0e6ba8" stroke="#fff" strokeWidth={12} pointerEvents="none" />
-        </svg>
+          <span className="pointer-events-none inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10.5px] leading-tight font-semibold whitespace-nowrap text-white shadow-soft sm:text-xs">
+            <MousePointerClick className="h-3 w-3 shrink-0" aria-hidden /> Tocca una stanza
+          </span>
+          <svg
+            viewBox={`${plan.minX} ${plan.minY} ${plan.w} ${plan.h}`}
+            className="h-36 rounded-xl bg-white/90 shadow-soft ring-2 ring-primary/40 backdrop-blur-sm sm:h-52"
+            style={{ aspectRatio: plan.w / plan.h }}
+            aria-label="Mini planimetria: tocca una stanza per andarci"
+            role="group"
+          >
+            {ROOMS_3D.map((r, i) => {
+              const target = roomStation[i];
+              const here = target === stationId;
+              return (
+                <polygon
+                  key={i}
+                  points={r.pts.map((p) => p.join(",")).join(" ")}
+                  fill={here ? "#dbeafe" : r.kind === "balcony" ? "#e2e8f0" : "#ffffff"}
+                  stroke="#64748b"
+                  strokeWidth={9}
+                  strokeLinejoin="round"
+                  onClick={target && !here ? () => apiRef.current?.jump(target) : undefined}
+                  className={target && !here ? "cursor-pointer transition-colors hover:fill-[#bfdbfe]" : undefined}
+                >
+                  {target && <title>{BY_ID.get(target)?.name}</title>}
+                </polygon>
+              );
+            })}
+            {PANO_STATIONS.map((s) => {
+              const here = s.id === stationId;
+              const cx = s.pos[0] * PX_M;
+              const cy = -s.pos[1] * PX_M;
+              return (
+                <g key={s.id} onClick={() => !here && apiRef.current?.jump(s.id)} className={here ? "" : "cursor-pointer"}>
+                  <title>{s.name}</title>
+                  <circle cx={cx} cy={cy} r={70} fill="transparent" />
+                  {!here && (
+                    // anello che pulsa: fa capire che il punto si può toccare
+                    <circle cx={cx} cy={cy} r={30} fill="none" stroke="#0e6ba8" strokeWidth={8} className="pano-pulse" />
+                  )}
+                  <circle cx={cx} cy={cy} r={26} fill={here ? "#0e6ba8" : "#38bdf8"} stroke="#fff" strokeWidth={10} />
+                </g>
+              );
+            })}
+            <path ref={coneRef} fill="#0e6ba8" fillOpacity={0.3} pointerEvents="none" />
+            <circle ref={dotRef} r={40} fill="#0e6ba8" stroke="#fff" strokeWidth={12} pointerEvents="none" />
+          </svg>
+        </div>
 
         {/* Avviso puntuale: compare solo guardando le zone della foto in cui la ricostruzione non è fedele */}
         <div
