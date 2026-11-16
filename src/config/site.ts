@@ -42,12 +42,11 @@ const rawWhatsApp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/
 export const WHATSAPP_NUMBER: string | null = /^\d{8,15}$/.test(rawWhatsApp) ? rawWhatsApp : null;
 
 /**
- * Tour virtuale 3D (sezione "Tour Virtuale 3D" subito dopo la galleria foto,
- * raggiungibile anche dalla barra "Tour virtuale 3D" sopra le schede Foto Attuali / Arredala tu).
- * `false` = sezione e barra nascoste; TOUR_EMBED_URL vuoto = sezione nascosta.
+ * Tour virtuale 3D (pulsante "Tour virtuale 3D" sopra le schede Foto Attuali / Arredala tu):
+ * visore a 360° con le foto panoramiche in /public/images/tour e i dati in src/data/panoTour.ts.
+ * `false` = pulsante nascosto.
  */
 export const ENABLE_3D_TOUR = true;
-export const TOUR_EMBED_URL = "https://splattour.com/t/My_tour-2901";
 
 /** Limiti dello studio "Crea il tuo Render AI" */
 export const AI_FREE_RENDERS = 2;

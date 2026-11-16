@@ -250,8 +250,3 @@
   .fp3d-label span { font-size: 10.5px; }
   .fp3d-label em { font-size: 9px; }
 }
-
-/* Riflesso dello scheletro di caricamento del tour 3D */
-@keyframes tour-shimmer {
-  to { transform: translateX(100%); }
-}

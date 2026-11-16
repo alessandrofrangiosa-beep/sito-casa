@@ -10,8 +10,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
 import { CompositionList } from "@/components/CompositionList";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
-import { VirtualTour } from "@/components/VirtualTour";
-import { ENABLE_3D_TOUR, PROPERTY, TOUR_EMBED_URL } from "@/config/site";
+import { PROPERTY } from "@/config/site";
 
 /** Collega automaticamente le immagini in /public/images/planimetria (verificate al build); "garage" nel nome = planimetria del box. */
 function findFloorPlans(): { src: string; label: string }[] {
@@ -37,9 +36,8 @@ function Band({ tone = "white", last = false, children }: { tone?: "white" | "ic
 
 export default function Home() {
   const floorPlans = findFloorPlans();
-  // Tour 3D subito dopo la galleria foto (se attivo); le fasce successive alternano bianco / grigio ghiaccio
-  const showTour = ENABLE_3D_TOUR && Boolean(TOUR_EMBED_URL);
-  const tone = (i: number): "white" | "ice" => ((i + (showTour ? 1 : 0)) % 2 === 0 ? "ice" : "white");
+  // Alternanza bianco / grigio ghiaccio delle fasce (il tour 3D è una scheda della sezione foto)
+  const tone = (i: number): "white" | "ice" => (i % 2 === 0 ? "ice" : "white");
   // Solo un booleano: la chiave resta sul server e non arriva mai al browser
   const aiEnabled = Boolean(process.env.OPENAI_API_KEY);
 
@@ -51,12 +49,6 @@ export default function Home() {
         <div className="pb-16 sm:pb-20">
           <ExploreSection aiEnabled={aiEnabled} />
         </div>
-
-        {showTour && (
-          <Band tone="ice">
-            <VirtualTour />
-          </Band>
-        )}
 
         <Band tone={tone(0)}>
           <Location />

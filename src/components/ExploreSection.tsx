@@ -4,13 +4,14 @@ import { useCallback, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Carousel } from "./Carousel";
 import { AiStudio } from "./AiStudio";
-import { ENABLE_3D_TOUR, TOUR_EMBED_URL } from "@/config/site";
+import { ENABLE_3D_TOUR } from "@/config/site";
+import { PanoTour } from "./PanoTour";
 import { galleryData, type GalleryItem } from "@/data/galleryData";
 import { useUi } from "./UiProvider";
 
-type Mode = "foto" | "ai";
+type Mode = "foto" | "ai" | "tour";
 
-const MODES: { id: Mode; emoji: string; label: string; short: string }[] = [
+const MODES: { id: Exclude<Mode, "tour">; emoji: string; label: string; short: string }[] = [
   { id: "foto", emoji: "📷", label: "Foto Attuali", short: "Foto Attuali" },
   { id: "ai", emoji: "🎨", label: "Arredala come vuoi tu", short: "Arredala tu" },
 ];
@@ -22,21 +23,31 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
 
   return (
     <section id="esplora" className="mx-auto max-w-5xl scroll-mt-4 px-4">
-      {/* Un unico selettore: in alto la barra sottile "Tour virtuale 3D" (porta alla sezione del tour),
+      {/* Un unico selettore: in alto la barra sottile "Tour virtuale 3D" (apre il tour al posto delle foto),
           una linea di separazione, poi le schede divise da linee verticali. All'apertura: foto reali. */}
       <div className="rounded-2xl border border-line bg-card p-1.5 shadow-soft">
-        {ENABLE_3D_TOUR && TOUR_EMBED_URL && (
+        {ENABLE_3D_TOUR && (
           <>
-            {/* Porta alla sezione "Tour Virtuale 3D" subito sotto la galleria */}
-            <a
-              href="#tour-3d"
-              // Aspetto da pulsante: fondo azzurro, bordo, ombra e freccia a destra
-              className="group relative flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary-soft px-10 text-[14px] font-bold text-primary shadow-soft transition hover:border-primary/60 hover:bg-[#e0efff] active:scale-[0.99] sm:text-[15px]"
+            {/* Apre il tour 3D al posto delle foto, nello stesso riquadro */}
+            <button
+              type="button"
+              aria-pressed={mode === "tour"}
+              aria-controls="pannello-tour"
+              onClick={() => setMode("tour")}
+              // Aspetto da pulsante: fondo azzurro, bordo, ombra e freccia a destra (blu pieno quando è aperto)
+              className={`group relative flex h-11 w-full items-center justify-center gap-2 rounded-xl border px-10 text-[14px] font-bold shadow-soft transition active:scale-[0.99] sm:text-[15px] ${
+                mode === "tour"
+                  ? "border-primary bg-primary text-white"
+                  : "border-primary/30 bg-primary-soft text-primary hover:border-primary/60 hover:bg-[#e0efff]"
+              }`}
             >
               <span className="text-base leading-none" aria-hidden>🧭</span>
               Tour virtuale 3D
-              <ChevronRight aria-hidden className="absolute right-3 h-5 w-5 rotate-90 text-primary transition group-hover:translate-y-0.5" />
-            </a>
+              <ChevronRight
+                aria-hidden
+                className={`absolute right-3 h-5 w-5 transition group-hover:translate-x-0.5 ${mode === "tour" ? "text-white" : "text-primary"}`}
+              />
+            </button>
             <div aria-hidden className="mx-2 my-1.5 h-px bg-line" />
           </>
         )}
@@ -81,6 +92,7 @@ export function ExploreSection({ aiEnabled = false }: { aiEnabled?: boolean }) {
           </>
         )}
         {mode === "ai" && <AiStudio aiEnabled={aiEnabled} onShowRenders={() => setMode("foto")} />}
+        {mode === "tour" && <PanoTour />}
       </div>
     </section>
   );
