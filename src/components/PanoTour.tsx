@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Mesh, ShaderMaterial, Texture } from "three";
 import { ChevronDown, Footprints, Maximize2, Minimize2 } from "lucide-react";
 import { ROOMS_3D } from "@/data/floorPlan3d";
-import { PANO_START, PANO_STATIONS, type PanoLink, type PanoStation } from "@/data/panoTour";
+import { PANO_START, PANO_STATIONS, type PanoStation } from "@/data/panoTour";
 
 type FsElement = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
 type FsDocument = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => Promise<void> | void };
@@ -17,6 +17,8 @@ const PX_M = 70.3; // pixel della planimetria per metro
 const FREE_R = 0.8;
 const WALL_MARGIN = 0.6;
 const SPEED = 1.5; // m/s
+/** Spessore dei muri (m): le stanze si allargano di mezzo muro, così due stanze vicine si toccano sulla soglia */
+const PAD = 0.18;
 
 const angDiff = (a: number, b: number) => ((((a - b) % 360) + 540) % 360) - 180;
 const bearingOf = (dx: number, dz: number) => Math.atan2(dx, dz) / D2R;
@@ -30,14 +32,6 @@ function boxDist(s: PanoStation, b: number) {
   const tz = dz > 1e-6 ? z1 / dz : dz < -1e-6 ? z0 / dz : Infinity;
   return Math.min(tx, tz);
 }
-/** Punto della porta (coordinate locali della stanza) visto dalla foto nella direzione `yaw` */
-function doorPoint(s: PanoStation, yaw: number): V2 {
-  const b = yaw + s.off;
-  const d = boxDist(s, b) - 0.02;
-  const [dx, dz] = dirOf(b);
-  return [dx * d, dz * d];
-}
-const backLink = (b: PanoStation, aId: string) => b.links.find((l) => l.to === aId);
 
 /* ------------------------------------------------------------------ */
 /* Shader: proiezione della foto equirettangolare dal punto di ripresa  */
@@ -158,7 +152,7 @@ export function PanoTour() {
       const rooms = new Map<string, Room>();
       for (const s of PANO_STATIONS) {
         const [x0, x1, z0, z1] = s.box;
-        const geo = new THREE.BoxGeometry(x1 - x0, s.ceil, z1 - z0);
+        const geo = new THREE.BoxGeometry(x1 - x0 + 2 * PAD, s.ceil, z1 - z0 + 2 * PAD);
         const mat = new THREE.ShaderMaterial({
           uniforms: { tex: { value: null }, center: { value: new THREE.Vector3() }, off: { value: s.off * D2R }, opacity: { value: 1 } },
           vertexShader: VERT,
@@ -173,6 +167,19 @@ export function PanoTour() {
         scene.add(mesh);
         rooms.set(s.id, { s, mesh, mat, origin: [0, 0] });
       }
+      // Sfondo a 360° con la foto della stanza di destinazione: nei punti di passaggio che non appartengono a nessuna
+      // stanza della planimetria (es. disimpegno) non si vede mai il vuoto
+      const skyMat = new THREE.ShaderMaterial({
+        uniforms: { tex: { value: null }, center: { value: new THREE.Vector3() }, off: { value: 0 }, opacity: { value: 1 } },
+        vertexShader: VERT,
+        fragmentShader: FRAG,
+        side: THREE.BackSide,
+        depthTest: false,
+        depthWrite: false,
+      });
+      const sky = new THREE.Mesh(new THREE.SphereGeometry(40, 48, 32), skyMat);
+      sky.renderOrder = -1;
+      scene.add(sky);
       const place = (r: Room, origin: V2) => {
         r.origin = origin;
         const [x0, x1, z0, z1] = r.s.box;
@@ -205,7 +212,7 @@ export function PanoTour() {
       // --- Stato ---
       let cur = rooms.get(PANO_START)!;
       let next: Room | null = null;
-      const pos: V2 = [0, 0]; // posizione della camera (coordinate della casa)
+      const pos: V2 = [cur.s.pos[0], cur.s.pos[1]]; // posizione della camera (metri, riferimento della planimetria)
       let eye = cur.s.h;
       let heading = cur.s.yaw + cur.s.off; // direzione di vista (gradi)
       let pitch = -5;
@@ -215,7 +222,7 @@ export function PanoTour() {
       let velH = 0;
       let velP = 0;
       const keys = new Set<string>();
-      place(cur, [0, 0]);
+      for (const r of rooms.values()) place(r, r.s.pos);
       cur.mesh.visible = true;
 
       const local = (): V2 => [pos[0] - cur.origin[0], pos[1] - cur.origin[1]];
@@ -303,31 +310,24 @@ export function PanoTour() {
           setBusy(false);
         } else void ensure(b);
         if (disposed) return;
-        let origin: V2;
         let pts: V2[];
         let f0: number;
         let f1: number;
         if (link.direct) {
           // stessa stanza (due punti di ripresa): passaggio diretto
-          origin = [cur.origin[0] + link.direct[0], cur.origin[1] + link.direct[1]];
-          pts = [[pos[0], pos[1]], origin];
+          pts = [[pos[0], pos[1]], b.pos];
           const { len } = pathOf(pts);
           f0 = len * 0.2;
           f1 = len * 0.8;
         } else {
-          const back = backLink(b, cur.s.id) as PanoLink;
-          const dA = doorPoint(cur.s, link.yaw!);
-          const dB = doorPoint(b, back.yaw!);
-          const door: V2 = [cur.origin[0] + dA[0], cur.origin[1] + dA[1]];
-          origin = [door[0] - dB[0], door[1] - dB[1]];
-          // un passo prima e uno dopo la soglia, in direzione perpendicolare alla porta
-          pts = [[pos[0], pos[1]], door, origin];
-          const l1 = Math.hypot(door[0] - pos[0], door[1] - pos[1]);
-          // la foto della stanza accanto compare solo sulla soglia (prima la si vedrebbe "da fuori")
-          f0 = Math.max(0, l1 - 0.08);
-          f1 = l1 + 0.55;
+          // percorso dalle porte della planimetria; la foto della stanza accanto compare sulla soglia dell'ultima porta
+          const via = link.via ?? [];
+          pts = [[pos[0], pos[1]], ...via, b.pos];
+          const { lens } = pathOf(pts);
+          // dissolvenza dalla prima all'ultima porta (es. soggiorno → disimpegno → cucina)
+          f0 = Math.max(0, lens[1] - 0.08);
+          f1 = lens[pts.length - 2] + 0.55;
         }
-        place(nr, origin);
         next = nr;
         nr.mat.uniforms.opacity.value = 0;
         nr.mesh.visible = true;
@@ -345,11 +345,6 @@ export function PanoTour() {
         next = null;
         cur.mat.uniforms.opacity.value = 1;
         cur.mesh.renderOrder = 0;
-        // si riporta l'origine a zero (niente accumulo di errori)
-        const o = cur.origin;
-        pos[0] -= o[0];
-        pos[1] -= o[1];
-        place(cur, [0, 0]);
         setStationId(cur.s.id);
         preloadNeighbours(cur.s);
       };
@@ -372,10 +367,10 @@ export function PanoTour() {
         move = null;
         cur.mesh.visible = false;
         cur = rooms.get(id)!;
-        place(cur, [0, 0]);
         cur.mat.uniforms.opacity.value = 1;
         cur.mesh.visible = true;
-        pos[0] = pos[1] = 0;
+        pos[0] = s.pos[0];
+        pos[1] = s.pos[1];
         eye = s.h;
         heading = s.yaw + s.off;
         pitch = -5;
@@ -390,8 +385,11 @@ export function PanoTour() {
       type Pick = { kind: "step"; p: V2 } | { kind: "go"; to: string; p: V2 } | null;
       const doorTargets = () =>
         cur.s.links.map((l) => {
-          if (l.direct) return { to: l.to, p: l.direct as V2, direct: true };
-          return { to: l.to, p: doorPoint(cur.s, l.yaw!), direct: false };
+          const b = BY_ID.get(l.to)!;
+          if (l.direct) return { to: l.to, p: [b.pos[0] - cur.origin[0], b.pos[1] - cur.origin[1]] as V2, direct: true };
+          // prima porta del percorso, in coordinate locali della stanza attuale
+          const d = l.via?.[0] ?? b.pos;
+          return { to: l.to, p: [d[0] - cur.origin[0], d[1] - cur.origin[1]] as V2, direct: false };
         });
       const pick = (cx: number, cy: number): Pick => {
         const r = canvas.getBoundingClientRect();
@@ -595,19 +593,15 @@ export function PanoTour() {
           el.style.pointerEvents = on ? "auto" : "none";
           if (on) el.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
         });
-        // posizione in pianta: punto di ripresa + spostamento locale
-        const s = cur.s;
-        const lp = local();
-        const d = Math.hypot(lp[0], lp[1]);
-        const th = (bearingOf(lp[0], lp[1]) - s.off + s.planAlpha) * D2R;
-        const px = s.plan[0] + Math.cos(th) * d * PX_M;
-        const py = s.plan[1] + Math.sin(th) * d * PX_M;
+        // posizione in pianta: x = metri verso est, z = metri verso nord (y della planimetria verso il basso)
+        const px = pos[0] * PX_M;
+        const py = -pos[1] * PX_M;
         dotRef.current?.setAttribute("cx", `${px}`);
         dotRef.current?.setAttribute("cy", `${py}`);
         const hf = (2 * Math.atan(Math.tan((camera.fov * D2R) / 2) * camera.aspect)) / D2R;
         const L = 170;
-        const a0 = (heading - s.off + s.planAlpha - hf / 2) * D2R;
-        const a1 = (heading - s.off + s.planAlpha + hf / 2) * D2R;
+        const a0 = (heading - 90 - hf / 2) * D2R;
+        const a1 = (heading - 90 + hf / 2) * D2R;
         coneRef.current?.setAttribute(
           "d",
           `M${px},${py} L${px + Math.cos(a0) * L},${py + Math.sin(a0) * L} A${L},${L} 0 0 1 ${px + Math.cos(a1) * L},${py + Math.sin(a1) * L} Z`,
@@ -696,6 +690,12 @@ export function PanoTour() {
         const [hx, hz] = dirOf(heading);
         const cp = Math.cos(pitch * D2R);
         camera.lookAt(pos[0] + hx * cp, eye + Math.sin(pitch * D2R), -(pos[1] + hz * cp));
+        const skyRoom = next ?? cur;
+        skyMat.uniforms.tex.value = skyRoom.mat.uniforms.tex.value;
+        skyMat.uniforms.off.value = skyRoom.s.off * D2R;
+        // proiezione dal punto della camera: la foto resta "all'infinito", senza deformazioni
+        skyMat.uniforms.center.value.set(pos[0], eye, pos[1]);
+        sky.position.set(pos[0], eye, -pos[1]);
         if (cur.mat.uniforms.tex.value) renderer.render(scene, camera);
         placeOverlay();
       };
@@ -866,8 +866,8 @@ export function PanoTour() {
           {PANO_STATIONS.map((s) => (
             <g key={s.id} onClick={() => apiRef.current?.jump(s.id)} className="cursor-pointer">
               <title>{s.name}</title>
-              <circle cx={s.plan[0]} cy={s.plan[1]} r={70} fill="transparent" />
-              <circle cx={s.plan[0]} cy={s.plan[1]} r={22} fill="#94a3b8" stroke="#fff" strokeWidth={10} />
+              <circle cx={s.pos[0] * PX_M} cy={-s.pos[1] * PX_M} r={70} fill="transparent" />
+              <circle cx={s.pos[0] * PX_M} cy={-s.pos[1] * PX_M} r={22} fill="#94a3b8" stroke="#fff" strokeWidth={10} />
             </g>
           ))}
           <path ref={coneRef} fill="#0e6ba8" fillOpacity={0.3} pointerEvents="none" />
