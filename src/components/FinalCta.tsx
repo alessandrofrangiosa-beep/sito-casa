@@ -2,10 +2,15 @@
 
 import { FileCheck2 } from "lucide-react";
 import { useUi } from "./UiProvider";
-import { PROPERTY } from "@/config/site";
+import { PROPERTY, WHATSAPP_NUMBER } from "@/config/site";
+import { galleryData } from "@/data/galleryData";
+import { WhatsAppIcon } from "./BookingModal";
+
+/** Messaggio precompilato per chi vuole prima parlarne in famiglia */
+const FAMILY_MESSAGE = `Ciao, ho visto il sito dell'appartamento in ${PROPERTY.address}. Potrei ricevere su WhatsApp le planimetrie e il riepilogo dell'immobile per valutarlo in famiglia prima di fissare una visita?`;
 
 const STEPS = [
-  { t: "Guarda foto e render", d: "La visita guidata in 15 scatti reali, più le ipotesi di arredo." },
+  { t: "Guarda foto e render", d: `La visita guidata in ${galleryData.length} scatti reali, più le ipotesi di arredo.` },
   { t: "Leggi le Info Utili", d: "Composizione, stato, condominio e documenti: tutto nero su bianco." },
   { t: "Prenota la visita dal vivo", d: "Indica come acquisti e quando preferisci: rispondo su WhatsApp." },
 ];
@@ -48,6 +53,37 @@ export function FinalCta() {
             Apri le Info Utili
           </button>
         </div>
+        {/* CTA secondaria a basso attrito: scheda e planimetrie su WhatsApp, senza fissare subito una visita */}
+        {(() => {
+          const inner = (
+            <>
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white">
+                <WhatsAppIcon className="h-[18px] w-[18px] text-whatsapp" />
+              </span>
+              <span className="min-w-0 text-left text-sm leading-snug">
+                <strong className="font-semibold text-white">Vuoi parlarne in famiglia?</strong>{" "}
+                <span className="text-white/80">Ricevi scheda riepilogativa e planimetrie su WhatsApp</span>
+              </span>
+              <span aria-hidden className="ml-auto shrink-0 text-lg text-white/70">→</span>
+            </>
+          );
+          const cls =
+            "mt-3 flex w-full items-center gap-3 rounded-xl border border-white/20 bg-white/5 px-4 py-3 transition hover:bg-white/10";
+          return WHATSAPP_NUMBER ? (
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(FAMILY_MESSAGE)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cls}
+            >
+              {inner}
+            </a>
+          ) : (
+            <button type="button" onClick={openBooking} className={cls}>
+              {inner}
+            </button>
+          );
+        })()}
       </div>
     </section>
   );

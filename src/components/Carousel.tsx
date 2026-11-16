@@ -55,45 +55,83 @@ function CaptionPill({ item, index, total }: { item: GalleryItem; index: number;
   );
 }
 
+/** Oltre questa durata (ms) la pressione è un "tieni premuto" (confronto al volo), sotto è un tocco (interruttore fisso) */
+const TAP_MS = 320;
+
 /**
- * Pulsante "Premi: Render 3D" (tieni premuto): finché il dito (o il mouse) resta sul pulsante si vede il render,
- * al rilascio torna subito la foto reale. Niente menu "Salva immagine" né selezione di testo su iOS/Android.
+ * Controllo "Render 3D / Stato attuale":
+ * - tocco / clic singolo: passa in modo fisso dalla foto reale al render (e viceversa), così si può guardare con calma e zoomare;
+ * - tieni premuto: finché il dito (o il mouse) resta sul pulsante si vede l'altra versione, al rilascio si torna a come era
+ *   (confronto al volo). Niente menu "Salva immagine" né selezione di testo su iOS/Android.
  */
-function HoldToCompare({ active, onHold }: { active: boolean; onHold: (on: boolean) => void }) {
-  const start = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    e.preventDefault();
+function RenderToggle({
+  showing,
+  pinned,
+  onHold,
+  onToggle,
+}: {
+  showing: boolean;
+  pinned: boolean;
+  onHold: (on: boolean) => void;
+  onToggle: () => void;
+}) {
+  const downAt = useRef<number | null>(null);
+  const begin = () => {
+    if (downAt.current !== null) return;
+    downAt.current = performance.now();
     onHold(true);
   };
-  const stop = () => onHold(false);
+  const finish = (commit: boolean) => {
+    if (downAt.current === null) return;
+    const quick = performance.now() - downAt.current < TAP_MS;
+    downAt.current = null;
+    onHold(false);
+    if (commit && quick) onToggle();
+  };
   return (
     <button
       type="button"
-      onPointerDown={start}
-      onPointerUp={stop}
-      onPointerLeave={stop}
-      onPointerCancel={stop}
-      onLostPointerCapture={stop}
-      onKeyDown={(e) => (e.key === " " || e.key === "Enter") && (e.preventDefault(), onHold(true))}
-      onKeyUp={stop}
-      onBlur={stop}
+      onPointerDown={(e) => {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        e.preventDefault();
+        begin();
+      }}
+      onPointerUp={() => finish(true)}
+      onPointerLeave={() => finish(false)}
+      onPointerCancel={() => finish(false)}
+      onLostPointerCapture={() => finish(false)}
+      onKeyDown={(e) => {
+        if (e.key !== " " && e.key !== "Enter") return;
+        e.preventDefault();
+        if (!e.repeat) begin();
+      }}
+      onKeyUp={(e) => (e.key === " " || e.key === "Enter") && finish(true)}
+      onBlur={() => finish(false)}
       onContextMenu={(e) => e.preventDefault()}
       style={{ WebkitTouchCallout: "none" }}
-      aria-pressed={active}
-      aria-label="Tieni premuto per vedere il Render 3D"
+      aria-pressed={pinned}
+      aria-label={
+        pinned
+          ? "Torna alla foto reale (tocca) o tieni premuto per un confronto rapido"
+          : "Mostra il Render 3D (tocca) o tieni premuto per un confronto rapido"
+      }
       className={`pointer-events-auto inline-flex touch-none items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-semibold text-white shadow-float backdrop-blur transition select-none ${
-        active ? "scale-95 border-primary bg-primary" : "border-white/70 bg-ink/80"
+        showing ? "border-primary bg-primary" : "border-white/70 bg-ink/80"
       }`}
     >
-      Premi: Render 3D
+      {showing ? "Stato attuale" : "Render 3D"}
     </button>
   );
 }
 
-/** Stato "tengo premuto": si azzera cambiando foto e se la pagina perde il focus con il dito ancora giù */
-function useHold(index: number) {
+/** Stato del confronto: render fissato (tocco) e "tengo premuto" (confronto al volo); si azzera cambiando foto o perdendo il focus */
+function useCompare(index: number) {
+  const [pinned, setPinned] = useState(false);
   const [holding, setHolding] = useState(false);
-  useEffect(() => setHolding(false), [index]);
+  useEffect(() => {
+    setPinned(false);
+    setHolding(false);
+  }, [index]);
   useEffect(() => {
     const release = () => setHolding(false);
     window.addEventListener("blur", release);
@@ -103,7 +141,9 @@ function useHold(index: number) {
       document.removeEventListener("visibilitychange", release);
     };
   }, []);
-  return [holding, setHolding] as const;
+  const toggle = useCallback(() => setPinned((p) => !p), []);
+  // Tenendo premuto si vede l'altra versione rispetto a quella fissata
+  return { showRender: pinned !== holding, pinned, setHolding, toggle };
 }
 
 /** Badge mostrato mentre si vede il render */
@@ -136,8 +176,8 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
   const [lightbox, setLightbox] = useState<number | null>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
   const current = items[index];
-  const [holding, setHolding] = useHold(index);
-  const showingRender = holding && Boolean(current.render);
+  const { showRender, pinned, setHolding, toggle } = useCompare(index);
+  const showingRender = showRender && Boolean(current.render);
 
   useEffect(() => {
     onIndexChange?.(items[index], index);
@@ -201,7 +241,7 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
         <Arrows index={index} total={items.length} goTo={goTo} />
 
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
-          <div className="flex flex-col items-start gap-1.5">
+          <div className="flex min-w-0 flex-col items-start gap-1.5">
             {overlayBadge && (
               <span className="rounded-full bg-ink/70 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
                 ✨ {overlayBadge}
@@ -214,14 +254,14 @@ export function Carousel({ items, overlayBadge, onIndexChange, priorityFirst }: 
               </span>
             )}
           </div>
-          <span className="flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[12px] font-semibold text-white backdrop-blur">
+          <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[12px] font-semibold whitespace-nowrap text-white backdrop-blur">
             {index + 1} / {items.length}
             <Maximize2 className="h-3 w-3" />
           </span>
         </div>
 
         <div className="pointer-events-none absolute inset-x-2 bottom-2 flex flex-col items-center gap-2 sm:inset-x-3 sm:bottom-3">
-          {current.render && <HoldToCompare key={current.id} active={showingRender} onHold={setHolding} />}
+          {current.render && <RenderToggle key={current.id} showing={showingRender} pinned={pinned} onHold={setHolding} onToggle={toggle} />}
           <CaptionPill item={current} index={index} total={items.length} />
         </div>
       </div>
@@ -264,8 +304,8 @@ function Lightbox({
 }) {
   const { trackRef, index, onScroll, goTo } = useCarousel(items.length, start);
   const item = items[index];
-  const [holding, setHolding] = useHold(index);
-  const showingRender = holding && Boolean(item.render);
+  const { showRender, pinned, setHolding, toggle } = useCompare(index);
+  const showingRender = showRender && Boolean(item.render);
 
   useLayoutEffect(() => {
     const el = trackRef.current;
@@ -330,7 +370,7 @@ function Lightbox({
         )}
         {item.render && (
           <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
-            <HoldToCompare key={item.id} active={showingRender} onHold={setHolding} />
+            <RenderToggle key={item.id} showing={showingRender} pinned={pinned} onHold={setHolding} onToggle={toggle} />
           </div>
         )}
       </div>

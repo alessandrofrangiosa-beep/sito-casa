@@ -10,7 +10,7 @@ export type GalleryItem = {
   render?: string;
 };
 
-/** Visita guidata: 14 foto reali in /public/images/attuali, in ordine di percorso. */
+/** Visita guidata: foto reali in /public/images/attuali, in ordine di percorso. */
 export const galleryData: GalleryItem[] = [
   {
     id: 1,
@@ -18,7 +18,7 @@ export const galleryData: GalleryItem[] = [
     title: "Vista mare aperta",
     caption: "Vista aperta sul Golfo dal 6° piano, con la luce del mattino su due lati.",
     alt: "Panorama dal 6° piano sul Golfo di Napoli con la penisola sorrentina all'orizzonte",
-    badge: "Esposizione Nord-Est",
+    badge: "Sole al mattino · Fresco d'estate (Est/Nord)",
   },
   {
     id: 2,

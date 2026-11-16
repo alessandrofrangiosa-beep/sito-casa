@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronDown, Hammer, Landmark, PiggyBank, ShieldCheck } from "lucide-react";
+import { ChevronDown, Hammer, HandCoins, Landmark, PiggyBank, ShieldCheck } from "lucide-react";
 import { PROPERTY } from "@/config/site";
 import {
   PROPERTY_FINANCE_CONFIG as C,
@@ -73,7 +73,10 @@ export function MortgageSimulator() {
     const prima = notaryTaxes(rendita, true);
     const seconda = notaryTaxes(rendita, false);
     const sulPrezzo = C.propertyPrice * C.registroSecondaCasa;
-    return { prima, seconda, sulPrezzo };
+    // Imposte sul prezzo pieno come prima casa (2% + ipotecaria e catastale fisse) e con IVA al 4% da costruttore
+    const primaSulPrezzoPieno = C.propertyPrice * C.registroPrimaCasa + C.impostaIpotecaria + C.impostaCatastale;
+    const conIva = C.propertyPrice * C.ivaCostruttorePrimaCasa;
+    return { prima, seconda, sulPrezzo, primaSulPrezzoPieno, conIva };
   }, [rendita]);
 
   const bonus = useMemo(() => {
@@ -239,7 +242,26 @@ export function MortgageSimulator() {
       <h3 className="mt-10 text-xl font-bold leading-tight text-ink sm:text-2xl">
         Perché comprare questa casa ti fa risparmiare migliaia di euro
       </h3>
-      <div className="mt-4 grid gap-3 md:grid-cols-3">
+      <div className="mt-4 grid gap-3 md:grid-cols-2">
+        {/* Card 0: zero provvigioni d'agenzia */}
+        <article className="flex flex-col rounded-2xl border border-sand-line bg-sand p-5">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-sage-soft text-sage">
+            <HandCoins className="h-5 w-5" aria-hidden />
+          </span>
+          <h4 className="mt-3 text-base font-bold leading-snug text-ink">Zero provvigioni d&apos;agenzia</h4>
+          <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">
+            <span className="whitespace-nowrap">
+              {formatEuro(C.agencySavingMin)} – {formatEuro(C.agencySavingMax)}
+            </span>{" "}
+            <span className="text-base font-bold">risparmiati subito</span>
+          </p>
+          <p className="mt-1.5 text-sm leading-snug text-slate-ink">
+            Comprando <strong className="text-ink">direttamente dai proprietari</strong> non paghi il classico 3%–4% + IVA di
+            mediazione immobiliare. Sono circa {formatEuro(10_000)} di liquidità netta (che le banche non finanziano col mutuo)
+            che restano interamente nelle tue tasche.
+          </p>
+        </article>
+
         {/* Card 1: prezzo-valore */}
         <article className="flex flex-col rounded-2xl border border-sand-line bg-sand p-5">
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-terracotta-soft text-terracotta">
@@ -247,16 +269,20 @@ export function MortgageSimulator() {
           </span>
           <h4 className="mt-3 text-base font-bold leading-snug text-ink">Tasse dal notaio ridotte col prezzo-valore</h4>
           {/* In verde il risparmio; sotto, il perché e quanto si paga davvero */}
-          <p className="mt-2 text-[1.7rem] leading-none font-extrabold text-sage tabular-nums">
-            {formatEuro(Math.round((tax.sulPrezzo - tax.prima.totale) / 100) * 100)} <span className="text-base font-bold">risparmiati</span>
+          {/* In verde l'importo che si paga davvero; sotto, il risparmio rispetto a un acquisto con IVA */}
+          <p className="mt-2 text-[1.7rem] leading-tight font-extrabold text-sage tabular-nums">
+            Solo {formatEuroCents(tax.prima.totale)} <span className="text-base font-bold">di imposte</span>
+          </p>
+          <p className="mt-1 text-sm leading-snug font-semibold text-sage tabular-nums">
+            Fino a {formatEuro(Math.round((tax.conIva - tax.prima.totale) / 10) * 10)} risparmiati rispetto ad acquisto soggetto a IVA
           </p>
           <p className="mt-1.5 text-sm leading-snug text-slate-ink">
-            <strong className="text-ink">Perché?</strong> Comprando da <strong className="text-ink">privato</strong> come prima casa, le tasse si pagano sul valore
-            catastale (circa {formatEuro(Math.round(tax.prima.valoreCatastale / 1000) * 1000)}) e non sul prezzo di{" "}
-            {formatEuro(C.propertyPrice)}. <strong className="text-ink">Paghi solo {formatEuroCents(tax.prima.totale)}</strong>{" "}
-            invece di {formatEuro(tax.sulPrezzo)}.
+            Comprando da <strong className="text-ink">privato</strong> come prima casa, l&apos;imposta del 2% si calcola sul valore
+            catastale (circa {formatEuro(Math.round(tax.prima.valoreCatastale / 10) * 10)}) anziché sul prezzo pieno di{" "}
+            {formatEuro(C.propertyPrice)}. <strong className="text-ink">Paghi solo {formatEuroCents(tax.prima.totale)} di imposte totali</strong>{" "}
+            (contro i {formatEuro(tax.primaSulPrezzoPieno)} sul valore pieno, i {formatEuro(tax.conIva)} di IVA al 4% da costruttore
+            o i {formatEuro(tax.sulPrezzo)} senza agevolazioni).
           </p>
-          <p className="mt-1 text-xs leading-snug text-slate-ink">Come seconda casa pagheresti {formatEuro(tax.seconda.totale)}.</p>
           <label className="mt-auto flex items-center justify-between gap-2 border-t border-sand-line pt-3 text-xs text-slate-ink">
             Rendita catastale (dalla visura)
             <span className="flex items-center gap-1 font-semibold text-ink">

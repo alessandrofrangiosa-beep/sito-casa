@@ -7,4 +7,6 @@ export const FIBER = {
 export const BUILDER_BONUS = {
   title: "Impresa già attiva nello stabile",
   text: "Su richiesta forniamo il contatto dell'impresa che sta eseguendo i lavori condominiali: interventi interni subito dopo il rogito, senza attese e a costi ridotti.",
+  /** Postilla rassicurante sui lavori straordinari dello stabile */
+  note: "Tutti i lavori condominiali straordinari già deliberati per lo stabile sono interamente saldati e a carico della parte venditrice: trovi un palazzo riqualificato a costo zero per te.",
 };

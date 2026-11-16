@@ -6,6 +6,10 @@ import { SectionTitle } from "./SectionTitle";
 const ITEMS: { bold: string; rest: string }[] = [
   { bold: "Casa già sgomberata:", rest: " libera subito, né attese né spese per lo sgombero: puoi entrare appena dopo il rogito" },
   { bold: "Ascensore disponibile:", rest: " si arriva al 6°\u00a0piano comodamente, anche con spesa e passeggino" },
+  {
+    bold: "Silenzio e privacy al 6° piano:",
+    rest: " essendo a un piano alto, l'appartamento resta isolato dai rumori della strada e della città: godi di tutta la comodità del pieno centro, ma nella quiete più totale e con vista aperta",
+  },
   { bold: "Cortile interno del palazzo:", rest: " spazio comune all'interno dell'edificio, al riparo dal traffico della strada" },
   { bold: `${FIBER.title}:`, rest: ` ${FIBER.text}` },
   { bold: "Pavimenti in buono stato:", rest: " graniglia nera nel salone, alla veneziana nelle altre stanze" },
@@ -34,6 +38,9 @@ export function Opportunity() {
         <div className="min-w-0">
           <p className="text-base font-bold leading-snug sm:text-lg">{BUILDER_BONUS.title}</p>
           <p className="mt-1 text-[15px] leading-snug text-white/90">{BUILDER_BONUS.text}</p>
+          <p className="mt-2.5 border-t border-white/25 pt-2.5 text-[15px] leading-snug font-semibold text-white">
+            ✓ {BUILDER_BONUS.note}
+          </p>
         </div>
       </aside>
 

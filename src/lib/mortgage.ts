@@ -58,6 +58,11 @@ export const PROPERTY_FINANCE_CONFIG = {
 
   /** Vantaggi già acquisiti con questa vendita (riquadro "Vantaggio economico reale" nella hero) */
   condoWorksPaid: 15_000,
+  /** Con l'acquisto da costruttore prima casa si paga IVA al 4% sul prezzo (termine di confronto per le tasse al rogito) */
+  ivaCostruttorePrimaCasa: 0.04,
+  /** Provvigione d'agenzia risparmiata comprando direttamente dai proprietari (3–4% + IVA su € 250.000, arrotondata) */
+  agencySavingMin: 9_000,
+  agencySavingMax: 12_000,
   agencyFeeMin: 7_500,
   agencyFeeMax: 10_000,
 } as const;
