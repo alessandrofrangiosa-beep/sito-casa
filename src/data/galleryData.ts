@@ -41,7 +41,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/04-cucina.jpg",
     render: "/images/render/render-14-cucina.jpg",
     title: "Cucina abitabile",
-    caption: "Cucina abitabile con finestra, portafinestra sul balcone e pavimento chiaro.",
+    caption: "Cucina abitabile lunga e luminosa, con portafinestra sul balcone e pavimento chiaro.",
     alt: "Cucina abitabile piastrellata con pavimento chiaro e portafinestra sul balcone",
   },
   {
