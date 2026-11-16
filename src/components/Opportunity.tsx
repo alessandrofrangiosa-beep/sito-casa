@@ -14,8 +14,8 @@ const ITEMS: { bold: string; rest: string }[] = [
   { bold: "Ingresso e corridoio", rest: " già tinteggiati di bianco" },
   { bold: "Soffitti alti", rest: " che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED" },
   {
-    bold: "Doppia esposizione angolare Nord-Est:",
-    rest: " luce diretta del mattino sul lato Est (cucina, lavanderia e due camere, sul balcone lungo di ~9,2\u00a0m²) e affaccio aperto sul lato Nord (camera da 17,6\u00a0m² sul terrazzino di ~5,1\u00a0m², su Via Vittorio Veneto). Al 6°\u00a0piano significa ottima luminosità naturale al mattino, ventilazione su due lati e freschezza d'estate, senza il caldo pomeridiano dell'esposizione a Ovest",
+    bold: "Doppia esposizione Nord-Est:",
+    rest: " luce diretta dal lato Est e affaccio aperto sul lato Nord. Ottima luminosità naturale al mattino, ventilazione su due lati e freschezza d'estate",
   },
 ];
 
