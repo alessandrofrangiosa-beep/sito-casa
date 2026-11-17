@@ -60,8 +60,7 @@ function Highlights() {
           <HardHat className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
           <span className="min-w-0 text-sm leading-snug text-ink">
             <strong className="font-semibold">Ditta già attiva nello stabile:</strong> su richiesta e senza vincoli ricevi
-            il contatto della squadra delle facciate per tinteggiare gli interni subito dopo il rogito, senza attese e
-            con costi di uscita ridotti.
+            il contatto della squadra delle facciate per tinteggiare gli interni subito dopo il rogito, senza attese.
           </span>
         </li>
       </ul>
