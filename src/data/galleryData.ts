@@ -50,7 +50,7 @@ export const galleryData: GalleryItem[] = [
     render: "/images/render/render-04-balcone-principale.jpg",
     title: "Balcone principale",
     caption: "Balcone lungo (~9,2 m²) sul lato Est: cucina, lavanderia e due camere con il sole del mattino.",
-    alt: "Balcone lungo con ringhiera e ponteggio sul lato sinistro",
+    alt: "Balcone lungo con ringhiera e pavimento chiaro, con la portafinestra sulla destra",
   },
   {
     id: 6,
@@ -132,7 +132,7 @@ export const renderData: GalleryItem[] = [
   { id: 1, src: "/images/render/render-01-ingresso.jpg", title: "Ingresso", caption: "Ingresso caldo e accogliente con consolle, specchio e luce soffusa.", alt: "Render dell'ingresso arredato" },
   { id: 2, src: "/images/render/render-02-soggiorno-pavimento-nero.jpg", title: "Soggiorno", caption: "Living caldo con divano, libreria e toni naturali sulla graniglia nera originale.", alt: "Render del soggiorno arredato" },
   { id: 3, src: "/images/render/render-03-angolo-relax-vista-mare.jpg", title: "Angolo relax vista mare", caption: "Lettura e relax davanti alla portafinestra affacciata sul Golfo.", alt: "Render di un angolo relax davanti alla vista mare" },
-  { id: 4, src: "/images/render/render-04-balcone-principale.jpg", title: "Balcone principale", caption: "Balcone lungo vissuto come un salotto all'aperto, a lavori ultimati.", alt: "Render del balcone principale arredato" },
+  { id: 4, src: "/images/render/render-04-balcone-principale.jpg", title: "Balcone principale", caption: "Balcone lungo vissuto come un salotto all'aperto, con sedute, piante e luci.", alt: "Render del balcone principale arredato" },
   { id: 5, src: "/images/render/render-05-secondo-balcone.jpg", title: "Secondo balcone", caption: "Angolo verde con fioriere e sedute per la colazione al sole.", alt: "Render del balcone con piante" },
   { id: 6, src: "/images/render/render-06-corridoio.jpg", title: "Corridoio", caption: "Corridoio zona notte valorizzato da quadri, piante e luce calda.", alt: "Render del corridoio arredato" },
   { id: 7, src: "/images/render/render-07-nicchia-armadio.jpg", title: "Nicchia ad arco", caption: "L'arco del disimpegno diventa un guardaroba su misura in legno.", alt: "Render della nicchia ad arco con armadio in legno" },
