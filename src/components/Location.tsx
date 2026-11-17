@@ -35,7 +35,6 @@ export function Location() {
       <SectionTitle
         eyebrow="Posizione strategica"
         title={<>Via Vittorio Veneto 390: centro, mare e collegamenti</>}
-        intro="Uno dei contesti residenziali più apprezzati di Torre Annunziata: tutto ciò che serve è sotto casa, e il mare lo vedi dalla finestra."
       />
       <div className="mb-3 flex gap-3 rounded-2xl border border-primary/20 bg-primary-soft p-4">
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-white">
