@@ -239,8 +239,7 @@ export function InfoDrawer({
               <p className="font-semibold text-ink">Trasparenza totale</p>
               <p className="mt-1">
                 L&apos;immobile è venduto <strong>vuoto / non arredato</strong>. Richiede principalmente{" "}
-                <strong>una semplice rinfrescata delle pareti secondo il proprio gusto e l&apos;arredo personalizzato</strong>.{" "}
-                <strong>Zero opere murarie</strong>: pronta da personalizzare con i tuoi colori e arredi.
+                <strong>una semplice rinfrescata delle pareti secondo il proprio gusto e l&apos;arredo personalizzato</strong>.
               </p>
             </div>
           </>
