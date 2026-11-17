@@ -6,7 +6,7 @@ import { SectionTitle } from "./SectionTitle";
 /** Dotazioni già presenti: bullet brevissimi, inizio in grassetto per una lettura veloce su smartphone */
 const ITEMS: { bold: string; rest?: string }[] = [
   { bold: "Casa già sgomberata:", rest: " libera subito, né attese né spese per lo sgombero." },
-  { bold: "Ascensore", rest: " fino al 6°\u00a0piano." },
+  { bold: "Ascensore", rest: " disponibile." },
   {
     bold: "Silenzio e privacy",
     rest: " al 6°\u00a0piano: nessun rumore dalla strada e nessuna finestra adiacente, con vista aperta.",
