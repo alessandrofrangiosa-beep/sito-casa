@@ -8,7 +8,6 @@ import { FloorPlan } from "@/components/FloorPlan";
 import { Location } from "@/components/Location";
 import { SectionTitle } from "@/components/SectionTitle";
 import { FinalCta } from "@/components/FinalCta";
-import { CompositionList } from "@/components/CompositionList";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
 import { PROPERTY } from "@/config/site";
 
@@ -60,17 +59,9 @@ export default function Home() {
 
         <Band tone={tone(2)}>
           <section id="planimetria" className="mx-auto max-w-5xl scroll-mt-4 px-4">
-            <SectionTitle
-              eyebrow="Quadrilocale · 4 stanze"
-              title="Distribuzione degli spazi"
-              intro="Zona giorno e zona notte ben separate dal corridoio centrale: 4 stanze, cucina abitabile, 2 bagni e 2 balconi."
-            />
-            <div className="grid gap-4 md:grid-cols-2 md:items-start">
-              <CompositionList />
-              <div>
-                <p className="mb-2 text-sm font-semibold text-ink">Planimetria</p>
-                <FloorPlan plans={floorPlans} />
-              </div>
+            <div className="mx-auto max-w-xl">
+              <SectionTitle title="Planimetria" />
+              <FloorPlan plans={floorPlans} />
             </div>
           </section>
         </Band>
