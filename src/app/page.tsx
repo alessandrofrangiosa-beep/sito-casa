@@ -7,7 +7,6 @@ import { Opportunity } from "@/components/Opportunity";
 import { FloorPlan } from "@/components/FloorPlan";
 import { Location } from "@/components/Location";
 import { SectionTitle } from "@/components/SectionTitle";
-import { FinalCta } from "@/components/FinalCta";
 import { MortgageSimulator } from "@/components/MortgageSimulator";
 import { PROPERTY } from "@/config/site";
 
@@ -66,12 +65,8 @@ export default function Home() {
           </section>
         </Band>
 
-        <Band tone={tone(3)}>
+        <Band tone={tone(3)} last>
           <MortgageSimulator />
-        </Band>
-
-        <Band tone={tone(4)} last>
-          <FinalCta />
         </Band>
       </main>
 
