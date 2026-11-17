@@ -2,21 +2,15 @@ import { Check, HardHat } from "lucide-react";
 import { BUILDER_BONUS, FIBER } from "@/data/highlights";
 import { SectionTitle } from "./SectionTitle";
 
-/** Dotazioni già presenti: inizio in grassetto per una lettura veloce su smartphone; la fibra è il primo punto */
-const ITEMS: { bold: string; rest: string }[] = [
-  { bold: "Casa già sgomberata:", rest: " libera subito, né attese né spese per lo sgombero: puoi entrare appena dopo il rogito" },
-  { bold: "Ascensore disponibile:", rest: " si arriva al 6°\u00a0piano comodamente, anche con spesa e passeggino" },
-  {
-    bold: "Silenzio e privacy al 6° piano:",
-    rest: " essendo a un piano alto, l'appartamento resta isolato dai rumori della strada e della città: godi di tutta la comodità del pieno centro, ma nella quiete più totale e con vista aperta",
-  },
-  { bold: "Cortile interno del palazzo:", rest: " spazio comune all'interno dell'edificio, al riparo dal traffico della strada" },
-  { bold: `${FIBER.title}:`, rest: ` ${FIBER.text}` },
-  { bold: "Pavimenti in buono stato:", rest: " graniglia nera nel salone, alla veneziana nelle altre stanze" },
-  { bold: "Bagno completo", rest: " con vasca e sanitari" },
-  { bold: "Riscaldamento autonomo", rest: " con termosifoni e caldaia già installati" },
-  { bold: "Ingresso e corridoio", rest: " già tinteggiati di bianco" },
-  { bold: "Soffitti alti", rest: " che donano ampiezza, respiro e possibilità di controsoffitti con faretti LED" },
+/** Dotazioni già presenti: bullet brevissimi, inizio in grassetto per una lettura veloce su smartphone */
+const ITEMS: { bold: string; rest?: string }[] = [
+  { bold: "Casa già sgomberata:", rest: " libera subito, né attese né spese per lo sgombero." },
+  { bold: "Ascensore", rest: " fino al 6°\u00a0piano." },
+  { bold: "Silenzio e privacy", rest: " al 6°\u00a0piano, con vista aperta." },
+  { bold: "Cortile interno", rest: " del palazzo." },
+  { bold: `${FIBER.title}.` },
+  { bold: "Riscaldamento autonomo." },
+  { bold: "Soffitti alti." },
   {
     bold: "Doppia esposizione Nord-Est:",
     rest: " luce diretta dal lato Est e affaccio aperto sul lato Nord. Ottima luminosità naturale al mattino, ventilazione su due lati e freschezza d'estate",
