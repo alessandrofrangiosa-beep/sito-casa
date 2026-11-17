@@ -11,6 +11,8 @@ type UiState = {
   openBooking: () => void;
   /** Chiude la prenotazione e porta alle foto della visita guidata */
   showPhotos: () => void;
+  /** Chiude la prenotazione e apre la planimetria 3D a schermo intero */
+  showPlan3d: () => void;
   /** Foto della visita guidata effettivamente viste (per la pre-qualificazione) */
   markPhotoSeen: (id: number) => void;
   photosSeen: number;
@@ -45,13 +47,18 @@ export function UiProvider({ children }: { children: React.ReactNode }) {
     // dopo la chiusura del pannello (che blocca lo scorrimento) si scorre alla sezione foto
     window.setTimeout(() => document.getElementById("esplora")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
   }, []);
+  const showPlan3d = useCallback(() => {
+    setBookingOpen(false);
+    // la sezione planimetria ascolta questo evento e apre la Vista 3D
+    window.setTimeout(() => window.dispatchEvent(new CustomEvent("open-plan3d")), 120);
+  }, []);
   const markPhotoSeen = useCallback((id: number) => {
     setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
   }, []);
 
   const value = useMemo(
-    () => ({ openInfo, openBooking, showPhotos, markPhotoSeen, photosSeen: seen.size, infoOpened }),
-    [openInfo, openBooking, showPhotos, markPhotoSeen, seen.size, infoOpened],
+    () => ({ openInfo, openBooking, showPhotos, showPlan3d, markPhotoSeen, photosSeen: seen.size, infoOpened }),
+    [openInfo, openBooking, showPhotos, showPlan3d, markPhotoSeen, seen.size, infoOpened],
   );
 
   return (

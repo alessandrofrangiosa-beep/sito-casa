@@ -1,16 +1,23 @@
-import { Check, HardHat } from "lucide-react";
-import { BUILDER_BONUS, FIBER } from "@/data/highlights";
+import { Check } from "lucide-react";
+import { FIBER } from "@/data/highlights";
+import { PROPERTY } from "@/config/site";
 import { SectionTitle } from "./SectionTitle";
 
 /** Dotazioni già presenti: bullet brevissimi, inizio in grassetto per una lettura veloce su smartphone */
 const ITEMS: { bold: string; rest?: string }[] = [
   { bold: "Casa già sgomberata:", rest: " libera subito, né attese né spese per lo sgombero." },
   { bold: "Ascensore", rest: " fino al 6°\u00a0piano." },
-  { bold: "Silenzio e privacy", rest: " al 6°\u00a0piano, con vista aperta." },
-  { bold: "Cortile interno", rest: " del palazzo." },
+  {
+    bold: "Silenzio e privacy",
+    rest: " al 6°\u00a0piano: nessun rumore dalla strada e nessuna finestra adiacente, con vista aperta.",
+  },
   { bold: `${FIBER.title}.` },
-  { bold: "Riscaldamento autonomo." },
+  { bold: "Riscaldamento centralizzato." },
   { bold: "Soffitti alti." },
+  {
+    bold: "Spese mensili:",
+    rest: ` condominio ${PROPERTY.monthlyCosts.condominio}, box auto ${PROPERTY.monthlyCosts.box}, riscaldamento ${PROPERTY.monthlyCosts.riscaldamento}.`,
+  },
   {
     bold: "Doppia esposizione Nord-Est:",
     rest: " luce diretta dal lato Est e affaccio aperto sul lato Nord. Ottima luminosità naturale al mattino, ventilazione su due lati e freschezza d'estate",
@@ -25,17 +32,7 @@ export function Opportunity() {
         title="Già presente nell'appartamento"
       />
 
-      <aside className="flex gap-3.5 rounded-2xl bg-primary p-5 text-white shadow-soft">
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-primary">
-          <HardHat className="h-6 w-6" aria-hidden />
-        </span>
-        <div className="min-w-0">
-          <p className="text-base font-bold leading-snug sm:text-lg">{BUILDER_BONUS.title}</p>
-          <p className="mt-1 text-[15px] leading-snug text-white/90">{BUILDER_BONUS.text}</p>
-        </div>
-      </aside>
-
-      <article className="mt-3 rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-6">
+      <article className="rounded-2xl border border-line bg-card p-5 shadow-soft sm:p-6">
         <ul className="space-y-4">
           {ITEMS.map((t) => (
             <li key={t.bold} className="flex gap-3 px-1 text-base leading-snug text-ink sm:text-lg">

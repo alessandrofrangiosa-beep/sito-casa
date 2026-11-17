@@ -8,7 +8,7 @@ import { PROPERTY, WHATSAPP_NUMBER } from "@/config/site";
 import { galleryData } from "@/data/galleryData";
 import { useUi } from "./UiProvider";
 
-const DAYS = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
+const DAYS = ["Sabato", "Domenica"];
 const SLOTS = ["Mattina", "Pomeriggio", "Sera"];
 const TIMING = ["Entro 3 mesi", "Entro 6 mesi", "Sto ancora valutando"];
 
@@ -90,10 +90,11 @@ function MoreButton({ onClick }: { onClick: () => void }) {
 }
 
 export function BookingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { photosSeen, openInfo, showPhotos } = useUi();
+  const { photosSeen, openInfo, showPhotos, showPlan3d } = useUi();
   const [name, setName] = useState("");
   const [sawPhotos, setSawPhotos] = useState(false);
   const [readInfo, setReadInfo] = useState(false);
+  const [sawPlan3d, setSawPlan3d] = useState(false);
   const [payment, setPayment] = useState<Payment>("");
   const [mortgage, setMortgage] = useState<MortgageStatus>("");
   const [days, setDays] = useState<string[]>([]);
@@ -107,12 +108,12 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
   const missing = useMemo(() => {
     const m: string[] = [];
     if (!name.trim()) m.push("nome");
-    if (!sawPhotos || !readInfo) m.push("conferme");
+    if (!sawPhotos || !readInfo || !sawPlan3d) m.push("conferme");
     if (!payment) m.push("modalità di acquisto");
     if (payment === "Mutuo" && !mortgage) m.push("stato del mutuo");
     if (days.length === 0) m.push("giorni preferiti");
     return m;
-  }, [name, sawPhotos, readInfo, payment, mortgage, days]);
+  }, [name, sawPhotos, readInfo, sawPlan3d, payment, mortgage, days]);
 
   const message = useMemo(() => {
     const pay = payment === "Mutuo" ? `Mutuo (${mortgage || "—"})` : payment || "—";
@@ -120,7 +121,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
       `Buongiorno, sono ${name.trim() || "—"}.`,
       `Vorrei prenotare una VISITA DAL VIVO dell'appartamento in ${PROPERTY.address}, Torre Annunziata (${PROPERTY.apartmentPrice} + ${PROPERTY.garagePrice} garage, in blocco ${PROPERTY.price} ${PROPERTY.priceNote}).`,
       "",
-      "✅ Ho visionato le foto e le Info Utili del sito",
+      "✅ Ho visionato le foto, la planimetria 3D e le Info Utili del sito",
       `💶 Modalità di acquisto: ${pay}`,
       timing ? `⏱️ Tempistica: ${timing}` : null,
       `📅 Giorni preferiti: ${days.join(", ") || "—"}`,
@@ -151,7 +152,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
           <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
           <p>
             Le visite si svolgono <strong>solo in presenza</strong>, su appuntamento, direttamente con i proprietari
-            (nessuna videochiamata). Per rispetto del tempo di tutti, ti chiediamo poche informazioni prima di fissare.
+            (nessuna videochiamata), <strong>solo il sabato e la domenica</strong>. Per rispetto del tempo di tutti, ti chiediamo poche informazioni prima di fissare.
           </p>
         </div>
 
@@ -174,8 +175,12 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
             <MoreButton onClick={showPhotos} />
           </CheckLine>
           <CheckLine checked={readInfo} onChange={setReadInfo}>
-            Ho letto le Info Utili (prezzo, composizione, impianti, condominio, documenti){" "}
+            Ho letto le Info Utili (prezzo, composizione, impianti, condominio){" "}
             <MoreButton onClick={() => openInfo()} />
+          </CheckLine>
+          <CheckLine checked={sawPlan3d} onChange={setSawPlan3d}>
+            Hai visto la planimetria 3D?
+            <MoreButton onClick={showPlan3d} />
           </CheckLine>
         </Step>
 
@@ -206,14 +211,14 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
         </Step>
 
         <Step n={4} title="Quando preferisci venire?">
-          <div className="grid grid-cols-7 gap-1.5">
+          <div className="grid grid-cols-2 gap-2">
             {DAYS.map((d) => (
               <button
                 key={d}
                 type="button"
                 aria-pressed={days.includes(d)}
                 onClick={() => toggle(days, setDays, d)}
-                className={`rounded-xl border py-2.5 text-xs font-bold transition ${
+                className={`rounded-xl border py-3 text-sm font-bold transition ${
                   days.includes(d) ? "border-primary bg-primary text-white" : "border-line bg-card text-slate-ink"
                 }`}
               >

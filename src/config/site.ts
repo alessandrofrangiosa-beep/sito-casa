@@ -24,10 +24,12 @@ export const PROPERTY = {
   garagePrice: "€\u00a025.000",
   priceNote: "trattabili",
   agencySavings: "€\u00a07.500 – €\u00a010.000",
-  /** Spese condominiali mensili, es. "€ 60/mese" */
-  condoFees: null as string | null,
-  /** Classe energetica APE, es. "G" */
-  energyClass: null as string | null,
+  /** Spese mensili */
+  monthlyCosts: {
+    condominio: "€\u00a060",
+    box: "€\u00a05",
+    riscaldamento: "€\u00a035",
+  },
 };
 
 

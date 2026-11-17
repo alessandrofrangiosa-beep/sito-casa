@@ -1,21 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, ChevronLeft, ChevronRight, HardHat, Wifi } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Wifi } from "lucide-react";
 import { Sheet } from "./Sheet";
-import { DaControllare } from "./DaControllare";
 import { PROPERTY } from "@/config/site";
 import { useUi } from "./UiProvider";
 import { FIBER } from "@/data/highlights";
 
-export type InfoTab = "prezzo" | "composizione" | "impianti" | "condominio" | "documenti";
+export type InfoTab = "prezzo" | "composizione" | "impianti" | "condominio";
 
 const TABS: { id: InfoTab; label: string }[] = [
   { id: "prezzo", label: "Prezzo" },
   { id: "composizione", label: "Composizione" },
   { id: "impianti", label: "Caratteristiche e impianti" },
-  { id: "condominio", label: "Condominio e lavori" },
-  { id: "documenti", label: "Stato documentale" },
+  { id: "condominio", label: "Condominio e spese" },
 ];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -53,13 +51,6 @@ function Highlights() {
           <span className="min-w-0 text-sm leading-snug text-ink">
             <strong className="font-semibold">{FIBER.title}</strong>, ideale per lo smart working, le videochiamate e lo
             streaming 4K.
-          </span>
-        </li>
-        <li className="flex gap-3 px-4 py-3">
-          <HardHat className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
-          <span className="min-w-0 text-sm leading-snug text-ink">
-            <strong className="font-semibold">Ditta già attiva nello stabile:</strong> su richiesta e senza vincoli ricevi
-            il contatto della squadra delle facciate per tinteggiare gli interni subito dopo il rogito, senza attese.
           </span>
         </li>
       </ul>
@@ -207,7 +198,7 @@ export function InfoDrawer({
                 <Row label="Cucina">Abitabile, separata</Row>
                 <Row label="Bagni">2</Row>
                 <Row label="Pertinenze">2 balconi + garage privato di {PROPERTY.catasto.garage.superficie} al piano seminterrato, adatto anche a SUV, con 2 ingressi in metallo (saracinesca e portone) e presa elettrica</Row>
-                <Row label="Ripostiglio">Nessuno</Row>
+                <Row label="Ripostiglio">Piccolo vano ripostiglio</Row>
               </dl>
             </Card>
             <SubTitle>Esposizione</SubTitle>
@@ -233,13 +224,12 @@ export function InfoDrawer({
             <Highlights />
             <ul className="space-y-3">
               <Bullet>Soffitti alti: ampiezza, respiro e possibilità di controsoffitti con faretti LED.</Bullet>
-              <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
+              <Bullet>Riscaldamento centralizzato.</Bullet>
             </ul>
             <div className="rounded-2xl border border-primary/20 bg-primary-soft p-4 text-[15px] leading-relaxed text-ink">
               <p className="font-semibold text-ink">Trasparenza totale</p>
               <p className="mt-1">
-                L&apos;immobile è venduto <strong>vuoto / non arredato</strong>. Richiede principalmente{" "}
-                <strong>una semplice rinfrescata delle pareti secondo il proprio gusto e l&apos;arredo personalizzato</strong>.
+                L&apos;immobile è venduto <strong>vuoto / non arredato</strong>.
               </p>
             </div>
           </>
@@ -249,53 +239,14 @@ export function InfoDrawer({
           <>
             <ul className="space-y-3">
               <Bullet>Stabile con ascensore.</Bullet>
-              <Bullet>
-                Facoltativo: puoi contattare direttamente l&apos;impresa già sul posto per eventuali tinteggiature
-                interne dopo il rogito.
-              </Bullet>
+              <Bullet>Riscaldamento centralizzato.</Bullet>
             </ul>
+            <SubTitle>Spese mensili</SubTitle>
             <Card>
               <dl>
-                <Row label="Spese condominiali mensili">
-                  {PROPERTY.condoFees ?? <DaControllare>Inserire importo spese condominiali</DaControllare>}
-                </Row>
-              </dl>
-            </Card>
-          </>
-        )}
-
-        {active === "documenti" && (
-          <>
-            <ul className="space-y-3">
-              <Bullet>Libero subito.</Bullet>
-              <Bullet>Documentazione controllata e pronta per mutuo e rogito immediato.</Bullet>
-              <Bullet>Immobile mutuabile, catastali in regola.</Bullet>
-              <Bullet>Trattativa diretta con i proprietari, senza intermediari.</Bullet>
-            </ul>
-            <SubTitle>Dati catastali (visura ufficiale)</SubTitle>
-            <Card>
-              <dl>
-                <Row label="Appartamento">
-                  Cat. {PROPERTY.catasto.appartamento.categoria} (abitazione civile), classe {PROPERTY.catasto.appartamento.classe},{" "}
-                  {PROPERTY.catasto.appartamento.vani} vani · rendita {PROPERTY.catasto.appartamento.rendita}
-                </Row>
-                <Row label="Garage">
-                  Cat. {PROPERTY.catasto.garage.categoria} (autorimessa), classe {PROPERTY.catasto.garage.classe},{" "}
-                  {PROPERTY.catasto.garage.superficie}, piano {PROPERTY.catasto.garage.piano} · rendita {PROPERTY.catasto.garage.rendita}
-                </Row>
-                <Row label="Rendita totale">{PROPERTY.catasto.renditaTotale}</Row>
-                <Row label="Planimetria catastale">Aggiornata e depositata (2023)</Row>
-              </dl>
-            </Card>
-            <Card>
-              <dl>
-                <Row label="Classe energetica (APE)">
-                  {PROPERTY.energyClass ?? <DaControllare>Inserire classe APE</DaControllare>}
-                </Row>
-                <Row label="Disponibilità">Libero subito</Row>
-                <Row label="Prezzo">
-                  {PROPERTY.apartmentPrice} + {PROPERTY.garagePrice} garage
-                </Row>
+                <Row label="Condominio">{PROPERTY.monthlyCosts.condominio}/mese</Row>
+                <Row label="Box auto">{PROPERTY.monthlyCosts.box}/mese</Row>
+                <Row label="Riscaldamento">{PROPERTY.monthlyCosts.riscaldamento}/mese</Row>
               </dl>
             </Card>
           </>

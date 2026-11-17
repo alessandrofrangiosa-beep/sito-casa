@@ -15,6 +15,15 @@ type Plan = { src: string; label: string };
 export function FloorPlan({ plans }: { plans: Plan[] }) {
   const [tab, setTab] = useState(0);
   const [show3d, setShow3d] = useState(false);
+  // "Hai visto la planimetria 3D?" nel modulo di prenotazione apre direttamente la Vista 3D
+  useEffect(() => {
+    const open = () => {
+      document.getElementById("planimetria")?.scrollIntoView({ block: "start" });
+      setShow3d(true);
+    };
+    window.addEventListener("open-plan3d", open);
+    return () => window.removeEventListener("open-plan3d", open);
+  }, []);
   const tabs = [...plans.map((p) => p.label), "Vista 3D"];
   const src = plans.length ? plans[Math.min(tab, plans.length - 1)].src : null;
   const label = src ? plans[Math.min(tab, plans.length - 1)].label : "";
