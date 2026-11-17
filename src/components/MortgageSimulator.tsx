@@ -94,7 +94,6 @@ export function MortgageSimulator() {
       <SectionTitle
         eyebrow="Mutuo e agevolazioni prima casa"
         title="Una rata alla portata, poche tasse al rogito"
-        intro="Comprando da privato come prima casa paghi le imposte sul valore catastale, non sul prezzo, e con la garanzia statale Consap puoi finanziare fino al 100%: i tuoi risparmi restano per i lavori che vedi nei render 3D."
       />
 
       {/* 1. Calcolatore */}
