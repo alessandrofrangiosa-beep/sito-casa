@@ -38,9 +38,6 @@ export function Opportunity() {
         <div className="min-w-0">
           <p className="text-base font-bold leading-snug sm:text-lg">{BUILDER_BONUS.title}</p>
           <p className="mt-1 text-[15px] leading-snug text-white/90">{BUILDER_BONUS.text}</p>
-          <p className="mt-2.5 border-t border-white/25 pt-2.5 text-[15px] leading-snug font-semibold text-white">
-            ✓ {BUILDER_BONUS.note}
-          </p>
         </div>
       </aside>
 
