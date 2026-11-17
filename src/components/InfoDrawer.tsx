@@ -233,7 +233,6 @@ export function InfoDrawer({
             <Highlights />
             <ul className="space-y-3">
               <Bullet>Soffitti alti: ampiezza, respiro e possibilità di controsoffitti con faretti LED.</Bullet>
-              <Bullet>Infissi nuovi bianchi con vetrocamera.</Bullet>
               <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
             </ul>
             <div className="rounded-2xl border border-primary/20 bg-primary-soft p-4 text-[15px] leading-relaxed text-ink">
