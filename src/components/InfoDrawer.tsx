@@ -6,7 +6,6 @@ import { Sheet } from "./Sheet";
 import { DaControllare } from "./DaControllare";
 import { PROPERTY } from "@/config/site";
 import { useUi } from "./UiProvider";
-import { composition } from "@/data/composition";
 import { FIBER } from "@/data/highlights";
 
 export type InfoTab = "prezzo" | "composizione" | "impianti" | "condominio" | "documenti";
@@ -195,9 +194,6 @@ export function InfoDrawer({
                 Vendita congiunta di appartamento e garage: <strong>{PROPERTY.price} {PROPERTY.priceNote}</strong>.
               </Bullet>
               <Bullet>Trattativa diretta con i proprietari, senza intermediari: 0% commissioni d&apos;agenzia.</Bullet>
-              <Bullet>
-                {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi già saldati dai proprietari.
-              </Bullet>
             </ul>
           </>
         )}
@@ -214,13 +210,6 @@ export function InfoDrawer({
                 <Row label="Ripostiglio">Nessuno</Row>
               </dl>
             </Card>
-            <ul className="space-y-3">
-              {composition.map((c) => (
-                <Bullet key={c.area}>
-                  <span className="font-semibold">{c.area}:</span> {c.text}.
-                </Bullet>
-              ))}
-            </ul>
             <SubTitle>Esposizione</SubTitle>
             <Card>
               <dl>
@@ -246,8 +235,6 @@ export function InfoDrawer({
               <Bullet>Soffitti alti: ampiezza, respiro e possibilità di controsoffitti con faretti LED.</Bullet>
               <Bullet>Infissi nuovi bianchi con vetrocamera.</Bullet>
               <Bullet>Riscaldamento autonomo con caldaia e termosifoni.</Bullet>
-              <Bullet>Pavimentazione in buono stato (graniglia nera nel salone, alla veneziana nelle altre stanze).</Bullet>
-              <Bullet>Bagno interno completo di vasca e sanitari.</Bullet>
             </ul>
             <div className="rounded-2xl border border-primary/20 bg-primary-soft p-4 text-[15px] leading-relaxed text-ink">
               <p className="font-semibold text-ink">Trasparenza totale</p>
@@ -265,11 +252,6 @@ export function InfoDrawer({
             <ul className="space-y-3">
               <Bullet>Stabile con ascensore.</Bullet>
               <Bullet>
-                {PROPERTY.condoWorksPaid} di lavori straordinari su facciate e balconi{" "}
-                <strong>già deliberati e saldati dai proprietari</strong>.
-              </Bullet>
-              <Bullet>Il ponteggio visibile in foto è in fase di ultimazione.</Bullet>
-              <Bullet>
                 Facoltativo: puoi contattare direttamente l&apos;impresa già sul posto per eventuali tinteggiature
                 interne dopo il rogito.
               </Bullet>
@@ -278,9 +260,6 @@ export function InfoDrawer({
               <dl>
                 <Row label="Spese condominiali mensili">
                   {PROPERTY.condoFees ?? <DaControllare>Inserire importo spese condominiali</DaControllare>}
-                </Row>
-                <Row label="Lavori straordinari">
-                  <span className="text-primary">Già pagati</span>
                 </Row>
               </dl>
             </Card>

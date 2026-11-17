@@ -7,7 +7,7 @@
 export const PROPERTY = {
   address: "Via Vittorio Veneto 390",
   city: "Torre Annunziata (NA)",
-  floor: "6° piano di 8 con ascensore",
+  floor: "6° piano di 10 con ascensore",
   /** Superficie catastale da visura (Agenzia Entrate, 15/11/2026): 140 m², 136 m² escluse aree scoperte */
   sqm: 140,
   /** Dati catastali ufficiali (visura del 15/11/2026) */
@@ -24,8 +24,6 @@ export const PROPERTY = {
   garagePrice: "€\u00a025.000",
   priceNote: "trattabili",
   agencySavings: "€\u00a07.500 – €\u00a010.000",
-  /** Lavori straordinari su facciate e balconi già pagati dai proprietari */
-  condoWorksPaid: "€\u00a015.000",
   /** Spese condominiali mensili, es. "€ 60/mese" */
   condoFees: null as string | null,
   /** Classe energetica APE, es. "G" */

@@ -25,7 +25,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/02-ingresso.jpg",
     render: "/images/render/render-01-ingresso.jpg",
     title: "Ingresso",
-    caption: "Ingresso ampio già tinteggiato di bianco con doppie porte a vetri.",
+    caption: "Ingresso ampio con doppie porte a vetri.",
     alt: "Ingresso con pareti bianche, pavimento in graniglia chiara e porte in legno con vetri",
   },
   {
@@ -33,7 +33,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/03-soggiorno.jpg",
     render: "/images/render/render-02-soggiorno-pavimento-nero.jpg",
     title: "Soggiorno / Sala",
-    caption: "Salone luminoso con graniglia nera lucida e infissi nuovi in PVC.",
+    caption: "Salone luminoso con infissi nuovi in PVC.",
     alt: "Salone con pavimento in graniglia nera lucida e doppie porte in legno con vetri",
   },
   {
@@ -49,9 +49,8 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/05-balcone-principale.jpg",
     render: "/images/render/render-04-balcone-principale.jpg",
     title: "Balcone principale",
-    caption: "Balcone lungo (~9,2 m²) sul lato Est: cucina, lavanderia e due camere con il sole del mattino. Ponteggio lavori facciata già pagato.",
-    alt: "Balcone lungo con ringhiera e ponteggio dei lavori di facciata in ultimazione",
-    badge: "Lavori già pagati",
+    caption: "Balcone lungo (~9,2 m²) sul lato Est: cucina, lavanderia e due camere con il sole del mattino.",
+    alt: "Balcone lungo con ringhiera e ponteggio sul lato sinistro",
   },
   {
     id: 6,
@@ -66,7 +65,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/08-corridoio-zona-notte.jpg",
     render: "/images/render/render-06-corridoio.jpg",
     title: "Corridoio zona notte",
-    caption: "Corridoio luminoso già tinteggiato che disimpegna la zona notte.",
+    caption: "Corridoio luminoso che disimpegna la zona notte.",
     alt: "Corridoio bianco della zona notte con arco in fondo e porte in legno",
   },
   {
@@ -107,7 +106,7 @@ export const galleryData: GalleryItem[] = [
     src: "/images/attuali/13-bagno-principale.jpg",
     render: "/images/render/render-23-bagno-principale.jpg",
     title: "Bagno principale interno",
-    caption: "Bagno interno finestrato con vasca e sanitari completi già pronti.",
+    caption: "Bagno principale interno, finestrato.",
     alt: "Bagno principale finestrato con vasca, lavabo, wc e bidet",
   },
   {

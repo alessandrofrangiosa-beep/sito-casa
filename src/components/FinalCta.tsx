@@ -32,7 +32,7 @@ export function FinalCta() {
           <FileCheck2 className="mt-0.5 h-5 w-5 shrink-0 text-white" aria-hidden />
           <p className="min-w-0 text-sm leading-snug text-white/85">
             <strong className="font-semibold text-white">Documentazione già pronta e verificata per il mutuo:</strong>{" "}
-            conformità urbanistica e catastale controllata, quietanze lavori condominiali saldate e consegna immediata al
+            conformità urbanistica e catastale controllata e consegna immediata al
             rogito.
           </p>
         </div>
