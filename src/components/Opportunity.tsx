@@ -19,7 +19,7 @@ const ITEMS: { bold: string; rest?: string }[] = [
     rest: ` condominio ${PROPERTY.monthlyCosts.condominio}, box auto ${PROPERTY.monthlyCosts.box}, riscaldamento ${PROPERTY.monthlyCosts.riscaldamento}.`,
   },
   {
-    bold: "Doppia esposizione Nord-Est:",
+    bold: "Doppia esposizione Sud-Ovest:",
     rest: " luce diretta dal lato Est e affaccio aperto sul lato Nord. Ottima luminosità naturale al mattino, ventilazione su due lati e freschezza d'estate",
   },
 ];

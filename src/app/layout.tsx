@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
   title: "Quadrilocale 140 m² vista mare con 2 balconi e garage | Via Vittorio Veneto 390, Torre Annunziata",
   description:
-    "Quadrilocale di 140 m² al 6° piano con ascensore, doppia esposizione angolare Nord-Est (sole del mattino e ventilazione su due lati), vista mare sul Golfo, 2 balconi e box auto privato. Vendita diretta dai proprietari, 0% commissioni d'agenzia. € 250.000 trattabili.",
+    "Quadrilocale di 140 m² al 6° piano con ascensore, doppia esposizione angolare Sud-Ovest (sole del mattino e ventilazione su due lati), vista mare sul Golfo, 2 balconi e box auto privato. Vendita diretta dai proprietari, 0% commissioni d'agenzia. € 250.000 trattabili.",
   openGraph: {
     title: "Quadrilocale 140 m² vista mare con 2 balconi e garage — Torre Annunziata",
     description: "Vendita da privato, 0% commissioni. € 250.000 trattabili. Prenota una visita dal vivo.",
